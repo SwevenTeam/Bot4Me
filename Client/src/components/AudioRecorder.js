@@ -15,7 +15,7 @@ const assemblyAI = axios.create({
   },
 })
 
-const AudioRecorder = () => {
+const AudioRecorder = ({changeMessage}) => {
   // Mic-Recorder-To-MP3
   const recorder = useRef(null) //Recorder
   const audioPlayer = useRef(null) //Ref for the HTML Audio Tag
@@ -91,7 +91,11 @@ const AudioRecorder = () => {
     setIsLoading(true)
     try {
       await assemblyAI.get(`/transcript/${transcriptID}`).then((res) => {
-        setTranscriptData(res.data)
+        if(res.data.text !== null){
+          setTranscriptData(res.data)
+          changeMessage(res.data.text)
+          console.log("CIAO STO SCRIVENDO TRANSCRIPT"+res.data.text)
+        }
       })
     } catch (err) {
       console.error(err)
@@ -106,7 +110,7 @@ const AudioRecorder = () => {
       } else {
         setIsLoading(false)
         setTranscript(transcriptData.text)
-
+        console.log("CIAO SONO L'ELSE DI SET INTERVAL");
         clearInterval(interval)
       }
     }, 1000)
@@ -126,6 +130,7 @@ const AudioRecorder = () => {
         <button
           className='btn btn-warning'
           onClick={stopRecording}
+          onSubmit={submitTranscriptionHandler}
           disabled={!isRecording}
         >
           Stop
@@ -142,18 +147,13 @@ const AudioRecorder = () => {
             height={100}
             width={100}
             strokeWidth={5}
-            color='red'
-            secondaryColor='yellow'
+            color='blue'
+            secondaryColor='light-blue'
           />
           <p className='text-center'>Is loading....</p>
         </div>
       ) : (
         <div></div>
-      )}
-      {!isLoading && transcript && (
-        <div className='w-2/3 lg:w-1/3 mockup-code'>
-          <p className='p-6'>{transcript}</p>
-        </div>
       )}
     </div>
   )

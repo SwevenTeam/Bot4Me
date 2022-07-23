@@ -26,7 +26,7 @@ const Home = () => {
       if (!message) return; 
 
       appendMessage(PERSON_NAME, PERSON_IMG, "right", message);
-      msgerInput.value = "";
+      setMessage("")
       botResponse(message);
     };
 
@@ -56,6 +56,9 @@ const Home = () => {
       
       fetch('http://127.0.0.1:5000/get?msg='+rawText).then(function(response) {
         response.text().then(function(data) {
+          if(response.status === 403){
+            data = "Non sei autorizzato a visualizzare questo contenuto"
+          }
             console.log(rawText);
             console.log(data);
             appendMessage(BOT_NAME, BOT_IMG, "left", data);
@@ -123,9 +126,9 @@ const Home = () => {
         </div>
 
         </main>
-        <input type="text" className="msger-input" id="textInput" placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>
+        <input type="text" className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>
         <CustomButton text={"send"}  onSubmit={()=>{onSubmit()}}/>
-        <AudioRecorder/>
+        <AudioRecorder changeMessage={setMessage}/>
         </section>
     )
 }
