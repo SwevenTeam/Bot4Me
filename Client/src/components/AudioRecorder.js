@@ -30,6 +30,7 @@ const AudioRecorder = ({changeMessage}) => {
 
   const startRecording = () => {
     // Check if recording isn't blocked by browser
+    recorder.current.stop()
     recorder.current.start().then(() => {
       setIsRecording(true)
     })
@@ -80,7 +81,6 @@ const AudioRecorder = ({changeMessage}) => {
       })
       .then((res) => {
         setTranscriptID(res.data.id)
-
         checkStatusHandler()
       })
       .catch((err) => console.error(err))
@@ -118,27 +118,15 @@ const AudioRecorder = ({changeMessage}) => {
   })
 
   return (
-    <div className='flex flex-col items-center justify-center mt-10 mb-20 space-y-4'>
       <div>
-        <button
-          className='btn btn-primary'
-          onClick={startRecording}
-          disabled={isRecording}
-        >
-          Record
-        </button>
-        <button
-          className='btn btn-warning'
-          onClick={stopRecording}
-          onSubmit={submitTranscriptionHandler}
-          disabled={!isRecording}
-        >
-          Stop
-        </button>
-      </div>
+       <CustomButton text={(!isRecording ? "Registra" : "Ferma")} 
+       onSubmit={()=> isRecording ? stopRecording() : startRecording()} />
+
       <audio ref={audioPlayer} src={blobURL} controls='controls' />
 
-      <CustomButton text={"Invia"} onSubmit={()=>{submitTranscriptionHandler()}} />
+      <CustomButton text={"Converti file audio"} 
+      isDisabled={audioFile === null ? true : false}
+      onSubmit={()=>{submitTranscriptionHandler()}} />
 
       {isLoading ? (
         <div>

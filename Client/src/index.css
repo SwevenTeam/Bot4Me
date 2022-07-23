@@ -143,6 +143,13 @@ body {
   cursor: pointer;
   transition: background 0.23s;
 }
+.msger-send-btn:disabled{
+  opacity: 0.5;
+  cursor: default;
+}
+.msger-send-btn:disabled:hover{
+  background: #579ffb;
+}
 .msger-send-btn:hover {
   background: rgb(0, 180, 50);
 }

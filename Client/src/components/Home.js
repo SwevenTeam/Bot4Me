@@ -127,7 +127,7 @@ const Home = () => {
 
         </main>
         <input type="text" className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>
-        <CustomButton text={"send"}  onSubmit={()=>{onSubmit()}}/>
+        <CustomButton text={"Invia"}  isDisabled={message === "" ? true : false} onSubmit={()=>{onSubmit()}}/>
         <AudioRecorder changeMessage={setMessage}/>
         </section>
     )
