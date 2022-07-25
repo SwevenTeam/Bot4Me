@@ -118,15 +118,15 @@ const AudioRecorder = ({changeMessage}) => {
   })
 
   return (
-      <div>
+      <div className="audio-form">
        <CustomButton text={(!isRecording ? "Registra" : "Ferma")} 
-       onSubmit={()=> isRecording ? stopRecording() : startRecording()} />
+       onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={"msger-send-btn"} />
 
       <audio ref={audioPlayer} src={blobURL} controls='controls' />
 
       <CustomButton text={"Converti file audio"} 
       isDisabled={audioFile === null ? true : false}
-      onSubmit={()=>{submitTranscriptionHandler()}} />
+      onSubmit={()=>{submitTranscriptionHandler()}} className={"msger-send-btn"} />
 
       {isLoading ? (
         <div>

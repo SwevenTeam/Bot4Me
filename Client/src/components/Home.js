@@ -93,43 +93,46 @@ const Home = () => {
     }
 
     return(
-      <section className="msger">
-        <header className="msger-header">
-        <div className="msger-header-title">
-            <i> Ciao sono il tuo assistente Bot4Me </i>
+      <div className="msger">
+          <header className="msger-header">
+          <div className="msger-header-title">
+              <i> Ciao sono il tuo assistente Bot4Me </i>
+          </div>
+          <CustomButton text={"API KEY"} isDisabled={false} className={"msger-apikey-btn"}/>
+          </header>
+
+          <main className="msger-chat">
+          <div className="msg left-msg">
+              <div className="msg-img"></div>
+              <div className="msg-bubble">
+              <div className="msg-info">
+                  <div className="msg-info-name">Bot4Me</div>
+                  <div className="msg-info-time"></div>
+              </div>
+
+              <div className="msg-text">
+                Benvenuto su Bot4Me, sarò il tuo assistente personale 😄
+              </div>
+              <div className="msg-text">
+                  Posso aiutarti a semplificare i tuoi compiti aziendali come: 
+                  <ul>
+                  <li>Inserire rendiconto ore</li>
+                  <li>Registrare la tua presenza in sede</li>
+                  <li>Aprire il cancello aziendale</li>
+                  <li>E molto altro ... </li>
+                  </ul>
+                  Mettimi alla prova!
+              </div>
+              </div>
+          </div>
+
+          </main>
+          <div className='input-form'>
+            <input type="text" className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>
+            <CustomButton text={"INVIA"}  isDisabled={message === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"}/>
+          </div>
+          <AudioRecorder changeMessage={setMessage}/>
         </div>
-        </header>
-
-        <main className="msger-chat">
-        <div className="msg left-msg">
-            <div className="msg-img"></div>
-            <div className="msg-bubble">
-            <div className="msg-info">
-                <div className="msg-info-name">Bot4Me</div>
-                <div className="msg-info-time"></div>
-            </div>
-
-            <div className="msg-text">
-              Benvenuto su Bot4Me, sarò il tuo assistente personale 😄
-            </div>
-            <div className="msg-text">
-                Posso aiutarti a semplificare i tuoi compiti aziendali come: 
-                <ul>
-                <li>Inserire rendiconto ore</li>
-                <li>Registrare la tua presenza in sede</li>
-                <li>Aprire il cancello aziendale</li>
-                <li>E molto altro ... </li>
-                </ul>
-                Mettimi alla prova!
-            </div>
-            </div>
-        </div>
-
-        </main>
-        <input type="text" className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>
-        <CustomButton text={"Invia"}  isDisabled={message === "" ? true : false} onSubmit={()=>{onSubmit()}}/>
-        <AudioRecorder changeMessage={setMessage}/>
-        </section>
     )
 }
 
