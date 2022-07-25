@@ -1,10 +1,15 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import CustomButton from './CustomButton';
 import AudioRecorder from './AudioRecorder';
 
 const Home = () => {
 
     const [message, setMessage] = useState("");
+
+    const [apikey, setApiKey] = useState("");
+    const [hidden, setHidden] = useState (true);
+    const inputApiKey = useRef(null);
+
 
     const msgerForm = get(".msger-inputarea");
     const msgerInput = get(".msger-input");
@@ -18,6 +23,28 @@ const Home = () => {
 
     const handleMessageChange = (e) =>{
       setMessage(e.target.value)
+    }
+
+    const handleApiKeyChange = (e) => {
+      setApiKey(e.target.value)
+    }
+    
+    const saveApiKey = () => {
+      if(inputApiKey.current.value !== null){
+        setApiKey(inputApiKey.current.value);
+      }
+      changeHidden()
+    }
+
+    const changeHidden = () => {
+      if(hidden === true){
+        setHidden(false);
+        if(apikey === "")
+          inputApiKey.current.value = "";
+        else 
+          inputApiKey.current.value = apikey;
+      }
+      else setHidden(true);
     }
 
     const onSubmit = () => {
@@ -64,19 +91,6 @@ const Home = () => {
             appendMessage(BOT_NAME, BOT_IMG, "left", data);
         });
       });
-
-      /*const ret = await fetch ('http://127.0.0.1:5000/get?msg='+rawText,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-      });
-      
-      if (ret.ok){
-        ret.json
-      }*/
-
     }
 
 
@@ -98,7 +112,7 @@ const Home = () => {
           <div className="msger-header-title">
               <i> Ciao sono il tuo assistente Bot4Me </i>
           </div>
-          <CustomButton text={"API KEY"} isDisabled={false} className={"msger-apikey-btn"}/>
+          <CustomButton text={"API KEY"} isDisabled={false} className={"msger-apikey-btn"} onSubmit={()=>{changeHidden()}}/>
           </header>
 
           <main className="msger-chat">
@@ -127,9 +141,13 @@ const Home = () => {
           </div>
 
           </main>
+
           <div className='input-form'>
-            <input type="text" className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>
-            <CustomButton text={"INVIA"}  isDisabled={message === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"}/>
+            <input type="text" ref={inputApiKey} hidden={hidden} className="msger-input" id="apikeyInput" placeholder="Scrivi qui la tua ApiKey..." onChange={handleApiKeyChange}/>
+            <CustomButton text={"SALVA API-KEY"}  hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{saveApiKey()}} className={"msger-send-btn"}/>  
+
+            <input type="text" hidden={!hidden} className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>          
+            <CustomButton text={"INVIA MESSAGGIO"}  hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"}/>
           </div>
           <AudioRecorder changeMessage={setMessage}/>
         </div>

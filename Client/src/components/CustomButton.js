@@ -1,8 +1,8 @@
 import React from 'react';
 
-const CustomButton = ({text,isDisabled,onSubmit,className}) => {
+const CustomButton = ({text,isDisabled,onSubmit,className,hidden}) => {
     return (
-        <button type="submit" disabled = {isDisabled} className={className} onClick={onSubmit}>{text}</button>
+        <button hidden={hidden} type="submit" disabled = {isDisabled} className={className} onClick={onSubmit}>{text}</button>
     )
 }
 
