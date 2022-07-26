@@ -12,7 +12,13 @@ class Server:
         self.chatterbot = ChatBot("botforme",logic_adapters=[{'import_path': 'Adapter.Adapter'}])
     
     def getResponse(self, text, stato, apiKey) -> StatementStato:
-        textinput = StatementStato(text, stato, apiKey)
+        input_statement=StatementStato(text,stato,apiKey)
+        max_confidence = -1
         for adapter in self.chatterbot.logic_adapters:
-            textoutput = adapter.process(textinput, None)
+            if adapter.can_process(input_statement):
+                output = adapter.process(input_statement, None)
+
+                if output.confidence > max_confidence:
+                    textoutput = output
+                    max_confidence = output.confidence
         return textoutput

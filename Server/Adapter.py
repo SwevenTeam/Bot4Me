@@ -16,6 +16,7 @@ class Adapter(LogicAdapter):
             return False
 
     def process(self, input_statement, additional_response_selection_parameters) -> StatementStato:
-        s=StatoPresenzaSede()
+        s = input_statement.getStato()
+        s.addDati("nomeSede","Bologna")
         output_statement=StatementStato("ciao",s,input_statement.getApiKey())
         return output_statement
