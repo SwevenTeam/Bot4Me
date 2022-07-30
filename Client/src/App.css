@@ -13,7 +13,7 @@
   --border: 2px solid #ddd;
   --left-msg-bg: #ececec;
   --right-msg-bg: #579ffb;
-  --border-radius-btn: 5%;
+  --border-radius-btn: 5px;
   --button-background: #579ffb;
 }
 
@@ -26,7 +26,7 @@
   height: calc(80%);
   border-radius: 5px;
   background: var(--msger-bg);
-  box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.4);
 }
 
 .msger-header {
@@ -112,20 +112,10 @@
 
 .msger-inputarea {
   display: flex;
-  padding: 10px;
+  padding: 1em;
+  border-radius: var(--border-radius-btn);
   border-top: var(--border);
   background: #eee;
-}
-
-.msger-inputarea * {
-  padding: 1em;
-  border: none;
-  border-radius: 3px;
-  font-size: 1em;
-}
-
-.msger-send-btn:hover {
-  background: rgb(0, 180, 50);
 }
 
 .msger-chat {
@@ -155,12 +145,12 @@
 }
 
 .msger-apikey-btn{
-  background: var(--button-background);
   width: 10%;
   color: #FFF;
   background-size: contain;
   border-radius: var(--border-radius-btn);
   padding: 0.5em;
+  background: var(--button-background);
   cursor: pointer;
 }
 
@@ -168,21 +158,41 @@
   padding: 0.5em;
   flex: 2;
   background: #ddd;
+  border-radius: var(--border-radius-btn);
 }
 
 .msger-send-btn {
-  flex: 1;
-  background:var(--button-background);
+  flex: 0.5;
   border-radius: var(--border-radius-btn);
-  color: #fff;
   padding: 0.5em;
+  background: var(--button-background);
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.msger-send-btn:hover{
+  opacity: 1;
+}
+
+.msger-rec-start{
+  flex: 0.5;
+  border-radius: var(--border-radius-btn);
+  padding: 0.5em;
+  background: #12b912;
+  cursor: pointer;
+}
+
+.msger-rec-stop{
+  flex: 0.5;
+  border-radius: var(--border-radius-btn);
+  padding: 0.5em;
+  background: #FF0000;
   cursor: pointer;
 }
 
 .msger-send-btn:disabled{
   opacity: 0.5;
   cursor: default;
-  background: #579ffb;
 }
 
 .msg-text ul li{

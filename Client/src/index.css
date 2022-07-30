@@ -1,8 +1,17 @@
+:root {
+  --body-bg: #579efbc3;
+  --msger-bg: #fff;
+  --border: 2px solid #ddd;
+  --left-msg-bg: #ececec;
+  --right-msg-bg: #579ffb;
+  --border-radius-btn: 5%;
+  --button-background: #579ffb;
+}
 
 html, body{
   margin: 0 auto;
   max-width: 1080px;
-  background-image: var(--body-bg);
+  background: var(--body-bg);
   font-family: Helvetica, sans-serif;
 }
 

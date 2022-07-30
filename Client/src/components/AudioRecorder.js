@@ -120,7 +120,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
   return (
       <div className="audio-form">
        <CustomButton text={(!isRecording ? "Registra" : "Ferma")} 
-       onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={"msger-send-btn"} hidden={hidden} icon="Rec" />
+       onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={!isRecording? "msger-rec-start":"msger-rec-stop"} hidden={hidden} icon="Rec"/>
 
       <audio ref={audioPlayer} src={blobURL} controls='controls' />
 
