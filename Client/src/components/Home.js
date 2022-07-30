@@ -112,7 +112,9 @@ const Home = () => {
           <div className="msger-header-title">
               <i> Ciao sono il tuo assistente Bot4Me </i>
           </div>
-          <CustomButton text={"API KEY"} isDisabled={false} className={"msger-apikey-btn"} onSubmit={()=>{changeHidden()}}/>
+          <CustomButton text={"API KEY"} isDisabled={false} 
+            className={"msger-apikey-btn"} onSubmit={()=>{changeHidden()}} 
+            hidden={false} icon="UserConf"/>
           </header>
 
           <main className="msger-chat">
@@ -144,12 +146,12 @@ const Home = () => {
 
           <div className='input-form'>
             <input type="text" ref={inputApiKey} hidden={hidden} className="msger-input" id="apikeyInput" placeholder="Scrivi qui la tua ApiKey..." onChange={handleApiKeyChange}/>
-            <CustomButton text={"SALVA API-KEY"}  hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{saveApiKey()}} className={"msger-send-btn"}/>  
+            <CustomButton text={"SALVA API-KEY"}  hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{saveApiKey()}} className={"msger-send-btn"} icon="Save"/>
 
             <input type="text" hidden={!hidden} className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>          
-            <CustomButton text={"INVIA MESSAGGIO"}  hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"}/>
+            <CustomButton text={"INVIA MESSAGGIO"}  hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"} icon="Send"/>
+            <AudioRecorder changeMessage={setMessage} hidden={!hidden}/>
           </div>
-          <AudioRecorder changeMessage={setMessage}/>
         </div>
     )
 }

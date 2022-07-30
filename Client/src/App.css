@@ -8,11 +8,12 @@
 }
 
 :root {
-  --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --body-bg: #579ffb;
   --msger-bg: #fff;
   --border: 2px solid #ddd;
   --left-msg-bg: #ececec;
   --right-msg-bg: #579ffb;
+  --border-radius-btn: 5%;
   --button-background: #579ffb;
 }
 
@@ -157,11 +158,8 @@
   background: var(--button-background);
   width: 10%;
   color: #FFF;
-  background-image: url('../src/img/login.png');
   background-size: contain;
-  background-position: center;
-  background-repeat:no-repeat;
-  text-indent: -9999em;
+  border-radius: var(--border-radius-btn);
   padding: 0.5em;
   cursor: pointer;
 }
@@ -175,6 +173,7 @@
 .msger-send-btn {
   flex: 1;
   background:var(--button-background);
+  border-radius: var(--border-radius-btn);
   color: #fff;
   padding: 0.5em;
   cursor: pointer;

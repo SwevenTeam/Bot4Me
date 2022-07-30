@@ -1,9 +1,8 @@
 import MicRecorder from "mic-recorder-to-mp3"
 import { useEffect, useState, useRef } from "react"
-import { Oval } from "react-loader-spinner"
 import axios from "axios"
 import CustomButton from "./CustomButton"
-
+import Spinner from 'react-bootstrap/Spinner'
 
 // Set AssemblyAI Axios Header
 const assemblyAI = axios.create({
@@ -15,7 +14,7 @@ const assemblyAI = axios.create({
   },
 })
 
-const AudioRecorder = ({changeMessage}) => {
+const AudioRecorder = ({changeMessage, hidden}) => {
   // Mic-Recorder-To-MP3
   const recorder = useRef(null) //Recorder
   const audioPlayer = useRef(null) //Ref for the HTML Audio Tag
@@ -51,6 +50,7 @@ const AudioRecorder = ({changeMessage}) => {
         setAudioFile(file)
       })
       .catch((e) => console.log(e))
+      submitTranscriptionHandler()
   }
 
   // AssemblyAI
@@ -74,7 +74,7 @@ const AudioRecorder = ({changeMessage}) => {
 
   // Submit the Upload URL to AssemblyAI and retrieve the Transcript ID
   const submitTranscriptionHandler = () => {
-    assemblyAI
+     assemblyAI
       .post("/transcript", {
         audio_url: uploadURL,
         language_code: "it"
@@ -120,25 +120,19 @@ const AudioRecorder = ({changeMessage}) => {
   return (
       <div className="audio-form">
        <CustomButton text={(!isRecording ? "Registra" : "Ferma")} 
-       onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={"msger-send-btn"} />
+       onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={"msger-send-btn"} hidden={hidden} icon="Rec" />
 
       <audio ref={audioPlayer} src={blobURL} controls='controls' />
 
       <CustomButton text={"Converti file audio"} 
       isDisabled={audioFile === null ? true : false}
-      onSubmit={()=>{submitTranscriptionHandler()}} className={"msger-send-btn"} />
+      onSubmit={()=>{submitTranscriptionHandler()}} className={"msger-send-btn"} hidden={hidden}/>
 
       {isLoading ? (
         <div>
-          <Oval
-            ariaLabel='loading-indicator'
-            height={100}
-            width={100}
-            strokeWidth={5}
-            color='blue'
-            secondaryColor='light-blue'
-          />
-          <p className='text-center'>Is loading....</p>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Sto traducendo il tuo messaggio...</span>
+            </Spinner>          
         </div>
       ) : (
         <div></div>
