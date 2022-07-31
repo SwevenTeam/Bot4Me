@@ -10,7 +10,7 @@ from requests import Response
 class RequestPresenza():
     def __init__(self, s, apiKey):
         self.dati = s.getDati()
-        self.ready = s.getStato()
+        self.ready = s.getStatoAttuale()
         self.Api = apiKey
 
     def isReady(self) -> bool:
@@ -23,6 +23,14 @@ class RequestPresenza():
           return False
 
     def sendRequest(self) :
-        # url = "https://apibot4me.imolinfo.it/v1/projects/"+  +"/activities/me"
-        return "cazzo"
-        #return response_statement
+        
+        # L'url credo sia giusto così
+        url = "https://apibot4me.imolinfo.it/v1/locations/" + \
+                self.dati["sede"] + "/presence"
+
+        responseUrl = requests.post(url, headers={"api_key": self.api_key})
+            
+        if responseUrl == 200:
+          return True
+        else:
+          return False

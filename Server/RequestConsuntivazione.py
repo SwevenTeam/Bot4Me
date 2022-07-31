@@ -20,6 +20,12 @@ class RequestConsuntivazione():
           return False
 
     def sendRequest(self) :
-        # url = "https://apibot4me.imolinfo.it/v1/projects/"+  +"/activities/me"
-        return "cazzo"
-        #return response_statement
+        url = "https://apibot4me.imolinfo.it/v1/locations/" + \
+                self.dati["sede"] + "/presence"
+
+        responseUrl = requests.post(url, headers={"api_key": self.api_key})
+            
+        if responseUrl == 200:
+          return True
+        else:
+          return False

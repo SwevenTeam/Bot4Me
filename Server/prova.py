@@ -13,9 +13,9 @@ print("\n Per favore consuntiva")
 
 print(client.getResponse("Per favore consuntiva"))
 
-print("Padova")
+print("Imola")
 
-print(client.getResponse("Padova"))
+print(client.getResponse("Imola"))
 
 print("Bel Progetto")
 
@@ -29,11 +29,12 @@ print("2 ore")
  
 print(client.getResponse("2 ore"))
 
+print(client.getStato().getDati())
+
 print("annulla")
  
 print(client.getResponse("annulla"))
 
-print(client.getStato().getDati())
 
 
 '''

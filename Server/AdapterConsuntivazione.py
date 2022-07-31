@@ -89,7 +89,10 @@ class AdapterConsuntivazione(LogicAdapter):
         elif(s.substate =="termina"):
             Req = RequestConsuntivazione(s,input_statement.getApiKey())
             if Req.isReady():
-              output_statement=StatementStato(Req.sendRequest(),StatoIniziale())      
+              if Req.sendRequest():
+                  output_statement=StatementStato("Operazione avvenuta correttamente",StatoIniziale())
+              else:
+                  output_statement=StatementStato("Operazione non avvenuta, riprovare? (inviare annulla per annullare)",s)
             else:
               output_statement=StatementStato("Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)",s)      
         else:

@@ -39,15 +39,23 @@ class AdapterPresenza(LogicAdapter):
              
             if any(x in input_statement.text.split() for x in sedeP):
                 s.addNomeSede("Bologna")
-                output_statement=StatementStato("Sede Accettata",s)
+                output_statement= self.callRequest(input_statement)
             elif any(x in input_statement.text.split() for x in sedeI):
                 s.addNomeSede("Imola")
-                Req = RequestPresenza(s,input_statement.getApiKey())
-                if Req.isReady():
-                    output_statement=StatementStato(Req.sendRequest(),StatoIniziale())      
-                else:
-                    output_statement=StatementStato("Sede Accettata",s)
+                output_statement= self.callRequest(input_statement)
             else:
                 output_statement=StatementStato("Sede non Accettata : Reinserire il nome della Sede",s)
             
+        return output_statement
+
+    def callRequest(self, input_statement) -> StatementStato :
+
+        Req = RequestPresenza(input_statement.getStato(),input_statement.getApiKey())
+        if Req.isReady():
+            if Req.sendRequest():
+                output_statement=StatementStato("Registrazione presenza effettuata con Successo",StatoIniziale())
+            else:
+                output_statement=StatementStato("Registrazione presenza Fallita",StatoIniziale())      
+        else:
+            output_statement=StatementStato("Request non pronto a soddisfare la richiesta",input_statement.getStato())
         return output_statement
