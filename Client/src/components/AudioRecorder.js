@@ -2,7 +2,7 @@ import MicRecorder from "mic-recorder-to-mp3"
 import { useEffect, useState, useRef } from "react"
 import axios from "axios"
 import CustomButton from "./CustomButton"
-import Spinner from 'react-bootstrap/Spinner'
+import LoadingSpinner from "./LoadingSpinner"
 
 // Set AssemblyAI Axios Header
 const assemblyAI = axios.create({
@@ -17,7 +17,6 @@ const assemblyAI = axios.create({
 const AudioRecorder = ({changeMessage, hidden}) => {
   // Mic-Recorder-To-MP3
   const recorder = useRef(null) //Recorder
-  const audioPlayer = useRef(null) //Ref for the HTML Audio Tag
   const [blobURL, setBlobUrl] = useState(null)
   const [audioFile, setAudioFile] = useState(null)
   const [isRecording, setIsRecording] = useState(null)
@@ -28,7 +27,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
   }, [])
 
   const startRecording = () => {
-    changeMessage("")
+    changeMessage("Sto registrando ...")
     // Check if recording isn't blocked by browser
     recorder.current.stop()
     recorder.current.start().then(() => {
@@ -39,6 +38,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
   }
 
   const stopRecording = () => {
+    changeMessage("Sto traducendo il tuo messaggio ...")
     recorder.current
       .stop()
       .getMp3()
@@ -58,7 +58,9 @@ const AudioRecorder = ({changeMessage, hidden}) => {
   const resetAudio = () => {
     setAudioFile(null)
     setBlobUrl(null)
-    document.getElementsByTagName('audio')[0].src = '';
+    setTranscriptID("")
+    setTranscriptData("")
+    setUploadURL("")
   }
 
   // AssemblyAI
@@ -77,56 +79,52 @@ const AudioRecorder = ({changeMessage, hidden}) => {
         .then((res) => setUploadURL(res.data.upload_url))
         .catch((err) => console.error(err))
     }
-    console.log(uploadURL)
+    console.log(audioFile)
   }, [audioFile])
-
-  useEffect(() =>{
-    if(audioFile)
-      submitTranscriptionHandler()
-  },[uploadURL])
 
   // Submit the Upload URL to AssemblyAI and retrieve the Transcript ID
   const submitTranscriptionHandler = () => {
-     assemblyAI
-      .post("/transcript", {
-        audio_url: uploadURL,
-        language_code: "it"
-      })
-      .then((res) => {
-        setTranscriptID(res.data.id)
-        checkStatusHandler()
-      })
-      .catch((err) => console.error(err))
+    if(audioFile){
+      assemblyAI
+        .post("/transcript", {
+          audio_url: uploadURL,
+          language_code: "it"
+        })
+        .then((res) => {
+          setTranscriptID(res.data.id)
+          checkStatusHandler()
+        })
+      }
   }
 
   // Check the status of the Transcript
   const checkStatusHandler = async () => {
     setIsLoading(true)
     try {
-      await assemblyAI.get(`/transcript/${transcriptID}`).then((res) => {
-        if(res.data.text !== null){
-          setTranscriptData(res.data)
-          changeMessage(res.data.text)
-          resetAudio()
-          console.log("CIAO STO SCRIVENDO TRANSCRIPT"+res.data.text)
-        }
-      })
+      if(transcriptID!==""){
+        await assemblyAI.get(`/transcript/${transcriptID}`).then((res) => {
+          if(res.data.text !== null){
+            setTranscriptData(res.data)
+            changeMessage(res.data.text)
+            console.log("CIAO STO SCRIVENDO TRANSCRIPT"+res.data.text)
+          }
+        })
+      }
     } catch (err) {
       console.error(err)
     }
   }
 
-  // Periodically check the status of the Transcript
+  //Periodically check the status of the Transcript
   useEffect(() => {
     const interval = setInterval(() => {
       if (transcriptData.status !== "completed" && isLoading) {
         checkStatusHandler()
       } else {
+        submitTranscriptionHandler()
+        resetAudio()        
         setIsLoading(false)
-        clearInterval(interval)
-        if(audioFile && blobURL !== ""){
-          //submitTranscriptionHandler()
-        }
+        clearInterval(interval)  
       }
     },1000)
     return () => clearInterval(interval)
@@ -137,17 +135,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
        <CustomButton text={(!isRecording ? "Registra" : "Ferma")} 
        onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={!isRecording? "msger-rec-start":"msger-rec-stop"} hidden={hidden} icon="Rec"/>
 
-      <audio ref={recorder} src={blobURL} controls='controls' />
-
-      {isLoading ? (
-        <div>
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Sto traducendo il tuo messaggio...</span>
-            </Spinner>          
-        </div>
-      ) : (
-        <div></div>
-      )}
+      <LoadingSpinner hidden={isLoading}/>
     </div>
   )
 }

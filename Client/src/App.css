@@ -198,3 +198,34 @@
 .msg-text ul li{
   margin-left:2em;
 }
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+* -------------------------------- SEZIONE CARICAMENTO --------------------------------
+*/
+
+.loading-spinner {
+  width: 1em;
+  height: 1em;
+  border: 10px solid #85baff; /* Light grey */
+  border-top: 10px solid #579ffb; /* Black */
+  border-radius: 50%;
+  margin: 0.3em;
+  animation: spinner 1.5s linear infinite;
+}
+
+.spinner-hidden {
+  display: none;
+}
+
+.spinner-container{
+  display:block;
+}
