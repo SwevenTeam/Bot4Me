@@ -28,9 +28,12 @@ const AudioRecorder = ({changeMessage, hidden}) => {
   }, [])
 
   const startRecording = () => {
+    changeMessage("")
     // Check if recording isn't blocked by browser
     recorder.current.stop()
     recorder.current.start().then(() => {
+      setBlobUrl("")
+      setAudioFile(null)
       setIsRecording(true)
     })
   }
@@ -50,7 +53,12 @@ const AudioRecorder = ({changeMessage, hidden}) => {
         setAudioFile(file)
       })
       .catch((e) => console.log(e))
-      submitTranscriptionHandler()
+  }
+  
+  const resetAudio = () => {
+    setAudioFile(null)
+    setBlobUrl(null)
+    document.getElementsByTagName('audio')[0].src = '';
   }
 
   // AssemblyAI
@@ -59,7 +67,6 @@ const AudioRecorder = ({changeMessage, hidden}) => {
   const [uploadURL, setUploadURL] = useState("")
   const [transcriptID, setTranscriptID] = useState("")
   const [transcriptData, setTranscriptData] = useState("")
-  const [transcript, setTranscript] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   // Upload the Audio File and retrieve the Upload URL
@@ -70,7 +77,13 @@ const AudioRecorder = ({changeMessage, hidden}) => {
         .then((res) => setUploadURL(res.data.upload_url))
         .catch((err) => console.error(err))
     }
+    console.log(uploadURL)
   }, [audioFile])
+
+  useEffect(() =>{
+    if(audioFile)
+      submitTranscriptionHandler()
+  },[uploadURL])
 
   // Submit the Upload URL to AssemblyAI and retrieve the Transcript ID
   const submitTranscriptionHandler = () => {
@@ -94,6 +107,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
         if(res.data.text !== null){
           setTranscriptData(res.data)
           changeMessage(res.data.text)
+          resetAudio()
           console.log("CIAO STO SCRIVENDO TRANSCRIPT"+res.data.text)
         }
       })
@@ -109,11 +123,12 @@ const AudioRecorder = ({changeMessage, hidden}) => {
         checkStatusHandler()
       } else {
         setIsLoading(false)
-        setTranscript(transcriptData.text)
-        console.log("CIAO SONO L'ELSE DI SET INTERVAL");
         clearInterval(interval)
+        if(audioFile && blobURL !== ""){
+          //submitTranscriptionHandler()
+        }
       }
-    }, 1000)
+    },1000)
     return () => clearInterval(interval)
   })
 
@@ -122,11 +137,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
        <CustomButton text={(!isRecording ? "Registra" : "Ferma")} 
        onSubmit={()=> isRecording ? stopRecording() : startRecording()} className={!isRecording? "msger-rec-start":"msger-rec-stop"} hidden={hidden} icon="Rec"/>
 
-      <audio ref={audioPlayer} src={blobURL} controls='controls' />
-
-      <CustomButton text={"Converti file audio"} 
-      isDisabled={audioFile === null ? true : false}
-      onSubmit={()=>{submitTranscriptionHandler()}} className={"msger-send-btn"} hidden={hidden}/>
+      <audio ref={recorder} src={blobURL} controls='controls' />
 
       {isLoading ? (
         <div>
