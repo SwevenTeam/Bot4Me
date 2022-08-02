@@ -3,8 +3,8 @@ from Stato import Stato
 class StatoLogin(Stato):
     
     def __init__(self):
-            self.statoAttuale="Login"
-            self.dati={"utente": ""}
+        self.statoAttuale="Login"
+        self.dati={"utente": ""}
 
     #return: Stato attuale -> str
     def getStatoAttuale(self):

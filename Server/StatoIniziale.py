@@ -3,8 +3,8 @@ from Stato import Stato
 class StatoIniziale(Stato):
     
     def __init__(self):
-            self.statoAttuale= "Iniziale"
-            self.dati = null
+        self.statoAttuale= "Iniziale"
+        self.dati = null
 
     #return: Stato attuale -> str
     def getStatoAttuale(self):

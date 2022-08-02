@@ -1,8 +1,15 @@
 from sqlalchemy import null
 from Stato import Stato
 from StatoIniziale import StatoIniziale
+
 class StatoConsuntivazione(Stato):
-    
+    """
+    ---
+    Class Name : StatoConsuntivazione 
+    ---
+    - Args → Stato (type Stato): rappresenta lo stato
+    - Description → Stato che rappresenta un'attività di consuntivazione
+    """    
     # costruttore
     def __init__(self):
         self.statoAttuale="consuntivazione"
@@ -11,6 +18,14 @@ class StatoConsuntivazione(Stato):
 
     # cambiare valori di d con dati della consuntivazione
     def aggiornamento(self,inputStatement):
+        """
+        ---
+        Function Name : aggiornamento 
+        ---
+        - Args → inputStatement (type StatementStato): input dell'utente con stato attuale del Client
+        - Description → aggiorna il sottostato di StatoConsuntivazione
+        - Returns → None
+        """    
         if(self.substate):
             if(self.substate =="inizio") :
                 self.substate="Sede"
@@ -32,13 +47,37 @@ class StatoConsuntivazione(Stato):
                 self.substate= "errore"
 
     #return: Stato attuale -> str
-    def getStatoAttuale(self):
+    def getStatoAttuale(self) -> str:
+        """
+        ---
+        Function Name : getStatoAttuale 
+        ---
+        - Args → None
+        - Description → restituisce lo stato attuale
+        - Returns → str value
+        """     
         return self.statoAttuale
 
     #return: i dati delle conversazioni precedenti -> dict
-    def getDati(self):
+    def getDati(self) -> dict:
+        """
+        ---
+        Function Name : getDati 
+        ---
+        - Args → None
+        - Description → restituisce i dati attualmente inseriti
+        - Returns → dictionary values
+        """
         return self.dati
 
-    def getSubstate(self):
+    def getSubstate(self) -> str:
+        """
+        ---
+        Function Name : getSubstate 
+        ---
+        - Args → None
+        - Description → restituisce il sottostato attuale
+        - Returns → str value
+        """     
         return self.substate
        

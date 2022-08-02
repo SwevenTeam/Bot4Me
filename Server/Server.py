@@ -9,10 +9,27 @@ from Adapter import Adapter
 from StatoIniziale import StatoIniziale
 
 class Server:
+    """
+    ---
+    Class Name : Server
+    ---    
+    - Description → rappresenta il server che contiene il chatbot
+    """    
     def __init__(self):
         self.chatterbot = ChatBot("botforme",logic_adapters=[{'import_path': 'Adapter.Adapter'},{'import_path': 'AdapterPresenza.AdapterPresenza'},{'import_path': 'AdapterAnnulla.AdapterAnnulla'},{'import_path': 'AdapterConsuntivazione.AdapterConsuntivazione'}])
     
     def getResponse(self, text, stato, apiKey) -> StatementStato:
+        """
+        ---
+        Function Name : getResponse 
+        ---
+        - Args →
+          -  text (type String): testo inviato dall'utente
+          -  stato (type Stato): stato del Client al momento dell'invio del messaggio
+          -  apiKey (type String): stringa che rappresenza la API Key
+        - Description → dato uno StatementStato, controlla tutti gli adapter e restituisce la risposta più adatta
+        - Returns → StatementStato value : restituisce la risposta del chatbot con eventuale stato aggiornato
+        """      
         input_statement=StatementStato(text,stato,apiKey)
 
         max_confidence = -1
