@@ -84,7 +84,7 @@ const AudioRecorder = ({changeMessage, hidden}) => {
 
   // Submit the Upload URL to AssemblyAI and retrieve the Transcript ID
   const submitTranscriptionHandler = () => {
-    if(audioFile){
+    if(audioFile && uploadURL!==""){
       assemblyAI
         .post("/transcript", {
           audio_url: uploadURL,

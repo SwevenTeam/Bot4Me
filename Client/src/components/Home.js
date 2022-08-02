@@ -25,6 +25,14 @@ const Home = () => {
       setMessage(e.target.value)
     }
 
+    const resetMessagge = () => {
+      setMessage("");
+    }
+
+    const resetApiKey = () => {
+      setApiKey("");
+    }
+
     const handleApiKeyChange = (e) => {
       setApiKey(e.target.value)
     }
@@ -145,9 +153,11 @@ const Home = () => {
           </main>
 
           <div className='input-form'>
-            <input type="text" ref={inputApiKey} hidden={hidden} className="msger-input" id="apikeyInput" placeholder="Scrivi qui la tua ApiKey..." onChange={handleApiKeyChange}/>
+            <CustomButton text={"CANCELLA API-KEY"} hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{resetApiKey()}} className={"msger-reset-btn"} icon="Trash"/>
+            <input type="text" ref={inputApiKey} value={apikey} hidden={hidden} className="msger-input" id="apikeyInput" placeholder="Scrivi qui la tua ApiKey..." onChange={handleApiKeyChange}/>
             <CustomButton text={"SALVA API-KEY"}  hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{saveApiKey()}} className={"msger-send-btn"} icon="Save"/>
-
+            
+            <CustomButton text={"CANCELLA MESSAGGIO"} hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{resetMessagge()}} className={"msger-reset-btn"} icon="Trash"/>
             <input type="text" hidden={!hidden} className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>          
             <CustomButton text={"INVIA MESSAGGIO"}  hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"} icon="Send"/>
             <AudioRecorder changeMessage={setMessage} hidden={!hidden}/>

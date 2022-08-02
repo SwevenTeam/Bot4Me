@@ -14,7 +14,7 @@
   --left-msg-bg: #ececec;
   --right-msg-bg: #579ffb;
   --border-radius-btn: 5px;
-  --button-background: #579ffb;
+  --button-background: #5ac3fe;
 }
 
 .msger {
@@ -150,7 +150,7 @@
   background-size: contain;
   border-radius: var(--border-radius-btn);
   padding: 0.5em;
-  background: var(--button-background);
+  background: #014aad;
   cursor: pointer;
 }
 
@@ -167,11 +167,16 @@
   padding: 0.5em;
   background: var(--button-background);
   cursor: pointer;
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .msger-send-btn:hover{
   opacity: 1;
+}
+
+.msger-send-btn:disabled{
+  opacity: 0.5;
+  cursor: default;
 }
 
 .msger-rec-start{
@@ -180,6 +185,11 @@
   padding: 0.5em;
   background: #12b912;
   cursor: pointer;
+  opacity: 0.9;
+}
+
+.msger-rec-start:hover{
+  opacity: 1;
 }
 
 .msger-rec-stop{
@@ -188,9 +198,26 @@
   padding: 0.5em;
   background: #FF0000;
   cursor: pointer;
+  opacity: 0.9;
 }
 
-.msger-send-btn:disabled{
+.msger-rec-stop:hover{
+  opacity: 1;
+}
+
+.msger-reset-btn{
+  border-radius: var(--border-radius-btn);
+  padding: 0.5em;
+  background: #FF0000;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.msger-reset-btn:hover{
+  opacity: 1;
+}
+
+.msger-reset-btn:disabled{
   opacity: 0.5;
   cursor: default;
 }
@@ -198,6 +225,11 @@
 .msg-text ul li{
   margin-left:2em;
 }
+
+
+/*
+* -------------------------------- SEZIONE CARICAMENTO --------------------------------
+*/
 
 @keyframes spinner {
   0% {
@@ -207,10 +239,6 @@
     transform: rotate(360deg);
   }
 }
-
-/*
-* -------------------------------- SEZIONE CARICAMENTO --------------------------------
-*/
 
 .loading-spinner {
   width: 1em;
