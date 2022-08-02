@@ -13,7 +13,16 @@ class StatoConsuntivazione(Stato):
     # costruttore
     def __init__(self):
         self.statoAttuale="consuntivazione"
-        self.dati={"Sede": "", "descrizione" : "", "data" :"", "durata" :""}
+        self.dati={
+          "codice progetto":"",
+          "data" :"", 
+          "ore fatturabili" :"",
+          "ore viaggio":"",
+          "ore viaggio fatturabili":"",
+          "sede": "",  
+          "fatturabile":"",
+          "descrizione" : ""
+        }
         self.substate="inizio"
 
     # cambiare valori di d con dati della consuntivazione
@@ -28,23 +37,40 @@ class StatoConsuntivazione(Stato):
         """    
         if(self.substate):
             if(self.substate =="inizio") :
-                self.substate="Sede"
-            elif(self.substate =="Sede") :
-                self.dati["Sede"]=inputStatement.getText()                
+            # codice progetto
+                self.substate="codice progetto"
+            elif(self.substate =="codice progetto") :
+                self.dati["codice progetto"]=inputStatement.getText()  
+            # data              
+                self.substate="data"
+            elif(self.substate =="data") :
+                self.dati["data"]=inputStatement.getText()
+            # ore fatturabili
+                self.substate="ore fatturabili"
+            elif(self.substate =="ore fatturabili") :
+                self.dati["ore fatturabili"]=inputStatement.getText()
+            # ore viaggio                
+                self.substate="ore viaggio"
+            elif(self.substate =="ore viaggio") :
+                self.dati["ore viaggio"]=inputStatement.getText()
+            # ore viaggio fatturabili
+                self.substate="ore viaggio fatturabili"
+            elif(self.substate =="ore viaggio fatturabili") :
+                self.dati["ore viaggio fatturabili"]=inputStatement.getText() 
+            # sede
+                self.substate="sede"
+            elif(self.substate =="sede") :
+                self.dati["sede"]=inputStatement.getText()
+            # fatturabile
+                self.substate="fatturabile"
+            elif(self.substate =="fatturabile") :
+                self.dati["fatturabile"]=inputStatement.getText()
+            # descrizione
                 self.substate="descrizione"
             elif(self.substate =="descrizione") :
                 self.dati["descrizione"]=inputStatement.getText()
-                self.substate="data"
-            elif(self.substate =="data") :
-                self.dati["data"]=inputStatement.getText()                
-                self.substate="durata"
-            elif(self.substate =="durata") :
-                self.dati["durata"]=inputStatement.getText()
-                self.substate = "termina"
-            elif(self.substate =="termina"):
-                print("bro")
-            else:
-                self.substate= "errore"
+                self.substate="termina"
+               
 
     #return: Stato attuale -> str
     def getStatoAttuale(self) -> str:

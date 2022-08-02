@@ -44,24 +44,53 @@ class RequestConsuntivazione():
         - Args → None
         - Description → assembla la richiesta di consuntivazione e la invia
         - Returns → boolean value : true se ha eseguito, false altrimenti
-        """      
-        # il code da dove cazzo lo tiro fuori?
-        url = "https://apibot4me.imolinfo.it/v1/projects/1/activities/me"
-        headers={"api_key": self.Api, 'accept': 'application/json', 'Content-Type': 'application/json'}
-        data={'date': self.dati["data"],
-            'billableHours': self.dati["durata"],
-            'travelHours': 0,
-            'billableTravelHours': 0,
-            'location': self.dati["Sede"],
-            'billable': true,
-            'note': self.dati["descrizione"]}
+        """  
+
+        myurl = "https://apibot4me.imolinfo.it/v1/projects/"+ self.dati["codice progetto"]+"/activities/me"
+
+        header={ 'accept': 'application/json','api_key': self.Api, 'Content-Type': 'application/json'}
+        
+        informazioni=[
+            {
+              'date': self.dati["data"],
+              'billableHours': self.dati["ore fatturabili"],
+              'travelHours': self.dati["ore viaggio"],
+              'billableTravelHours': self.dati["ore viaggio fatturabili"],
+              'location': self.dati["sede"],
+              'billable': self.dati["fatturabile"],
+              'note': self.dati["descrizione"]
+            },
+          ]
+
+
         responseUrl = requests.post(
-          url, 
-          headers, 
-          data
-          )
-        if responseUrl : 
-          #responseUrl == 200:
+          url = myurl, 
+          headers = header, 
+          json = informazioni          
+        )
+
+        print(responseUrl)
+        
+        if responseUrl.status_code >=200 and responseUrl.status_code <300 :
+            return True
+        else :
+            return False
+
+    def checkProjectExistance(self, code) -> Boolean :
+        """
+        ---
+        Name checkProjectExistance 
+        ---
+        - Args → code (int) : rappresenta il codice del progetto
+        - Description → manda una richiesta get e ritorna se il lavoro è presente o meno
+        - Returns → boolean value : true se esite, false altrimenti
+        """        
+        myurl = "https://apibot4me.imolinfo.it/v1/projects/" + code
+        header = { 'accept': 'application/json','api_key': self.Api,}
+
+        response = requests.get(myurl,headers=header,data={})
+        
+        if response.status_code >=200 and response.status_code < 300 :
           return True
-        else:
+        else :
           return False

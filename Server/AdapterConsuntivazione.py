@@ -7,6 +7,7 @@ from StatementStato import StatementStato
 from StatoConsuntivazione import StatoConsuntivazione
 from sqlalchemy import false, null, true
 from StatoIniziale import StatoIniziale
+import datetime
 
 class AdapterConsuntivazione(LogicAdapter):
     """
@@ -80,49 +81,95 @@ class AdapterConsuntivazione(LogicAdapter):
 
         # Effettuo dei controlli sul Substate, per sapere cosa dover richiedere all'utente        
         if(s.substate =="inizio"):
-            output_statement=StatementStato("Consuntivazione Avviata : Inserire il nome della sede",s)
+            output_statement=StatementStato("Consuntivazione Avviata : Inserire il codice del Progetto",s)
             s.aggiornamento(input_statement)
 
-        # Utente ha iniziato il processo, Adapter richiede di Inserire la Sede
+        # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
+        elif(s.substate =="codice progetto"):
+            # Controllo se il progetto esiste
+            Req = RequestConsuntivazione(s,input_statement.getApiKey())
+            if Req.checkProjectExistance( input_statement.getText()) :
+              output_statement=StatementStato("Progetto esistente \n Inserire la data di consuntivazione ( formato aaaa-mm-gg )",s)
+              s.aggiornamento(input_statement)
+            else :
+              output_statement=StatementStato("Progetto non esistente \n Reinserire un codice diverso o creare un nuovo progetto",s)
+        
+        # Utente ha inserito il codice e questo esiste, ora dovrà inserire la data
+        elif(s.substate =="data"):
+            ### Formato aaaa-mm-gg
+            try:
+              datetime.datetime.strptime(input_statement.getText(), '%Y-%m-%d')
+              output_statement=StatementStato("Data accettata : Inserire le ore fatturabili",s)
+              s.aggiornamento(input_statement)
+            except ValueError:
+              output_statement=StatementStato("Data non accettata : Reinserire la data del progetto",s)
+             
+        # Utente ha inserito la data nel formato corretto, ora dovrà inserire le ore fatturabili
+        elif(s.substate =="ore fatturabili"):
+            if input_statement.getText().isnumeric() :
+              output_statement=StatementStato("Ore fatturabili accettate : Inserire le ore di viaggio",s)
+              s.aggiornamento(input_statement)
+            else:
+              output_statement=StatementStato("Ore fatturabili non accettate : Reinserire le ore fatturabili come numero",s)
+
+        # Utente ha inserito il codice e questo esiste, ora dovrà inserire la data
+        elif(s.substate =="ore viaggio"):
+            if input_statement.getText().isnumeric() :
+              output_statement=StatementStato("Ore viaggio accettate : Inserire le ore di viaggio fatturabili",s)
+              s.aggiornamento(input_statement)
+            else:
+              output_statement=StatementStato("Ore viaggio non accettate : Reinserire le ore di viaggio come numero",s)
+
+
+        # Utente ha inserito il codice e questo esiste, ora dovrà inserire la data
+        elif(s.substate =="ore viaggio fatturabili"):
+            if input_statement.getText().isnumeric() :
+              output_statement=StatementStato("ore viaggio fatturabili Accettate : Inserire la sede",s)
+              s.aggiornamento(input_statement)
+            else:
+              output_statement=StatementStato("Ore viaggio fatturabili non accettate : Reinserire le ore di viaggio fatturabili come numero",s)
+
+
         # Controllo quindi se nel messaggio inviato dall'utente sia presente una delle due Sedi
-        elif(s.substate =="Sede"):
+        elif(s.substate =="sede"):
             sedeP = ['Bologna', 'bologna','bl']
             
             sedeI = ['Imola', 'imola', 'im']
              
             if any(x in input_statement.text.split() for x in sedeP):
-              output_statement=StatementStato("Sede Accettata : Inserire la descrizione del progetto",s)
+              output_statement=StatementStato("Sede Accettata : È fatturabile?",s)
               s.aggiornamento(StatementStato("Bologna",s) )
             elif any(x in input_statement.text.split() for x in sedeI):
-              output_statement=StatementStato("Sede Accettata : Inserire la descrizione del progetto",s)
+              output_statement=StatementStato("Sede Accettata : È fatturabile?",s)
               s.aggiornamento(StatementStato("Imola",s))
             else:
               output_statement=StatementStato("Sede non Accettata : Reinserire il nome della Sede",s)
 
+        elif(s.substate =="fatturabile"):
+
+            negativo = ['no', 'falso','false']
+            
+            affermativo = ['sì', 'si', 'true', 'vero']
+             
+            if any(x in input_statement.text.split() for x in affermativo):
+              output_statement=StatementStato("Scelta Fatturabilità accettata : Inserire la descrizione",s)
+              s.aggiornamento(StatementStato("True",s))
+            elif any(x in input_statement.text.split() for x in negativo):
+              output_statement=StatementStato("Scelta Fatturabilità accettata : Inserire la descrizione",s)
+              s.aggiornamento(StatementStato("False",s))
+            else:
+              output_statement=StatementStato("Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)",s)
+            
         # Utente ha inserito la sede, ora dovrà inserire la descrizione
         elif(s.substate =="descrizione"):
-            output_statement=StatementStato("Descrizione Accettata : Inserire la data del progetto (formato aaaa-mm-gg)",s)
             s.aggiornamento(input_statement)
-
-        # Utente ha inserito la descrizione, ora dovrà inserire la data
-        elif(s.substate =="data"):
-            ### Da sistemare quando conosco il formato della data
-            if True :
-              output_statement=StatementStato("Data Accettata : Inserire la durata del progetto",s)
-              s.aggiornamento(input_statement)
-            else:
-              output_statement=StatementStato("Data non Accettata : Reinserire la data del progetto",s)
-              
-        # Utente ha inserito la data, ora dovrà inserire la durata
-        elif(s.substate =="durata"):
-            s.aggiornamento(input_statement)
+            statement = "Descrizione Accettata : Inserimento completato \n" 
             values = s.getDati()
-            stringa = "Durata Accettata; \n Dati Inseriti : \n"
             for x in values:
-              stringa += x +" : "+ values[x] + "\n"
-            stringa += " Confermare l'operazione?"
+              statement += x +" : "+ values[x] + "\n"
+            statement += "vuoi consuntivare?"
+            output_statement=StatementStato(statement,s)
             
-            output_statement=StatementStato(stringa,s)
         
         # Utente ha inserito tutti i dati richiesti, ora dovrà confermare        
         elif(s.substate =="termina"):
