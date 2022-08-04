@@ -213,6 +213,18 @@
   opacity: 0.8;
 }
 
+.msger-undo-btn{
+  border-radius: var(--border-radius-btn);
+  padding: 0.5em;
+  background: #ffbf00;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.msger-undo-btn:hover{
+  opacity: 1;
+}
+
 .msger-reset-btn:hover{
   opacity: 1;
 }

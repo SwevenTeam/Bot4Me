@@ -44,13 +44,18 @@ const Home = () => {
       changeHidden()
     }
 
+    const login = () => {
+      changeHidden()
+      botResponse("login")
+    }
+
+    const finish = () => {
+      botResponse("termina")
+    }
+
     const changeHidden = () => {
       if(hidden === true){
         setHidden(false);
-        if(apikey === "")
-          inputApiKey.current.value = "";
-        else 
-          inputApiKey.current.value = apikey;
       }
       else setHidden(true);
     }
@@ -91,9 +96,6 @@ const Home = () => {
       
       fetch('http://127.0.0.1:5000/get?msg='+rawText).then(function(response) {
         response.text().then(function(data) {
-          if(response.status === 403){
-            data = "Non sei autorizzato a visualizzare questo contenuto"
-          }
             console.log(rawText);
             console.log(data);
             appendMessage(BOT_NAME, BOT_IMG, "left", data);
@@ -121,7 +123,7 @@ const Home = () => {
               <i> Ciao sono il tuo assistente Bot4Me </i>
           </div>
           <CustomButton text={"API KEY"} isDisabled={false} 
-            className={"msger-apikey-btn"} onSubmit={()=>{changeHidden()}} 
+            className={"msger-apikey-btn"} onSubmit={()=>{login()}} 
             hidden={false} icon="UserConf"/>
           </header>
 
@@ -153,6 +155,8 @@ const Home = () => {
           </main>
 
           <div className='input-form'>
+            <CustomButton text={"TERMINA OPERAZIONE"} onSubmit={()=>{finish()}} className={"msger-undo-btn"} icon="Delete"/>
+            
             <CustomButton text={"CANCELLA API-KEY"} hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{resetApiKey()}} className={"msger-reset-btn"} icon="Trash"/>
             <input type="text" ref={inputApiKey} value={apikey} hidden={hidden} className="msger-input" id="apikeyInput" placeholder="Scrivi qui la tua ApiKey..." onChange={handleApiKeyChange}/>
             <CustomButton text={"SALVA API-KEY"}  hidden={hidden} isDisabled={(apikey) === "" ? true : false} onSubmit={()=>{saveApiKey()}} className={"msger-send-btn"} icon="Save"/>
