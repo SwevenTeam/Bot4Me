@@ -19,7 +19,7 @@ class RequestConsuntivazione():
     """
     def __init__(self, s, apiKey):
         self.dati = s.getDati()
-        self.ready = s.getSubstate()
+        #self.ready = s.getSubstate()
         self.Api = apiKey
 
     def isReady(self) -> bool:
@@ -31,7 +31,7 @@ class RequestConsuntivazione():
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """      
-        if(self.ready=="termina"):
+        if self.dati["conferma"]=="conferma":
           return True
         else:
           return False
