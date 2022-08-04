@@ -89,8 +89,8 @@ class RequestConsuntivazione():
         header = { 'accept': 'application/json','api_key': self.Api,}
 
         response = requests.get(myurl,headers=header,data={})
-        
-        if response.status_code >=200 and response.status_code < 300 :
+
+        if response.status_code >=200 and response.status_code < 300 and response.headers.get('Content-Length')  != "0":
           return True
         else :
           return False
