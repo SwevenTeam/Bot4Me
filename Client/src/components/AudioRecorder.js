@@ -31,8 +31,6 @@ const AudioRecorder = ({changeMessage, hidden}) => {
     // Check if recording isn't blocked by browser
     recorder.current.stop()
     recorder.current.start().then(() => {
-      setBlobUrl("")
-      setAudioFile(null)
       setIsRecording(true)
     })
   }

@@ -51,6 +51,9 @@ const Home = () => {
 
     const finish = () => {
       botResponse("termina")
+      if(!hidden){
+        changeHidden()
+      }
     }
 
     const changeHidden = () => {
@@ -122,7 +125,7 @@ const Home = () => {
           <div className="msger-header-title">
               <i> Ciao sono il tuo assistente Bot4Me </i>
           </div>
-          <CustomButton text={"API KEY"} isDisabled={false} 
+          <CustomButton text={"API KEY"} isDisabled={!hidden} 
             className={"msger-apikey-btn"} onSubmit={()=>{login()}} 
             hidden={false} icon="UserConf"/>
           </header>

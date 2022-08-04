@@ -152,6 +152,16 @@
   padding: 0.5em;
   background: #014aad;
   cursor: pointer;
+  opacity: 0.8;
+}
+
+.msger-apikey-btn:hover{
+  opacity: 1;
+}
+
+.msger-apikey-btn:disabled{
+  opacity: 0.5;
+  cursor: default;
 }
 
 .msger-input {
