@@ -15,3 +15,8 @@ yarn-debug.log*
 yarn-error.log*
 /.changelog
 .npm/
+db.sqlite3
+
+db.sqlite3-shm
+
+db.sqlite3-wal

@@ -1,5 +1,4 @@
 from ast import And
-from asyncio.windows_events import NULL
 from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
 from RequestLogout import RequestLogout
