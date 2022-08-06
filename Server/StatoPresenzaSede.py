@@ -40,6 +40,4 @@ class StatoPresenzaSede(Stato):
     def addNomeSede(self, x):
         self.dati["sede"] = x
 
-    def addDati(self, x, y):
-        if x in self.dati:
-            self.dati[x]=y
+

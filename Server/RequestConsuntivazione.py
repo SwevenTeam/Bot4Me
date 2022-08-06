@@ -57,7 +57,7 @@ class RequestConsuntivazione():
               'travelHours': self.dati["ore viaggio"],
               'billableTravelHours': self.dati["ore viaggio fatturabili"],
               'location': self.dati["sede"],
-              'billable': self.dati["fatturabile"],
+              'billable':('True') if self.dati["fatturabile"] else ('False'),
               'note': self.dati["descrizione"]
             },
           ]

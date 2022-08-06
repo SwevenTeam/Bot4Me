@@ -23,7 +23,7 @@ class StatoConsuntivazione(Stato):
           "sede": "",  
           "fatturabile":"",
           "descrizione" : "",
-          "conferma" :"",
+          "conferma" :"non confermato",
         }
 
     def addDati(self, x, y):
