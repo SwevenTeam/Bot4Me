@@ -16,7 +16,7 @@ class Server:
     - Description → rappresenta il server che contiene il chatbot
     """    
     def __init__(self):
-        self.chatterbot = ChatBot("botforme",logic_adapters=[{'import_path': 'Adapter.Adapter'},{'import_path': 'AdapterPresenza.AdapterPresenza'},{'import_path': 'AdapterAnnulla.AdapterAnnulla'},{'import_path': 'AdapterConsuntivazione.AdapterConsuntivazione'}])
+        self.chatterbot = ChatBot("botforme",logic_adapters=[{'import_path': 'Adapter.Adapter'},{'import_path': 'AdapterPresenza.AdapterPresenza'},{'import_path': 'AdapterAnnulla.AdapterAnnulla'},{'import_path': 'AdapterConsuntivazione.AdapterConsuntivazione'},{'import_path': 'AdapterCreazioneProgetto.AdapterCreazioneProgetto'}])
     
     def getResponse(self, text, stato, apiKey) -> StatementStato:
         """
