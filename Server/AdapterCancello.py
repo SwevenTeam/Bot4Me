@@ -13,6 +13,7 @@ class AdapterCancello(Adapter):
     - Args → Adapter ( type Adapter) : implementata da tutti gli adapter di Chatbot
     - Description → Adapter per l'apertura del cancello di una sede
     """
+
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
 
@@ -26,7 +27,7 @@ class AdapterCancello(Adapter):
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         stato = statement.getStato()
-        
+
         if stato.getStatoAttuale() == StatoCancello().getStatoAttuale():
             return True
 
@@ -35,8 +36,7 @@ class AdapterCancello(Adapter):
             return any(word in statement.text.split() for word in words)
 
         return False
-        
-        
+
     def process(self, input_statement: StatementStato, additional_response_selection_parameters) -> StatementStato:
         """
         ---
@@ -49,46 +49,50 @@ class AdapterCancello(Adapter):
         crea un outputStatement (StatementStato) in base all'input inserito dall'utente, nel caso inserisca una sede valida 
         richiede l'apertura del cancello
         - Returns → StatementStato value : risposta del chatbot con eventuale cambio di stato
-        """ 
+        """
         stato = input_statement.getStato()
 
         # L'Utente vuole avviare l'attività di apertura del cancello
         if stato.getStatoAttuale() == StatoIniziale().getStatoAttuale():
-            return StatementStato (
-                "Apertura cancello avviata : Inserire la sede del cancello", 
-                StatoCancello(), 
+            return StatementStato(
+                "Apertura cancello avviata : Inserire la sede del cancello",
+                StatoCancello(),
                 input_statement.getApiKey()
             )
+
         
-        # validazione della sede
         request_cancello = RequestCancello(input_statement.getApiKey())
+        # vengono recuperate le sedi
         locations = request_cancello.getLocations()
-        sede = ''
-        for word in input_statement.text.split():
-            if word.upper() in locations:
-                sede = word.upper()
-                break
 
-        if sede == '':
-            return StatementStato (
-                "Sede non trovata : Reinserire la sede del cancello", 
-                stato, 
-                input_statement.getApiKey()
-            )
+        if len(locations) > 0:
+            # validazione della sede
+            sede = ''
+            for word in input_statement.getText().split():
+                if word.upper() in locations:
+                    sede = word.upper()
+                    break
 
-        stato.addDati("sede", sede)
-        request_cancello.setSede(stato)
-        
-        # viene inviata la richiesta di apertura del cancello, se non va a buon fine si è verificato un errore
-        if request_cancello.isReady() and request_cancello.sendRequest():
-            return StatementStato (
-                "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
-                StatoIniziale(),
-                input_statement.getApiKey()
-            )
+            if sede == '':
+                return StatementStato(
+                    "Sede non trovata : Reinserire la sede del cancello",
+                    stato,
+                    input_statement.getApiKey()
+                )
 
-        return StatementStato (
-            "Si è verificato un errore sconosciuto, riprova ad inviare la sede", 
-            stato, 
+            stato.addDati("sede", sede)
+            request_cancello.setSede(stato)
+
+            # viene inviata la richiesta di apertura del cancello, se non va a buon fine si è verificato un errore
+            if request_cancello.isReady() and request_cancello.sendRequest():
+                return StatementStato(
+                    "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
+                    StatoIniziale(),
+                    input_statement.getApiKey()
+                )
+
+        return StatementStato(
+            "Si è verificato un errore sconosciuto, riprova ad inviare la sede",
+            stato,
             input_statement.getApiKey()
         )
