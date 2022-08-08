@@ -9,8 +9,7 @@ const assemblyAI = axios.create({
   baseURL: "https://api.assemblyai.com/v2",
   headers: {
     authorization: "d558677a79ad45ccaf2204170bf00e16",
-    "content-type": "application/json",
-    "transfer-encoding": "chunked",
+    "content-type": "application/json"
   },
 })
 

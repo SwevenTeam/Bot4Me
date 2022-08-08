@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import CustomButton from './CustomButton';
 import AudioRecorder from './AudioRecorder';
+import axios from 'axios';
 
 const Home = () => {
 
@@ -89,7 +90,6 @@ const Home = () => {
           </div>
         </div>
       `;
-
       msgerChat.insertAdjacentHTML("beforeend", msgHTML);
       msgerChat.scrollTop += 500;
     }
@@ -99,6 +99,9 @@ const Home = () => {
       // Fetch --> localhost:8080/get
       // Bot Response
       
+      const url = 'http://127.0.0.1:5000/get'
+
+      /*
       fetch('http://127.0.0.1:5000/get?msg='+rawText).then(function(response) {
         response.text().then(function(data) {
             console.log(rawText);
@@ -106,8 +109,16 @@ const Home = () => {
             appendMessage(BOT_NAME, BOT_IMG, "left", data);
         });
       });
+      */
+     
+     axios.post(url,{
+      textInput: rawText,
+     }).then(function(response) {
+            console.log(rawText);
+            console.log(response);
+            appendMessage(BOT_NAME, BOT_IMG, "left", JSON.stringify(response.data));
+      });
     }
-
 
     // Utils
     function get(selector, root = document) {
@@ -117,7 +128,6 @@ const Home = () => {
     function formatDate(date) {
       const h = "0" + date.getHours();
       const m = "0" + date.getMinutes();
-
       return `${h.slice(-2)}:${m.slice(-2)}`;
     }
 
