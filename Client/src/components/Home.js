@@ -41,11 +41,13 @@ const Home = () => {
       if(inputApiKey.current.value !== null){
         setApiKey(inputApiKey.current.value);
       }
+      botResponse(apikey)
       changeHidden()
     }
 
     const login = () => {
       changeHidden()
+      appendMessage(PERSON_NAME, PERSON_IMG, "right", "login");
       botResponse("login")
     }
 

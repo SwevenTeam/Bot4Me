@@ -2,6 +2,8 @@ from ast import And
 from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
 from RequestConsuntivazione import RequestConsuntivazione
+from StatoLogin import StatoLogin
+from StatoAutenticazione import StatoAutenticazione
 from StatementStato import StatementStato
 from StatoConsuntivazione import StatoConsuntivazione
 from chatterbot.conversation import Statement
@@ -61,8 +63,10 @@ class AdapterAnnulla(LogicAdapter):
         # s rappresenta lo StatementStato
         if input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() :
           output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale())
+        elif input_statement.getStato().getStatoAttuale() == StatoAutenticazione().getStatoAttuale(): 
+          output_statement=StatementStato(" Operazione Login Annullata",StatoLogin())
         else:
-          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale())
+          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoLogin())
         # assegno una confidence MOLTO alta per questa operazione perché DEVE prendere la priorità
         output_statement.confidence = 100
 
