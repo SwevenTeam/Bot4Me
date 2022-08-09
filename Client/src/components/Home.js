@@ -116,7 +116,8 @@ const Home = () => {
      }).then(function(response) {
             console.log(rawText);
             console.log(response);
-            appendMessage(BOT_NAME, BOT_IMG, "left", JSON.stringify(response.data));
+            console.log(response.data)
+            appendMessage(BOT_NAME, BOT_IMG, "left", JSON.stringify(response.data).replaceAll('"',''))
       });
     }
 

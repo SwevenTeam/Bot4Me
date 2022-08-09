@@ -61,12 +61,12 @@ class AdapterAnnulla(LogicAdapter):
         - Returns → StatementStato value : risposta del chatbot
         """             
         # s rappresenta lo StatementStato
-        if input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() :
-          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale())
-        elif input_statement.getStato().getStatoAttuale() == StatoAutenticazione().getStatoAttuale(): 
-          output_statement=StatementStato(" Operazione Login Annullata",StatoLogin())
-        else:
-          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoLogin())
+        if input_statement.getStato().getStatoAttuale() == StatoAutenticazione().getStatoAttuale():
+          output_statement=StatementStato("Operazione di Login Annullata", StatoLogin(),self,"")
+        elif input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() and input_statement.getStato().getStatoAttuale() != StatoLogin().getStatoAttuale() and input_statement.getStato().getStatoAttuale() != StatoAutenticazione().getStatoAttuale():
+          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale(),input_statement.getApiKey())
+        elif (input_statement.getStato().getStatoAttuale() != StatoLogin().getStatoAttuale) and (input_statement.getStato().getStatoAttuale() != StatoAutenticazione().getStatoAttuale()) and (input_statement.getStato().getStatoAttuale() == StatoIniziale().getStatoAttuale()):
+          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale(),input_statement.getApiKey())
         # assegno una confidence MOLTO alta per questa operazione perché DEVE prendere la priorità
         output_statement.confidence = 100
 

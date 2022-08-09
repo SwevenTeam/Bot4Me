@@ -1,5 +1,6 @@
 from ast import And
 from decimal import InvalidOperation
+from os import stat
 from chatterbot.logic import LogicAdapter
 from RequestConsuntivazione import RequestConsuntivazione
 from StatementStato import StatementStato

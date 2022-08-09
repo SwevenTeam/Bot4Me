@@ -19,7 +19,7 @@ class AdapterLogin(LogicAdapter):
       stato=statement.getStato()
 
       if(stato.getStatoAttuale()=="Login"):
-        words = ['login', 'autenticazione','registrazione']
+        words = ['login', 'autenticazione','registrazione','log','accesso']
         if any(x in statement.text.split() for x in words):
             return True
         else:
@@ -53,7 +53,8 @@ class AdapterLogin(LogicAdapter):
 
         elif(s.getStatoAttuale() == 'Autenticazione'):
           if(input_statement.getText() == '12345678-1234-1234-1234-123456789012'):
-            output_statement=StatementStato("Autenticazione Avvenuta Con Successo",StatoIniziale(),input_statement.getText())
+            s = StatoIniziale()
+            output_statement=StatementStato("Autenticazione Avvenuta Con Successo",s,input_statement.getText())
           else:
             output_statement=StatementStato("Autenticazione Fallita : l'API-KEY inserita non è valida",s)
 
