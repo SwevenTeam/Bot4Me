@@ -103,12 +103,12 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="codice progetto":
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati \n " + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati <br> " + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
-                    output_statement=StatementStato("Progetto esistente \n Inserire la data di consuntivazione ( formato aaaa-mm-gg )",s)
+                    output_statement=StatementStato("Progetto esistente <br> Inserire la data di consuntivazione ( formato aaaa-mm-gg )",s)
             else :
-                output_statement=StatementStato("Progetto non esistente \n Reinserire un codice diverso o creare un nuovo progetto",s)
+                output_statement=StatementStato("Progetto non esistente <br> Reinserire un codice diverso o creare un nuovo progetto",s)
         
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la data
         elif (not dati["data"] and dati["codice progetto"] ) or dati["conferma"]=="data":
@@ -119,7 +119,7 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="data":
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Data accettata e aggiornata. Visualizzazione Dati Aggiornati \n" + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Data accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement=StatementStato("Data accettata : Inserire le ore fatturabili",s)
@@ -133,7 +133,7 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="ore fatturabili":
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Ore Fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati \n" + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Ore Fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati <br>" + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement=StatementStato("Ore fatturabili accettate : Inserire le ore di viaggio",s)
@@ -179,7 +179,7 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="sede" :
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Sede Accettata e aggiornata. Visualizzazione Dati Aggiornati \n " + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Sede Accettata e aggiornata. Visualizzazione Dati Aggiornati <br> " + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement=StatementStato("Sede Accettata : È fatturabile?",s)
@@ -188,7 +188,7 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="sede" :
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Sede Accettata e aggiornata. Visualizzazione Dati Aggiornati \n " + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Sede Accettata e aggiornata. Visualizzazione Dati Aggiornati <br> " + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement=StatementStato("Sede Accettata : È fatturabile?",s)
@@ -206,7 +206,7 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="fatturabile" :
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Fatturabilità Accettata e aggiornata. Visualizzazione Dati Aggiornati \n" + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Fatturabilità Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement=StatementStato("Scelta Fatturabilità accettata : Inserire la descrizione",s)
@@ -216,7 +216,7 @@ class AdapterConsuntivazione(LogicAdapter):
                 # Se è un'operazione di modifica
                 if dati["conferma"]=="fatturabile" :
                     s.addDati("conferma","non confermato")
-                    output_statement=StatementStato("Fatturabilità Accettata e aggiornata. Visualizzazione Dati Aggiornati \n" + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
+                    output_statement=StatementStato("Fatturabilità Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" + self.returnAllData(s) +"Confermare operazione di consuntivazione?",s)
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement=StatementStato("Scelta Fatturabilità accettata : Inserire la descrizione",s)
@@ -229,10 +229,10 @@ class AdapterConsuntivazione(LogicAdapter):
             # Se è un'operazione di modifica
             if dati["conferma"]=="descrizione" :
                 s.addDati("conferma","non confermato")
-                output_statement=StatementStato("Descrizione Accettata e aggiornata. Visualizzazione Dati Aggiornati \n" + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
+                output_statement=StatementStato("Descrizione Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" + self.returnAllData(s) +" Confermare operazione di consuntivazione?",s)
             # Se è un'operazione di primo inserimento
             else:
-                statement = "Descrizione Accettata : Inserimento completato \n" + self.returnAllData(s) + "vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
+                statement = "Descrizione Accettata : Inserimento completato <br>" + self.returnAllData(s) + "vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
                 output_statement=StatementStato(statement,s)
             
         
@@ -286,6 +286,6 @@ class AdapterConsuntivazione(LogicAdapter):
         sentence =""
         values = s.getDati()
         for x in values:
-            sentence += x +" : "+ values[x] + "\n"
+            sentence += x +" : "+ values[x] + "<br>"
         
         return sentence

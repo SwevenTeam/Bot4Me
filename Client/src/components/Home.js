@@ -76,6 +76,12 @@ const Home = () => {
       botResponse(message);
     };
 
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        onSubmit()
+      }
+    }
+
     function appendMessage(name, img, side, text) {
       //   Simple solution for small apps
       const msgHTML = `
@@ -179,7 +185,7 @@ const Home = () => {
             
             
             <CustomButton text={"CANCELLA MESSAGGIO"} hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{resetMessagge()}} className={"msger-reset-btn"} icon="Trash"/>
-            <input type="text" hidden={!hidden} className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>          
+            <input onKeyDown={handleKeyDown} type="text" hidden={!hidden} className="msger-input" id="textInput" value={message} placeholder="Scrivi qui il tuo messaggio..." onChange={handleMessageChange}/>          
             <CustomButton text={"INVIA MESSAGGIO"}  hidden={!hidden} isDisabled={(message) === "" ? true : false} onSubmit={()=>{onSubmit()}} className={"msger-send-btn"} icon="Send"/>
             <AudioRecorder changeMessage={setMessage} hidden={!hidden}/>
           </div>

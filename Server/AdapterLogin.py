@@ -7,7 +7,7 @@ from StatoLogin import StatoLogin
 from StatementStato import StatementStato
 from StatoConsuntivazione import StatoConsuntivazione
 from chatterbot.conversation import Statement
-from sqlalchemy import false, true
+from sqlalchemy import false, true, null
 from StatoIniziale import StatoIniziale
 
 class AdapterLogin(LogicAdapter):
@@ -46,7 +46,7 @@ class AdapterLogin(LogicAdapter):
 
         s = input_statement.getStato()
 
-        if (s.getStatoAttuale() and s.getStatoAttuale() == "Iniziale"):
+        if (s.getStatoAttuale() and s.getStatoAttuale() == "Iniziale" and input_statement.getApiKey()==null):
           s = StatoLogin()
           output_statement=StatementStato("Autenticazione Avviata : Inserire l'API-KEY",s)
 
@@ -58,7 +58,7 @@ class AdapterLogin(LogicAdapter):
             output_statement=StatementStato("Autenticazione Fallita : l'API-KEY inserita non è valida, riprova",s)
 
         else:
-            output_statement=StatementStato("È avvenuto un errore sconosciuto",s)
+            output_statement=StatementStato("Hai già effettuato l'accesso",s)
       
 
         return output_statement
