@@ -46,19 +46,17 @@ class AdapterLogin(LogicAdapter):
 
         s = input_statement.getStato()
 
-        if (s.getStatoAttuale() and s.getStatoAttuale() == "Iniziale" and input_statement.getApiKey()==null):
-          s = StatoLogin()
-          output_statement=StatementStato("Autenticazione Avviata : Inserire l'API-KEY",s)
+        if(input_statement.getApiKey()==null):
+          if (s.getStatoAttuale() and s.getStatoAttuale() == "Iniziale"):
+           s = StatoLogin()
+           output_statement=StatementStato("Autenticazione Avviata : Inserire l'API-KEY",s)
 
-        elif(s.getStatoAttuale() == 'Login'):
-          if(input_statement.getText() == '12345678-1234-1234-1234-123456789012'):
-            s = StatoIniziale()
-            output_statement=StatementStato("Autenticazione Avvenuta Con Successo",s,input_statement.getText())
-          else:
-            output_statement=StatementStato("Autenticazione Fallita : l'API-KEY inserita non è valida, riprova",s)
-
+          elif(s.getStatoAttuale() == 'Login'):
+            if(input_statement.getText() == '12345678-1234-1234-1234-123456789012'):
+              output_statement=StatementStato("Autenticazione Avvenuta Con Successo",StatoIniziale(),input_statement.getText())
+            else:
+             output_statement=StatementStato("Autenticazione Fallita : l'API-KEY inserita non è valida, riprova",StatoLogin(),null)
         else:
             output_statement=StatementStato("Hai già effettuato l'accesso",s)
-      
-
+          
         return output_statement

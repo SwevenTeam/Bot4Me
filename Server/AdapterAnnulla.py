@@ -36,9 +36,6 @@ class AdapterAnnulla(LogicAdapter):
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         # Controllo su presenza stringhe che identificano la richiesta di annullamento dell'operazione
-        if statement.getApiKey() == null :
-          return False
-
         words = ['annulla', 'termina','cancella']
         if any(x in statement.text.split() for x in words):
             return True
@@ -67,10 +64,13 @@ class AdapterAnnulla(LogicAdapter):
         
          # s rappresenta lo StatementStato
         if input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() :
-          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale())
+          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale(),null)
+        elif(input_statement.getApiKey() == null):
+          output_statement=StatementStato("Non Sei Loggato Non Hai Operazioni Da Annullare",StatoIniziale(),null)
         else:
           output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale())
         # assegno una confidence MOLTO alta per questa operazione perché DEVE prendere la priorità
+
         output_statement.confidence = 100
 
         return output_statement  
