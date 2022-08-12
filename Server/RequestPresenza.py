@@ -29,12 +29,12 @@ class RequestPresenza():
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """ 
         if self.ready=="presenza Sede":
-          if self.dati :
-            return True
-          else : 
-            return False
+            if self.dati :
+                return True
+            else : 
+                return False
         else:
-          return False
+            return False
 
     def sendRequest(self) :
         """

@@ -4,11 +4,13 @@ from turtle import textinput
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
-from StatoAutenticazione import StatoAutenticazione
 from StatoLogin import StatoLogin
 from StatementStato import StatementStato
 from Adapter import Adapter
 from StatoIniziale import StatoIniziale
+from sqlalchemy import null
+
+
 
 class Server:
     """
@@ -18,15 +20,15 @@ class Server:
     - Description → rappresenta il server che contiene il chatbot
     """    
     def __init__(self):
-        self.chatterbot = ChatBot("botforme",
-        logic_adapters=[
+        self.chatterbot = ChatBot("botforme",logic_adapters=[
             {'import_path': 'Adapter.Adapter'},
             {'import_path': 'AdapterLogin.AdapterLogin'},
+            {'import_path': 'AdapterAnnulla.AdapterAnnulla'},
             {'import_path': 'AdapterLogout.AdapterLogout'},
             {'import_path': 'AdapterPresenza.AdapterPresenza'},
             {'import_path': 'AdapterAnnulla.AdapterAnnulla'},
             {'import_path': 'AdapterConsuntivazione.AdapterConsuntivazione'},
-        ])
+            {'import_path': 'AdapterCreazioneProgetto.AdapterCreazioneProgetto'}])
     
     def getResponse(self, text, stato, apiKey) -> StatementStato:
         """
@@ -51,14 +53,11 @@ class Server:
                 if output.confidence > max_confidence:
                     textoutput = output
                     max_confidence = output.confidence
+
         if textoutput == "":
             # Effettuo questa operazione perché vengono effettuate operazioni con i logic adapter per cui servono degli Stati
-           
-            # Trovare un modo effeciente per distinguere se è stato fatto un login o meno 
-        
-            if stato.getStatoAttuale() == "Login" or stato.getStatoAttuale()  == "Autenticazione":
-                
-                textoutput = StatementStato("Devi prima effettuare l'accesso per utilizzare i nostri servizi",StatoLogin(),apiKey)
+            if apiKey == null:    
+              textoutput = StatementStato("Devi prima effettuare l'accesso per utilizzare i nostri servizi",StatoIniziale(),apiKey)
             else:
                 textoutput = StatementStato("Nessun Logic Adapter Adatto Trovato",StatoIniziale(),apiKey)
             

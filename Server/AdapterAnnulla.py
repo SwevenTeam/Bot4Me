@@ -3,11 +3,11 @@ from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
 from RequestConsuntivazione import RequestConsuntivazione
 from StatoLogin import StatoLogin
-from StatoAutenticazione import StatoAutenticazione
 from StatementStato import StatementStato
 from StatoConsuntivazione import StatoConsuntivazione
 from chatterbot.conversation import Statement
 from sqlalchemy import false, true
+from sqlalchemy import null
 from StatoIniziale import StatoIniziale
 
 class AdapterAnnulla(LogicAdapter):
@@ -36,6 +36,9 @@ class AdapterAnnulla(LogicAdapter):
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         # Controllo su presenza stringhe che identificano la richiesta di annullamento dell'operazione
+        if statement.getApiKey() == null :
+          return False
+
         words = ['annulla', 'termina','cancella']
         if any(x in statement.text.split() for x in words):
             return True
@@ -61,13 +64,13 @@ class AdapterAnnulla(LogicAdapter):
         - Returns → StatementStato value : risposta del chatbot
         """             
         # s rappresenta lo StatementStato
-        if input_statement.getStato().getStatoAttuale() == StatoAutenticazione().getStatoAttuale():
-          output_statement=StatementStato("Operazione di Login Annullata", StatoLogin(),self,"")
-        elif input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() and input_statement.getStato().getStatoAttuale() != StatoLogin().getStatoAttuale() and input_statement.getStato().getStatoAttuale() != StatoAutenticazione().getStatoAttuale():
-          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale(),input_statement.getApiKey())
-        elif (input_statement.getStato().getStatoAttuale() != StatoLogin().getStatoAttuale) and (input_statement.getStato().getStatoAttuale() != StatoAutenticazione().getStatoAttuale()) and (input_statement.getStato().getStatoAttuale() == StatoIniziale().getStatoAttuale()):
-          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale(),input_statement.getApiKey())
+        
+         # s rappresenta lo StatementStato
+        if input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() :
+          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale())
+        else:
+          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale())
         # assegno una confidence MOLTO alta per questa operazione perché DEVE prendere la priorità
         output_statement.confidence = 100
 
-        return output_statement
+        return output_statement  

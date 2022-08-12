@@ -1,18 +1,29 @@
 from sqlalchemy import null
 from Stato import Stato
 
-class StatoPresenzaSede(Stato):
+class StatoCreazioneProgetto(Stato):
     """
     ---
-    Class Name : StatoConsuntivazione 
+    Class Name : StatoCreazioneProgetto 
     ---
     - Args → Stato (type Stato): rappresenta lo stato
-    - Description → Stato che rappresenta un'attività di consuntivazione
+    - Description → Stato che rappresenta un'attività di creazione di un Nuovo Progetto
     """   
     def __init__(self):
-        self.statoAttuale="presenza Sede"
-        self.dati={"sede": ""}
-
+        self.statoAttuale="creazione progetto"
+        self.dati={  
+          "inizio":"",
+          "codice progetto": "",
+          "dettagli": "",
+          "cliente": "",
+          "manager": "",
+          "status": "iniziale",
+          "area": "",
+          "data Inizio": "",
+          "data Fine": "",
+          "conferma": "non confermato"
+          }
+    
     #return: Stato attuale -> str
     def getStatoAttuale(self):
         """
@@ -37,7 +48,6 @@ class StatoPresenzaSede(Stato):
         """
         return self.dati
 
-    def addNomeSede(self, x):
-        self.dati["sede"] = x
-
-
+    def addDati(self, x, y):
+        if x in self.dati:
+            self.dati[x]=y

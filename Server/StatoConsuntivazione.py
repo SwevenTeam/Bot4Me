@@ -14,6 +14,7 @@ class StatoConsuntivazione(Stato):
     def __init__(self):
         self.statoAttuale="consuntivazione"
         self.dati={
+          "inizio":"",
           "codice progetto":"",
           "data" :"", 
           "ore fatturabili" :"",
@@ -21,56 +22,13 @@ class StatoConsuntivazione(Stato):
           "ore viaggio fatturabili":"",
           "sede": "",  
           "fatturabile":"",
-          "descrizione" : ""
+          "descrizione" : "",
+          "conferma" :"non confermato",
         }
-        self.substate="inizio"
 
-    # cambiare valori di d con dati della consuntivazione
-    def aggiornamento(self,inputStatement):
-        """
-        ---
-        Function Name : aggiornamento 
-        ---
-        - Args → inputStatement (type StatementStato): input dell'utente con stato attuale del Client
-        - Description → aggiorna il sottostato di StatoConsuntivazione
-        - Returns → None
-        """    
-        if(self.substate):
-            if(self.substate =="inizio") :
-            # codice progetto
-                self.substate="codice progetto"
-            elif(self.substate =="codice progetto") :
-                self.dati["codice progetto"]=inputStatement.getText()  
-            # data              
-                self.substate="data"
-            elif(self.substate =="data") :
-                self.dati["data"]=inputStatement.getText()
-            # ore fatturabili
-                self.substate="ore fatturabili"
-            elif(self.substate =="ore fatturabili") :
-                self.dati["ore fatturabili"]=inputStatement.getText()
-            # ore viaggio                
-                self.substate="ore viaggio"
-            elif(self.substate =="ore viaggio") :
-                self.dati["ore viaggio"]=inputStatement.getText()
-            # ore viaggio fatturabili
-                self.substate="ore viaggio fatturabili"
-            elif(self.substate =="ore viaggio fatturabili") :
-                self.dati["ore viaggio fatturabili"]=inputStatement.getText() 
-            # sede
-                self.substate="sede"
-            elif(self.substate =="sede") :
-                self.dati["sede"]=inputStatement.getText()
-            # fatturabile
-                self.substate="fatturabile"
-            elif(self.substate =="fatturabile") :
-                self.dati["fatturabile"]=inputStatement.getText()
-            # descrizione
-                self.substate="descrizione"
-            elif(self.substate =="descrizione") :
-                self.dati["descrizione"]=inputStatement.getText()
-                self.substate="termina"
-               
+    def addDati(self, x, y):
+        if x in self.dati:
+            self.dati[x]=y
 
     #return: Stato attuale -> str
     def getStatoAttuale(self) -> str:
@@ -95,15 +53,3 @@ class StatoConsuntivazione(Stato):
         - Returns → dictionary values
         """
         return self.dati
-
-    def getSubstate(self) -> str:
-        """
-        ---
-        Function Name : getSubstate 
-        ---
-        - Args → None
-        - Description → restituisce il sottostato attuale
-        - Returns → str value
-        """     
-        return self.substate
-       

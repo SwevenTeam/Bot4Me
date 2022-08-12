@@ -3,12 +3,12 @@ from cmath import log
 from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
 from RequestLogin import RequestLogin
+from StatoLogin import StatoLogin
 from StatementStato import StatementStato
 from StatoConsuntivazione import StatoConsuntivazione
 from chatterbot.conversation import Statement
 from sqlalchemy import false, true
 from StatoIniziale import StatoIniziale
-from StatoAutenticazione import StatoAutenticazione
 
 class AdapterLogin(LogicAdapter):
     def __init__(self, chatbot, **kwargs):
@@ -17,19 +17,18 @@ class AdapterLogin(LogicAdapter):
     def can_process(self, statement):
       
       stato=statement.getStato()
-
-      if(stato.getStatoAttuale()=="Login"):
+      
+      if(stato.getStatoAttuale()=="Iniziale"):
         words = ['login', 'autenticazione','registrazione','log','accesso']
         if any(x in statement.text.split() for x in words):
             return True
         else:
             return False
 
-      elif(stato.getStatoAttuale()=="Autenticazione"):
+      if(stato.getStatoAttuale()=="Login"):
         return True
 
-      else:
-        return False
+      return False
 
     def process(self, input_statement, additional_response_selection_parameters) -> StatementStato:
       
@@ -47,16 +46,16 @@ class AdapterLogin(LogicAdapter):
 
         s = input_statement.getStato()
 
-        if (s.getStatoAttuale() and s.getStatoAttuale() == "Login"):
-          s = StatoAutenticazione()
+        if (s.getStatoAttuale() and s.getStatoAttuale() == "Iniziale"):
+          s = StatoLogin()
           output_statement=StatementStato("Autenticazione Avviata : Inserire l'API-KEY",s)
 
-        elif(s.getStatoAttuale() == 'Autenticazione'):
+        elif(s.getStatoAttuale() == 'Login'):
           if(input_statement.getText() == '12345678-1234-1234-1234-123456789012'):
             s = StatoIniziale()
             output_statement=StatementStato("Autenticazione Avvenuta Con Successo",s,input_statement.getText())
           else:
-            output_statement=StatementStato("Autenticazione Fallita : l'API-KEY inserita non è valida",s)
+            output_statement=StatementStato("Autenticazione Fallita : l'API-KEY inserita non è valida, riprova",s)
 
         else:
             output_statement=StatementStato("È avvenuto un errore sconosciuto",s)

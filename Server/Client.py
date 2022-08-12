@@ -3,6 +3,7 @@ from sqlalchemy import null
 from StatementStato import StatementStato
 from StatoPresenzaSede import StatoPresenzaSede
 from StatoLogin import StatoLogin
+from StatoIniziale import StatoIniziale
 
 class Client:
     """
@@ -13,9 +14,8 @@ class Client:
     """    
     
     def __init__(self, server):
-        self.stato = StatoLogin()
-        #self.apiKey = '12345678-1234-1234-1234-123456789012'
-        self.apiKey = ''
+        self.stato = StatoIniziale()
+        self.apiKey = null
         self.server = server
 
 
