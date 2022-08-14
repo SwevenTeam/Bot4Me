@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - '*'
-      - '!master'
+      - '!main'
 
 jobs:
   build:
@@ -25,8 +25,5 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
-          directory: ./coverage/reports/
           name: codecov-umbrella
-          files: ./coverage1.xml,./coverage2.xml
-          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
