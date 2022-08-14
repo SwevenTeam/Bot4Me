@@ -24,8 +24,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name : Change Dir
-        run: cd Client
         
       # 3: install NPM dependencies
       - name: Install dependencies
@@ -33,4 +31,6 @@ jobs:
       
       # 4: run test command
       - name: Run test command
-        run: npm run test
+        run: 
+          cd Client
+          npm run test
