@@ -8,7 +8,7 @@ from State.State_Activity import State_Activity
 from sqlalchemy import false, null, true
 from State.State_Null import State_Null
 import datetime
-from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch,  similarStringMatch_Location
+from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch, similarStringMatch_Location
 
 
 class Adapter_Activity(LogicAdapter):
@@ -105,7 +105,7 @@ class Adapter_Activity(LogicAdapter):
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
         if (not dati["codice progetto"]
-            ) or dati["conferma"] == "codice progetto":
+                ) or dati["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkProjectExistance(text, Api):
                 s.addData("codice progetto", text)
@@ -214,11 +214,11 @@ class Adapter_Activity(LogicAdapter):
         # Controllo quindi se nel messaggio inviato dall'utente sia presente
         # una delle due Sedi
         elif (not dati["sede"] and dati["ore viaggio fatturabili"]) or dati["conferma"] == "sede":
-            sedi = similarStringMatch_Location(text,Api)
-            if sedi == '' :
+            sedi = similarStringMatch_Location(text, Api)
+            if sedi == '':
                 output_statement = Statement_State(
                     "Sede non Accettata : Reinserire il nome della Sede", s)
-            else :
+            else:
                 s.addData("sede", sedi)
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "sede":
