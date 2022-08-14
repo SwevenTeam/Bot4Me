@@ -20,4 +20,4 @@ jobs:
           pip install -r Server/requirement.txt
       - name: Test with pytest
         run: |
-            pytest --cov-branch --junitxml=pytest.xml --covreport=term-missing:skip.covered --cov --html=report.html        
+            pytest --cov-branch --junitxml=pytest.xml --cov --html=report.html        
