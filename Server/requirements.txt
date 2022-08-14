@@ -6,3 +6,4 @@ requests==2.27.1
 SQLAlchemy==1.2.19
 pytest-html
 pytest-cov
+pytz
