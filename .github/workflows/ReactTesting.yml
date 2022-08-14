@@ -36,3 +36,5 @@ jobs:
         run: |
           cd Client
           npm run test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
