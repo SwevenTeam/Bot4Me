@@ -4,6 +4,7 @@ from sqlalchemy import Boolean
 import requests
 from difflib import SequenceMatcher
 
+
 def returnAllData(s) -> string:
     sentence = ""
     values = s.getData()
@@ -58,21 +59,23 @@ def checkProjectExistance(code, Api) -> Boolean:
 def similarStringMatch(Statement, Dict) -> Boolean:
 
     for y in Dict:
-        for x in Statement :
-            if SequenceMatcher(None, x, y).ratio()>=0.80 :
-              return True
+        for x in Statement:
+            if SequenceMatcher(None, x, y).ratio() >= 0.80:
+                return True
     return False
+
 
 def similarStringMatch_Location(Statement, Api) -> String:
 
     for y in getLocationList(Api):
         y_lower = y.lower()
-        for x in Statement :
-            if SequenceMatcher(None, x, y_lower).ratio()>=0.80 :
-              return y_lower
+        for x in Statement:
+            if SequenceMatcher(None, x, y_lower).ratio() >= 0.80:
+                return y_lower
     return ''
 
-def getLocationList(Api) :
+
+def getLocationList(Api):
     url = 'https://apibot4me.imolinfo.it/v1/locations'
     header = {'accept': 'application/json', 'api_key': Api}
 
@@ -81,7 +84,3 @@ def getLocationList(Api) :
     if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
         return [data["name"] for data in responseUrl.json()]
     return []
-
-    
-
-    

@@ -90,15 +90,15 @@ class Adapter_Presence(LogicAdapter):
                 s,
                 Api)
         else:
-            sedi = similarStringMatch_Location(text,Api)
-            if sedi == '' :
+            sedi = similarStringMatch_Location(text, Api)
+            if sedi == '':
                 output_statement = Statement_State(
-                  "Sede non Accettata : Reinserire il nome della Sede", s)
-            else :
+                    "Sede non Accettata : Reinserire il nome della Sede", s)
+            else:
                 s.addData("sede", sedi)
                 Req = Request_Presence(
-                  input_statement.getState(),
-                  Api)
+                    input_statement.getState(),
+                    Api)
                 if Req.isReady():
                     if Req.sendRequest():
                         output_statement = Statement_State(
@@ -108,9 +108,7 @@ class Adapter_Presence(LogicAdapter):
                             "Registrazione presenza Fallita", State_Null())
                 else:
                     output_statement = Statement_State(
-                      "Request non pronto a soddisfare la richiesta",
-                      input_statement.getState())
-      
-        return output_statement
+                        "Request non pronto a soddisfare la richiesta",
+                        input_statement.getState())
 
-   
+        return output_statement
