@@ -10,7 +10,7 @@ from sqlalchemy import false, true
 from State.State_Project_Creation import State_Project_Creation
 from State.State_Null import State_Null
 from Request.Request_Project_Creation import Request_Project_Creation
-from .Util_Adapter import returnAllData, checkCodeProject
+from .Util_Adapter import returnAllData, checkCodeProject, similarStringMatch, similarStringMatch_Location
 
 
 class Adapter_Project_Creation(LogicAdapter):
@@ -89,7 +89,7 @@ class Adapter_Project_Creation(LogicAdapter):
 
         s = input_statement.getState()
         Api = input_statement.getApiKey()
-        testo = input_statement.getText()
+        text = input_statement.getText()
 
         # Nel caso in cui sia settato ad "Iniziale",
         # riassegno il valore come una nuova inizializzazione di
@@ -106,8 +106,8 @@ class Adapter_Project_Creation(LogicAdapter):
         if (not dati["codice progetto"]
             ) or dati["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
-            if checkCodeProject(testo, Api):
-                s.addData("codice progetto", testo)
+            if checkCodeProject(text, Api):
+                s.addData("codice progetto", text)
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "codice progetto":
                     s.addData("conferma", "non confermato")
@@ -126,7 +126,7 @@ class Adapter_Project_Creation(LogicAdapter):
 
         # Utente ha inserito la sede, ora dovrà inserire la descrizione
         elif (not dati["dettagli"] and dati["codice progetto"]) or dati["conferma"] == "dettagli":
-            s.addData("dettagli", testo)
+            s.addData("dettagli", text)
             # Se è un'operazione di modifica
             if dati["conferma"] == "dettagli":
                 s.addData("conferma", "non confermato")
@@ -142,7 +142,7 @@ class Adapter_Project_Creation(LogicAdapter):
 
         # Utente ha inserito i dettagli, ora dovrà inserire il cliente
         elif (not dati["cliente"] and dati["dettagli"]) or dati["conferma"] == "cliente":
-            s.addData("cliente", testo)
+            s.addData("cliente", text)
             # Se è un'operazione di modifica
             if dati["conferma"] == "cliente":
                 s.addData("conferma", "non confermato")
@@ -158,7 +158,7 @@ class Adapter_Project_Creation(LogicAdapter):
 
         # Utente ha inserito il cliente, ora dovrà inserire i dettagli
         elif (not dati["manager"] and dati["cliente"]) or dati["conferma"] == "manager":
-            s.addData("manager", testo)
+            s.addData("manager", text)
             # Se è un'operazione di modifica
             if dati["conferma"] == "manager":
                 s.addData("conferma", "non confermato")
@@ -175,47 +175,32 @@ class Adapter_Project_Creation(LogicAdapter):
         # Controllo quindi se nel messaggio inviato dall'utente sia presente
         # una delle due Sedi
         elif (not dati["area"] and dati["manager"]) or dati["conferma"] == "area":
-            sedeP = ['Bologna', 'bologna', 'bl']
-            sedeI = ['Imola', 'imola', 'im']
-            if any(x in testo.split() for x in sedeP):
-                s.addData("area", "Bologna")
-                # Se è un'operazione di modifica
-                if dati["conferma"] == "area":
-                    s.addData("conferma", "non confermato")
-                    output_statement = Statement_State(
-                        "Area Accettata e aggiornata. Visualizzazione Dati Aggiornati \n " +
-                        returnAllData(s) +
-                        " Confermare operazione di creazione?",
-                        s)
-                # Se è un'operazione di primo inserimento
-                else:
-                    output_statement = Statement_State(
-                        "Area Accettata : Inserire Data Inizio", s)
-            elif any(x in testo.split() for x in sedeI):
-                s.addData("area", "Imola")
-                # Se è un'operazione di modifica
-                if dati["conferma"] == "area":
-                    s.addData("conferma", "non confermato")
-                    output_statement = Statement_State(
-                        "Area Accettata e aggiornata. Visualizzazione Dati Aggiornati \n " +
-                        returnAllData(s) +
-                        " Confermare operazione di creazione?",
-                        s)
-                # Se è un'operazione di primo inserimento
-                else:
-                    output_statement = Statement_State(
-                        "Area Accettata : Inserire Data Inizio", s)
-            else:
+            area = similarStringMatch_Location(text.split(),Api)
+            if area == '':
                 output_statement = Statement_State(
                     "Area non Accettata : Reinserire il nome dell'area", s)
+            else :
+                s.addData("area", area)
+                # Se è un'operazione di modifica
+                if dati["conferma"] == "area":
+                    s.addData("conferma", "non confermato")
+                    output_statement = Statement_State(
+                        "Area Accettata e aggiornata. Visualizzazione Dati Aggiornati \n " +
+                        returnAllData(s) +
+                        " Confermare operazione di creazione?",
+                        s)
+                # Se è un'operazione di primo inserimento
+                else:
+                    output_statement = Statement_State(
+                        "Area Accettata : Inserire Data Inizio", s)
 
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la
         # data
         elif (not dati["data Inizio"] and dati["area"]) or dati["conferma"] == "data Inizio":
             # Formato aaaa-mm-gg
             try:
-                datetime.datetime.strptime(testo, '%Y-%m-%d')
-                s.addData("data Inizio", testo)
+                datetime.datetime.strptime(text, '%Y-%m-%d')
+                s.addData("data Inizio", text)
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "data":
                     s.addData("conferma", "non confermato")
@@ -236,8 +221,8 @@ class Adapter_Project_Creation(LogicAdapter):
         elif (not dati["data Fine"] and dati["data Inizio"]) or dati["conferma"] == "data Fine":
             # Formato aaaa-mm-gg
             try:
-                datetime.datetime.strptime(testo, '%Y-%m-%d')
-                s.addData("data Fine", testo)
+                datetime.datetime.strptime(text, '%Y-%m-%d')
+                s.addData("data Fine", text)
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "data":
                     s.addData("conferma", "non confermato")
@@ -268,10 +253,10 @@ class Adapter_Project_Creation(LogicAdapter):
                 'date Fine']
 
             if dati["conferma"] == "modifica":
-                if any(x in testo for x in chiavi):
-                    s.addData("conferma", testo)
+                if any(x in text for x in chiavi):
+                    s.addData("conferma", text)
                     output_statement = Statement_State(
-                        "Inserire nuovo valore per " + testo, s)
+                        "Inserire nuovo valore per " + text, s)
                 else:
                     output_statement = Statement_State(
                         "Chiave non accettata. Provare con una chiave diversa", s)
@@ -281,7 +266,7 @@ class Adapter_Project_Creation(LogicAdapter):
                 modifica = ['modifica']
                 consuntiva = ['sì', 'ok', 'consuntiva', 'procedi', 'conferma']
 
-                if any(x in testo.split() for x in consuntiva):
+                if any(x in text.split() for x in consuntiva):
                     s.addData("conferma", "conferma")
                     Req = Request_Project_Creation(s, Api)
                     if Req.isReady():
@@ -295,11 +280,11 @@ class Adapter_Project_Creation(LogicAdapter):
                         output_statement = Statement_State(
                             "Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)", s)
 
-                elif any(x in testo.split() for x in annulla):
+                elif any(x in text.split() for x in annulla):
                     output_statement = Statement_State(
                         "Operazione annullata", State_Null())
 
-                elif any(x in testo.split() for x in modifica):
+                elif any(x in text.split() for x in modifica):
                     s.addData("conferma", "modifica")
                     output_statement = Statement_State(
                         "Inserire elemento che si vuole modificare", s)

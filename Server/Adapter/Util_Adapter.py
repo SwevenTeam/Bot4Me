@@ -64,10 +64,11 @@ def similarStringMatch(Statement, Dict) -> Boolean:
     return False
 
 def similarStringMatch_Location(Statement, Api) -> String:
-
+    
     for y in getLocationList(Api):
         y_lower = y.lower()
         for x in Statement :
+            print(x + " : " +y_lower)
             if SequenceMatcher(None, x, y_lower).ratio()>=0.80 :
               return y_lower
     return ''
