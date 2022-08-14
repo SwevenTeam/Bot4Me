@@ -31,7 +31,6 @@ class Adapter(LogicAdapter):
         - Description → restituisce True se l'elemento in Input contiene keyword corretta
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        state = statement.getState()
         if(statement.getText() == "ciao"):
             return True
         else:

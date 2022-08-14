@@ -6,6 +6,7 @@ from Request.Request_Presence import Request_Presence
 from State.State_Null import State_Null
 from chatterbot.conversation import Statement
 from sqlalchemy import true
+from .Util_Adapter import similarStringMatch, similarStringMatch_Location
 
 
 class Adapter_Presence(LogicAdapter):
@@ -44,10 +45,7 @@ class Adapter_Presence(LogicAdapter):
             # Controllo su presenza stringhe che identificano la richiesta di
             # presenza
             words = ['presenza', 'presenze']
-            if any(x in statement.text.split() for x in words):
-                return True
-            else:
-                return False
+            return similarStringMatch(statement.text.split(), words)
 
         # Altrimenti, controllo se lo state è presenza sede
         elif state.getCurrentState() == "presenza Sede":
@@ -81,7 +79,8 @@ class Adapter_Presence(LogicAdapter):
 
         # s rappresenta lo Statement_State
         s = input_statement.getState()
-
+        text = input_statement.text.split()
+        Api = input_statement.getApiKey()
         # Nel caso in cui sia settato ad "Iniziale",
         # riassegno il valore come una nuova inizializzazione di  StatoPresenza
         if s.getCurrentState() and s.getCurrentState() == "Iniziale":
@@ -89,52 +88,29 @@ class Adapter_Presence(LogicAdapter):
             output_statement = Statement_State(
                 "Operazione di registrazione della presenza avviata : inserire il nome di una sede",
                 s,
-                input_statement.getApiKey())
+                Api)
         else:
-            sedeP = ['Bologna', 'bologna', 'bl']
-
-            sedeI = ['Imola', 'imola', 'im']
-
-            if any(x in input_statement.text.split() for x in sedeP):
-                s.addData("sede", "Bologna")
-                output_statement = self.callRequest(input_statement)
-            elif any(x in input_statement.text.split() for x in sedeI):
-                s.addData("sede", "Imola")
-                output_statement = self.callRequest(input_statement)
-            else:
+            sedi = similarStringMatch_Location(text,Api)
+            if sedi == '' :
                 output_statement = Statement_State(
-                    "Sede non Accettata : Reinserire il nome della Sede", s)
-
+                  "Sede non Accettata : Reinserire il nome della Sede", s)
+            else :
+                s.addData("sede", sedi)
+                Req = Request_Presence(
+                  input_statement.getState(),
+                  Api)
+                if Req.isReady():
+                    if Req.sendRequest():
+                        output_statement = Statement_State(
+                            "Registrazione presenza effettuata con Successo", State_Null())
+                    else:
+                        output_statement = Statement_State(
+                            "Registrazione presenza Fallita", State_Null())
+                else:
+                    output_statement = Statement_State(
+                      "Request non pronto a soddisfare la richiesta",
+                      input_statement.getState())
+      
         return output_statement
 
-    # callRequest
-    # input : self, frase input presa dal client
-    # output : Statement_State, varia in base al risultato della Request
-
-    def callRequest(self, input_statement) -> Statement_State:
-        """
-        ---
-        Function Name : callRequest
-        ---
-        - Args → input_statement (Statement_State): frase inserita dall'utente
-        - Description →
-            - richiama isReady() su RequestPresenza;
-            - se quest ultimo restituisce true potrà effettuare la richiesta;
-            - invia la richiesta e restituisce il valore associato
-        - Returns → Statement_State: risposta del chatbot con eventuale cambio di state
-        """
-        Req = Request_Presence(
-            input_statement.getState(),
-            input_statement.getApiKey())
-        if Req.isReady():
-            if Req.sendRequest():
-                output_statement = Statement_State(
-                    "Registrazione presenza effettuata con Successo", State_Null())
-            else:
-                output_statement = Statement_State(
-                    "Registrazione presenza Fallita", State_Null())
-        else:
-            output_statement = Statement_State(
-                "Request non pronto a soddisfare la richiesta",
-                input_statement.getState())
-        return output_statement
+   
