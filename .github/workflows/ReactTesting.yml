@@ -22,6 +22,8 @@ jobs:
       # 2: Checkout repository in the CWD
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       # 3: install NPM dependencies
       - name: Install dependencies
