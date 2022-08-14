@@ -1,31 +1,33 @@
 from sqlalchemy import null
 from .State import State
 
+
 class State_Presence(State):
     """
     ---
-    Class Name : State_Presence 
+    Class Name : State_Presence
     ---
     - Args → Stato (type Stato): rappresenta lo stato
     - Description → Stato che rappresenta un'attività di consuntivazione
-    """   
-    def __init__(self):
-        self.currentState="presenza Sede"
-        self.data={"sede": ""}
+    """
 
-    #return: Stato attuale -> str
+    def __init__(self):
+        self.currentState = "presenza Sede"
+        self.data = {"sede": ""}
+
+    # return: Stato attuale -> str
     def getCurrentState(self) -> str:
         """
         ---
-        Function Name : getCurrentState 
+        Function Name : getCurrentState
         ---
         - Args → None
         - Description → restituisce lo stato attuale
         - Returns → str value : rappresenta lo stato attuale della Presenza
-        """     
+        """
         return self.currentState
 
-    #return: i dati delle conversazioni precedenti -> dict
+    # return: i dati delle conversazioni precedenti -> dict
     def getData(self):
         """
         ---
@@ -39,5 +41,4 @@ class State_Presence(State):
 
     def addData(self, x, y):
         if x in self.data:
-            self.data[x]=y
-
+            self.data[x] = y
