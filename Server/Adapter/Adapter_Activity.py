@@ -8,7 +8,7 @@ from State.State_Activity import State_Activity
 from sqlalchemy import false, null, true
 from State.State_Null import State_Null
 import datetime
-from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch,  similarStringMatch_Location
+from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch, similarStringMatch_Location
 
 
 class Adapter_Activity(LogicAdapter):
@@ -105,7 +105,7 @@ class Adapter_Activity(LogicAdapter):
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
         if (not dati["codice progetto"]
-            ) or dati["conferma"] == "codice progetto":
+                ) or dati["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkProjectExistance(text, Api):
                 s.addData("codice progetto", text)
@@ -214,11 +214,11 @@ class Adapter_Activity(LogicAdapter):
         # Controllo quindi se nel messaggio inviato dall'utente sia presente
         # una delle due Sedi
         elif (not dati["sede"] and dati["ore viaggio fatturabili"]) or dati["conferma"] == "sede":
-            sedi = similarStringMatch_Location(text.split(),Api)
+            sedi = similarStringMatch_Location(text.split(), Api)
             if sedi == '':
                 output_statement = Statement_State(
                     "Sede non Accettata : Reinserire il nome della Sede", s)
-            else :
+            else:
                 s.addData("sede", sedi)
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "sede":
@@ -238,7 +238,7 @@ class Adapter_Activity(LogicAdapter):
 
             affermative = ['sì', 'si', 'true', 'vero']
 
-            if similarStringMatch(text.split(),affermative):
+            if similarStringMatch(text.split(), affermative):
                 s.addData("fatturabile", "True")
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "fatturabile":
@@ -253,7 +253,7 @@ class Adapter_Activity(LogicAdapter):
                     output_statement = Statement_State(
                         "Scelta Fatturabilità accettata : Inserire la descrizione", s)
 
-            elif similarStringMatch(text.split(),negative):
+            elif similarStringMatch(text.split(), negative):
                 s.addData("fatturabile", "False")
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "fatturabile":
@@ -314,7 +314,7 @@ class Adapter_Activity(LogicAdapter):
                 modifica = ['modifica']
                 consuntiva = ['sì', 'ok', 'consuntiva', 'procedi', 'conferma']
 
-                if  similarStringMatch(text.split(),consuntiva):
+                if similarStringMatch(text.split(), consuntiva):
                     s.addData("conferma", "conferma")
                     Req = Request_Activity(s, Api)
                     if Req.isReady():
@@ -328,11 +328,11 @@ class Adapter_Activity(LogicAdapter):
                         output_statement = Statement_State(
                             "Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)", s)
 
-                elif similarStringMatch(text.split(),annulla):
+                elif similarStringMatch(text.split(), annulla):
                     output_statement = Statement_State(
                         "Operazione annullata", State_Null())
 
-                elif similarStringMatch(text.split(),modifica):
+                elif similarStringMatch(text.split(), modifica):
                     s.addData("conferma", "modifica")
                     output_statement = Statement_State(
                         "Inserire elemento che si vuole modificare", s)

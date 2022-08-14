@@ -104,7 +104,7 @@ class Adapter_Project_Creation(LogicAdapter):
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
         if (not dati["codice progetto"]
-            ) or dati["conferma"] == "codice progetto":
+                ) or dati["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkCodeProject(text, Api):
                 s.addData("codice progetto", text)
@@ -175,11 +175,11 @@ class Adapter_Project_Creation(LogicAdapter):
         # Controllo quindi se nel messaggio inviato dall'utente sia presente
         # una delle due Sedi
         elif (not dati["area"] and dati["manager"]) or dati["conferma"] == "area":
-            area = similarStringMatch_Location(text.split(),Api)
+            area = similarStringMatch_Location(text.split(), Api)
             if area == '':
                 output_statement = Statement_State(
                     "Area non Accettata : Reinserire il nome dell'area", s)
-            else :
+            else:
                 s.addData("area", area)
                 # Se è un'operazione di modifica
                 if dati["conferma"] == "area":
