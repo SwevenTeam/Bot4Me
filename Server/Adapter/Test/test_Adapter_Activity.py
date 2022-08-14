@@ -1,8 +1,9 @@
 import pytest
-from Adapter import Adapter 
+from Adapter import Adapter
 from Client import Client
 from Server import Server
 from .util import login
+
 
 def test_Adapter_Activity_Activate():
     server = Server()
@@ -10,6 +11,7 @@ def test_Adapter_Activity_Activate():
     login(client)
     value = client.getResponse("consuntiva")
     assert value == "Consuntivazione Avviata : Inserire il codice del Progetto"
+
 
 def test_Adapter_Activity_Code_Correct():
     server = Server()
@@ -19,6 +21,7 @@ def test_Adapter_Activity_Code_Correct():
     value = client.getResponse("1")
     assert value == "Progetto esistente : Inserire la data di consuntivazione ( formato aaaa-mm-gg )"
 
+
 def test_Adapter_Activity_Code_Incorrect():
     server = Server()
     client = Client(server)
@@ -26,6 +29,7 @@ def test_Adapter_Activity_Code_Incorrect():
     client.getResponse("consuntiva")
     value = client.getResponse("1999999999999999")
     assert value == "Progetto non esistente : Reinserire un codice diverso o creare un nuovo progetto"
+
 
 def test_Adapter_Activity_Date_Correct():
     server = Server()
@@ -36,6 +40,7 @@ def test_Adapter_Activity_Date_Correct():
     value = client.getResponse("2022-01-01")
     assert value == "Data accettata : Inserire le ore fatturabili"
 
+
 def test_Adapter_Activity_Date_Incorrect():
     server = Server()
     client = Client(server)
@@ -44,6 +49,7 @@ def test_Adapter_Activity_Date_Incorrect():
     client.getResponse("1")
     value = client.getResponse("2022-01-0111")
     assert value == "Data non accettata : Reinserire la data del progetto"
+
 
 def test_Adapter_Activity_Billable_Hours_Correct():
     server = Server()
@@ -55,6 +61,7 @@ def test_Adapter_Activity_Billable_Hours_Correct():
     value = client.getResponse("3")
     assert value == "Ore fatturabili accettate : Inserire le ore di viaggio"
 
+
 def test_Adapter_Activity_Billable_Hours_Incorrect():
     server = Server()
     client = Client(server)
@@ -64,6 +71,7 @@ def test_Adapter_Activity_Billable_Hours_Incorrect():
     client.getResponse("2022-01-01")
     value = client.getResponse("no")
     assert value == "Ore fatturabili non accettate : Reinserire le ore fatturabili come numero"
+
 
 def test_Adapter_Activity_Travel_Hours_Correct():
     server = Server()
@@ -76,6 +84,7 @@ def test_Adapter_Activity_Travel_Hours_Correct():
     value = client.getResponse("3")
     assert value == "Ore viaggio accettate : Inserire le ore di viaggio fatturabili"
 
+
 def test_Adapter_Activity_Travel_Hours_Incorrect():
     server = Server()
     client = Client(server)
@@ -86,6 +95,7 @@ def test_Adapter_Activity_Travel_Hours_Incorrect():
     client.getResponse("3")
     value = client.getResponse("no")
     assert value == "Ore viaggio non accettate : Reinserire le ore di viaggio come numero"
+
 
 def test_Adapter_Activity_Billable_Travel_Hours_Correct():
     server = Server()
@@ -99,6 +109,7 @@ def test_Adapter_Activity_Billable_Travel_Hours_Correct():
     value = client.getResponse("3")
     assert value == "Ore viaggio fatturabili Accettate : Inserire la sede"
 
+
 def test_Adapter_Activity_Billable_Travel_Hours_Incorrect():
     server = Server()
     client = Client(server)
@@ -110,6 +121,7 @@ def test_Adapter_Activity_Billable_Travel_Hours_Incorrect():
     client.getResponse("3")
     value = client.getResponse("no")
     assert value == "Ore viaggio fatturabili non accettate : Reinserire le ore di viaggio fatturabili come numero"
+
 
 def test_Adapter_Activity_Area_Correct_Imola():
     server = Server()
@@ -124,6 +136,7 @@ def test_Adapter_Activity_Area_Correct_Imola():
     value = client.getResponse("Imola")
     assert value == "Sede Accettata : È fatturabile?"
 
+
 def test_Adapter_Activity_Area_Correct_Bologna():
     server = Server()
     client = Client(server)
@@ -137,6 +150,7 @@ def test_Adapter_Activity_Area_Correct_Bologna():
     value = client.getResponse("Bologna")
     assert value == "Sede Accettata : È fatturabile?"
 
+
 def test_Adapter_Activity_Area_Incorrect():
     server = Server()
     client = Client(server)
@@ -149,6 +163,7 @@ def test_Adapter_Activity_Area_Incorrect():
     client.getResponse("3")
     value = client.getResponse("Padova")
     assert value == "Sede non Accettata : Reinserire il nome della Sede"
+
 
 def test_Adapter_Activity_Billable_True():
     server = Server()
@@ -164,6 +179,7 @@ def test_Adapter_Activity_Billable_True():
     value = client.getResponse("sì")
     assert value == "Scelta Fatturabilità accettata : Inserire la descrizione"
 
+
 def test_Adapter_Activity_Billable_No():
     server = Server()
     client = Client(server)
@@ -178,6 +194,7 @@ def test_Adapter_Activity_Billable_No():
     value = client.getResponse("no")
     assert value == "Scelta Fatturabilità accettata : Inserire la descrizione"
 
+
 def test_Adapter_Activity_Billable_Incorrect():
     server = Server()
     client = Client(server)
@@ -191,6 +208,8 @@ def test_Adapter_Activity_Billable_Incorrect():
     client.getResponse("Imola")
     value = client.getResponse("bzorg")
     assert value == "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)"
+
+
 '''
 def test_Adapter_Activity_Description():
     server = Server()

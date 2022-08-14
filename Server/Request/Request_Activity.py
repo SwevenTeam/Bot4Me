@@ -10,13 +10,15 @@ import requests
 from requests import Response
 import json
 
+
 class Request_Activity():
     """
     ---
-    Class Name : Request_Activity 
+    Class Name : Request_Activity
     ---
     - Description → Request utilizzata per mandare la richiesta HTTP per effettuare una consuntivazione
     """
+
     def __init__(self, s, apiKey):
         self.data = s.getData()
         self.Api = apiKey
@@ -24,18 +26,18 @@ class Request_Activity():
     def isReady(self) -> bool:
         """
         ---
-        Function Name : isReady 
+        Function Name : isReady
         ---
         - Args → None
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
-        """      
-        if self.data["conferma"]=="conferma":
-          return True
+        """
+        if self.data["conferma"] == "conferma":
+            return True
         else:
-          return False
+            return False
 
-    def sendRequest(self) -> Boolean :
+    def sendRequest(self) -> Boolean:
         """
         ---
         Function Name : sendRequest
@@ -43,53 +45,57 @@ class Request_Activity():
         - Args → None
         - Description → assembla la richiesta di consuntivazione e la invia
         - Returns → boolean value : true se ha eseguito, false altrimenti
-        """  
+        """
 
-        myurl = "https://apibot4me.imolinfo.it/v1/projects/"+ self.data["codice progetto"]+"/activities/me"
+        myurl = "https://apibot4me.imolinfo.it/v1/projects/" + \
+            self.data["codice progetto"] + "/activities/me"
 
-        header={ 'accept': 'application/json','api_key': self.Api, 'Content-Type': 'application/json'}
-        
-        informazioni=[
+        header = {
+            'accept': 'application/json',
+            'api_key': self.Api,
+            'Content-Type': 'application/json'}
+
+        informazioni = [
             {
-              'date': self.data["data"],
-              'billableHours': self.data["ore fatturabili"],
-              'travelHours': self.data["ore viaggio"],
-              'billableTravelHours': self.data["ore viaggio fatturabili"],
-              'location': self.data["sede"],
-              'billable':('True') if self.data["fatturabile"] else ('False'),
-              'note': self.data["descrizione"]
+                'date': self.data["data"],
+                'billableHours': self.data["ore fatturabili"],
+                'travelHours': self.data["ore viaggio"],
+                'billableTravelHours': self.data["ore viaggio fatturabili"],
+                'location': self.data["sede"],
+                'billable':('True') if self.data["fatturabile"] else ('False'),
+                'note': self.data["descrizione"]
             },
-          ]
-
+        ]
 
         responseUrl = requests.post(
-          url = myurl, 
-          headers = header, 
-          json = informazioni          
+            url=myurl,
+            headers=header,
+            json=informazioni
         )
 
         print(responseUrl)
-        
-        if responseUrl.status_code >=200 and responseUrl.status_code <300 :
+
+        if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
-        else :
+        else:
             return False
 
-    def checkProjectExistance(self, code) -> Boolean :
+    def checkProjectExistance(self, code) -> Boolean:
         """
         ---
-        Name checkProjectExistance 
+        Name checkProjectExistance
         ---
         - Args → code (int) : rappresenta il codice del progetto
         - Description → manda una richiesta get e ritorna se il lavoro è presente o meno
         - Returns → boolean value : true se esite, false altrimenti
-        """        
+        """
         myurl = "https://apibot4me.imolinfo.it/v1/projects/" + code
-        header = { 'accept': 'application/json','api_key': self.Api,}
+        header = {'accept': 'application/json', 'api_key': self.Api, }
 
-        response = requests.get(myurl,headers=header,data={})
+        response = requests.get(myurl, headers=header, data={})
 
-        if response.status_code >=200 and response.status_code < 300 and response.headers.get('Content-Length')  != "0":
-          return True
-        else :
-          return False
+        if response.status_code >= 200 and response.status_code < 300 and response.headers.get(
+                'Content-Length') != "0":
+            return True
+        else:
+            return False

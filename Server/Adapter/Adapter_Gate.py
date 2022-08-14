@@ -8,7 +8,7 @@ from State.State_Null import State_Null
 class Adapter_Gate(LogicAdapter):
     """
     ---
-    Class Name : Adapter_Gate 
+    Class Name : Adapter_Gate
     ---
     - Args → Adapter ( type Adapter) : implementata da tutti gli adapter di Chatbot
     - Description → Adapter per l'apertura del cancello di una sede
@@ -37,16 +37,17 @@ class Adapter_Gate(LogicAdapter):
 
         return False
 
-    def process(self, input_statement: Statement_State, additional_response_selection_parameters) -> Statement_State:
+    def process(self, input_statement: Statement_State,
+                additional_response_selection_parameters) -> Statement_State:
         """
         ---
         Function Name :  process
         ---
-        - Args → 
+        - Args →
           - input_statement ( type Statement_State): frase inserita dall'utente
           - additional_response_selection_parameters ( type any): elementi extra necessari alla funzione del metodo
-        - Description → 
-        crea un outputStatement (Statement_State) in base all'input inserito dall'utente, nel caso inserisca una sede valida 
+        - Description →
+        crea un outputStatement (Statement_State) in base all'input inserito dall'utente, nel caso inserisca una sede valida
         richiede l'apertura del cancello
         - Returns → Statement_State value : risposta del chatbot con eventuale cambio di state
         """
@@ -60,7 +61,6 @@ class Adapter_Gate(LogicAdapter):
                 input_statement.getApiKey()
             )
 
-        
         Req_Gate = Request_Gate(input_statement.getApiKey())
         # vengono recuperate le sedi
         locations = Req_Gate.getLocations()
@@ -83,13 +83,13 @@ class Adapter_Gate(LogicAdapter):
             state.addData("sede", sede)
             Req_Gate.setSede(state)
 
-            # viene inviata la richiesta di apertura del cancello, se non va a buon fine si è verificato un errore
+            # viene inviata la richiesta di apertura del cancello, se non va a
+            # buon fine si è verificato un errore
             if Req_Gate.isReady() and Req_Gate.sendRequest():
                 return Statement_State(
                     "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
                     State_Null(),
-                    input_statement.getApiKey()
-                )
+                    input_statement.getApiKey())
             else:
                 return Statement_State(
                     "Sede non accettata : riprovare",
@@ -97,8 +97,7 @@ class Adapter_Gate(LogicAdapter):
                     input_statement.getApiKey()
                 )
         else:
-          return Statement_State(
-              "Si è verificato un errore sconosciuto, riprova ad inviare la sede",
-              state,
-              input_statement.getApiKey()
-          )
+            return Statement_State(
+                "Si è verificato un errore sconosciuto, riprova ad inviare la sede",
+                state,
+                input_statement.getApiKey())

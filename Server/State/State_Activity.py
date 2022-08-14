@@ -1,46 +1,48 @@
 from sqlalchemy import null
 from .State import State
 
+
 class State_Activity(State):
     """
     ---
-    Class Name : State_Activity 
+    Class Name : State_Activity
     ---
     - Args → Stato (type Stato): rappresenta lo stato
     - Description → Stato che rappresenta un'attività di consuntivazione
-    """    
+    """
     # costruttore
+
     def __init__(self):
-        self.currentState="consuntivazione"
-        self.data={
-          "codice progetto":"",
-          "data" :"", 
-          "ore fatturabili" :"",
-          "ore viaggio":"",
-          "ore viaggio fatturabili":"",
-          "sede": "",  
-          "fatturabile":"",
-          "descrizione" : "",
-          "conferma" :"non confermato",
+        self.currentState = "consuntivazione"
+        self.data = {
+            "codice progetto": "",
+            "data": "",
+            "ore fatturabili": "",
+            "ore viaggio": "",
+            "ore viaggio fatturabili": "",
+            "sede": "",
+            "fatturabile": "",
+            "descrizione": "",
+            "conferma": "non confermato",
         }
 
     def addData(self, x, y):
         if x in self.data:
-            self.data[x]=y
+            self.data[x] = y
 
-    #return: Stato attuale -> str
+    # return: Stato attuale -> str
     def getCurrentState(self) -> str:
         """
         ---
-        Function Name : getCurrentState 
+        Function Name : getCurrentState
         ---
         - Args → None
         - Description → restituisce lo stato attuale
         - Returns → str value
-        """     
+        """
         return self.currentState
 
-    #return: i dati delle conversazioni precedenti -> dict
+    # return: i dati delle conversazioni precedenti -> dict
     def getData(self) -> dict:
         """
         ---

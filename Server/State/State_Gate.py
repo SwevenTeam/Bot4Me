@@ -4,31 +4,32 @@ from .State import State
 class State_Gate(State):
     """
     ---
-    Class Name : StateGate 
+    Class Name : StateGate
     ---
     - Args → Stato (type State): rappresenta lo stato
     - Description → Stato che rappresenta un'attività di apertura di un cancello
-    """   
+    """
+
     def __init__(self):
         super().__init__()
         self.currentState = "cancello"
-        self.data = { "sede": '' }
+        self.data = {"sede": ''}
 
     def getCurrentState(self) -> str:
         """
         ---
-        Function Name : getCurrentState 
+        Function Name : getCurrentState
         ---
         - Args → None
         - Description → restituisce lo stato attuale
         - Returns → str value
-        """ 
+        """
         return self.currentState
 
     def getData(self) -> dict:
         """
         ---
-        Function Name : getData 
+        Function Name : getData
         ---
         - Args → None
         - Description → restituisce i dati attualmente inseriti
@@ -38,4 +39,4 @@ class State_Gate(State):
 
     def addData(self, key, value):
         if key == "sede":
-            self.data[key]=value
+            self.data[key] = value

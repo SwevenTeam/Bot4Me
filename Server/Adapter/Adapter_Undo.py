@@ -7,6 +7,7 @@ from sqlalchemy import false, true
 from sqlalchemy import null
 from State.State_Null import State_Null
 
+
 class Adapter_Undo(LogicAdapter):
     """
     ---
@@ -15,14 +16,15 @@ class Adapter_Undo(LogicAdapter):
     - Args → LogicAdapter ( type LogicAdapter) : implementata da tutti gli adapter di Chatbot
     - Description → Adapter utile per annullare un'operazione
     """
-    ### Costruttore   
+    # Costruttore
+
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
 
+    # can_process
+    # input : self, frase input presa dal client
+    # output : boolean, true se può eseguire, false se non può eseguire
 
-    ### can_process
-    ### input : self, frase input presa dal client
-    ### output : boolean, true se può eseguire, false se non può eseguire
     def can_process(self, statement):
         """
         ---
@@ -32,42 +34,55 @@ class Adapter_Undo(LogicAdapter):
         - Description → restituisce True se l'elemento in Input contiene keyword corretta
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        # Controllo su presenza stringhe che identificano la richiesta di annullamento dell'operazione
-        words = ['annulla', 'termina','cancella']
+        # Controllo su presenza stringhe che identificano la richiesta di
+        # annullamento dell'operazione
+        words = ['annulla', 'termina', 'cancella']
         if any(x in statement.text.split() for x in words):
             return True
         else:
             return False
 
+    # process
+    # input : self, frase input presa dal client, ( eventuali info extra )
+    # output : Statement_State, varia in base a quale operazione si sta
+    # eseguendo
 
-    ### process
-    ### input : self, frase input presa dal client, ( eventuali info extra )
-    ### output : Statement_State, varia in base a quale operazione si sta eseguendo
-    def process(self, input_statement, additional_response_selection_parameters) -> Statement_State:
+    def process(
+            self,
+            input_statement,
+            additional_response_selection_parameters) -> Statement_State:
         """
         ---
         Function Name :  process
         ---
-        - Args → 
+        - Args →
           - input_statement ( type Statement_State): frase inserita dall'utente
           - additional_response_selection_parameters ( type any): elementi extra necessari alla funzione del metodo
-        - Description → 
+        - Description →
         crea un outputStatement (Statement_State) in base all'input inserito dall'utente \n
             1. Se lo state equivale ad iniziale, non annulla nulla
             2. Altrimenti, annulla l'operazione
         - Returns → Statement_State value : risposta del chatbot
-        """             
+        """
         # s rappresenta lo Statement_State
-        
-         # s rappresenta lo Statement_State
-        if input_statement.getState().getCurrentState() != State_Null().getCurrentState() :
-          output_statement=Statement_State("Operazione di "+input_statement.getState().getCurrentState() +" Annullata",State_Null(),null)
+
+        # s rappresenta lo Statement_State
+        if input_statement.getState().getCurrentState() != State_Null().getCurrentState():
+            output_statement = Statement_State(
+                "Operazione di " +
+                input_statement.getState().getCurrentState() +
+                " Annullata",
+                State_Null(),
+                null)
         elif(input_statement.getApiKey() == null):
-          output_statement=Statement_State("Non Sei Loggato e non Hai Operazioni Da Annullare",State_Null(),null)
+            output_statement = Statement_State(
+                "Non Sei Loggato e non Hai Operazioni Da Annullare", State_Null(), null)
         else:
-          output_statement=Statement_State("Nessuna Operazione da Annullare",State_Null())
-        # assegno una confidence MOLTO alta per questa operazione perché DEVE prendere la priorità
+            output_statement = Statement_State(
+                "Nessuna Operazione da Annullare", State_Null())
+        # assegno una confidence MOLTO alta per questa operazione perché DEVE
+        # prendere la priorità
 
         output_statement.confidence = 100
 
-        return output_statement  
+        return output_statement

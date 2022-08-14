@@ -2,6 +2,7 @@ from re import S
 from sqlalchemy import null
 from State.State_Null import State_Null
 
+
 class Client:
     """
     ---
@@ -24,13 +25,15 @@ class Client:
         - Description → invia il messaggio al server e restituisce la risposta
         - Returns → string value : restituisce la risposta del server
         """
-        server_response = self.server.getResponse(text, self.state, self.apiKey)
+        server_response = self.server.getResponse(
+            text, self.state, self.apiKey)
         # nuovo stato
         updated_state = server_response.getState()
         if self.state != updated_state:
-          self.upgradeState(updated_state)
+            self.upgradeState(updated_state)
 
-        if self.state.getCurrentState() == "Iniziale" and self.apiKey != server_response.getApiKey():
+        if self.state.getCurrentState(
+        ) == "Iniziale" and self.apiKey != server_response.getApiKey():
             self.upgradeApiKey(server_response.getApiKey())
 
         return str(server_response)
@@ -38,21 +41,21 @@ class Client:
     def upgradeState(self, state):
         """
         ---
-        Function Name : upgradeState 
+        Function Name : upgradeState
         ---
         - Args → stato ( type String) : nuovo stato
         - Description → aggiorna lo stato del Client
         - Returns → None
-        """        
+        """
         self.state = state
 
     def upgradeApiKey(self, apiKey):
         """
         ---
-        Function Name : upgradeApiKey 
+        Function Name : upgradeApiKey
         ---
         - Args → apiKey ( type String) : nuova API Key
         - Description → aggiorna la ApiKey
         - Returns → None
-        """  
-        self.apiKey=apiKey
+        """
+        self.apiKey = apiKey
