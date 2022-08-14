@@ -1,4 +1,4 @@
-nname: ReactTesting
+name: ReactTesting
 on: push
 jobs:
   build:
