@@ -20,7 +20,7 @@ jobs:
           pip install -r Server/requirements.txt
       - name: Test with pytest
         run: |
-            pytest --cov-branch --junitxml=pytest.xml --cov --html=report.html        
+            pytest -p --cov-report term-missing --cov     
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
