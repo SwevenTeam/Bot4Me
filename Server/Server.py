@@ -4,10 +4,9 @@ from turtle import textinput
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
-from StatoLogin import StatoLogin
-from StatementStato import StatementStato
-from Adapter import Adapter
-from StatoIniziale import StatoIniziale
+from State.Statement_State import Statement_State
+from Adapter.Adapter import Adapter
+from State.State_Null import State_Null
 from sqlalchemy import null
 
 
@@ -21,28 +20,28 @@ class Server:
     """    
     def __init__(self):
         self.chatterbot = ChatBot("botforme",logic_adapters=[
-            {'import_path': 'Adapter.Adapter'},
-            {'import_path': 'AdapterLogin.AdapterLogin'},
-            {'import_path': 'AdapterAnnulla.AdapterAnnulla'},
-            {'import_path': 'AdapterLogout.AdapterLogout'},
-            {'import_path': 'AdapterPresenza.AdapterPresenza'},
-            {'import_path': 'AdapterAnnulla.AdapterAnnulla'},
-            {'import_path': 'AdapterConsuntivazione.AdapterConsuntivazione'},
-            {'import_path': 'AdapterCreazioneProgetto.AdapterCreazioneProgetto'}])
+            {'import_path': 'Adapter.Adapter.Adapter'},
+            {'import_path': 'Adapter.Adapter_Login.Adapter_Login'},
+            {'import_path': 'Adapter.Adapter_Gate.Adapter_Gate'},
+            {'import_path': 'Adapter.Adapter_Undo.Adapter_Undo'},
+            {'import_path': 'Adapter.Adapter_Logout.Adapter_Logout'},
+            {'import_path': 'Adapter.Adapter_Presence.Adapter_Presence'},
+            {'import_path': 'Adapter.Adapter_Activity.Adapter_Activity'},
+            {'import_path': 'Adapter.Adapter_Project_Creation.Adapter_Project_Creation'}])
     
-    def getResponse(self, text, stato, apiKey) -> StatementStato:
+    def getResponse(self, text, state, apiKey) -> Statement_State:
         """
         ---
         Function Name : getResponse 
         ---
         - Args →
           -  text (type String): testo inviato dall'utente
-          -  stato (type Stato): stato del Client al momento dell'invio del messaggio
+          -  stato (type State): stato del Client al momento dell'invio del messaggio
           -  apiKey (type String): stringa che rappresenza la API Key
-        - Description → dato uno StatementStato, controlla tutti gli adapter e restituisce la risposta più adatta
-        - Returns → StatementStato value : restituisce la risposta del chatbot con eventuale stato aggiornato
+        - Description → dato uno Statement_State, controlla tutti gli adapter e restituisce la risposta più adatta
+        - Returns → Statement_State value : restituisce la risposta del chatbot con eventuale stato aggiornato
         """      
-        input_statement=StatementStato(text,stato,apiKey)
+        input_statement=Statement_State(text,state,apiKey)
 
         max_confidence = -1
         textoutput = ""
@@ -57,8 +56,8 @@ class Server:
         if textoutput == "":
             # Effettuo questa operazione perché vengono effettuate operazioni con i logic adapter per cui servono degli Stati
             if apiKey == null:    
-              textoutput = StatementStato("Devi prima effettuare l'accesso per utilizzare i nostri servizi",StatoIniziale(),apiKey)
+              textoutput = Statement_State("Devi prima effettuare l'accesso per utilizzare i nostri servizi",State_Null(),apiKey)
             else:
-                textoutput = StatementStato("Nessun Logic Adapter Adatto Trovato",StatoIniziale(),apiKey)
+                textoutput = Statement_State("Nessun Logic Adapter Adatto Trovato",State_Null(),apiKey)
             
         return textoutput

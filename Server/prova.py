@@ -1,7 +1,3 @@
-from StatementStato import StatementStato
-from Stato import Stato
-from StatoConsuntivazione import StatoConsuntivazione
-from StatoPresenzaSede import StatoPresenzaSede
 from Client import Client
 from Server import Server
 from flask import Flask, render_template, request, session

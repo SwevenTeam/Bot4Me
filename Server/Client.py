@@ -1,9 +1,6 @@
 from re import S
 from sqlalchemy import null
-from StatementStato import StatementStato
-from StatoPresenzaSede import StatoPresenzaSede
-from StatoLogin import StatoLogin
-from StatoIniziale import StatoIniziale
+from State.State_Null import State_Null
 
 class Client:
     """
@@ -11,13 +8,12 @@ class Client:
     Class Name : Client
     ---
     - Description → Rappresenta il Client che fa una richiesta al server
-    """    
-    
+    """
+
     def __init__(self, server):
-        self.stato = StatoIniziale()
+        self.state = State_Null()
         self.apiKey = null
         self.server = server
-
 
     def getResponse(self, text):
         """
@@ -28,28 +24,27 @@ class Client:
         - Description → invia il messaggio al server e restituisce la risposta
         - Returns → string value : restituisce la risposta del server
         """
-        s = self.server.getResponse(text, self.stato, self.apiKey)
+        server_response = self.server.getResponse(text, self.state, self.apiKey)
         # nuovo stato
-        stato = s.getStato()
-        
-        if self.stato.getStatoAttuale() and self.stato.getStatoAttuale() != stato.getStatoAttuale()  :
-          self.upgradeStato(stato)
+        updated_state = server_response.getState()
+        if self.state != updated_state:
+          self.upgradeState(updated_state)
 
-        if self.stato.getStatoAttuale() == "Iniziale" and self.apiKey != s.getApiKey():
-            self.upgradeApiKey(s.getApiKey())
+        if self.state.getCurrentState() == "Iniziale" and self.apiKey != server_response.getApiKey():
+            self.upgradeApiKey(server_response.getApiKey())
 
-        return str(s)
+        return str(server_response)
 
-    def upgradeStato(self, stato):
+    def upgradeState(self, state):
         """
         ---
-        Function Name : upgradeStato 
+        Function Name : upgradeState 
         ---
         - Args → stato ( type String) : nuovo stato
         - Description → aggiorna lo stato del Client
         - Returns → None
         """        
-        self.stato = stato
+        self.state = state
 
     def upgradeApiKey(self, apiKey):
         """
@@ -61,14 +56,3 @@ class Client:
         - Returns → None
         """  
         self.apiKey=apiKey
-
-    def getStato(self) :
-        """
-        ---
-        Function Name : getStato
-        ---
-        - Args → None
-        - Description → restituisce lo stato
-        - Returns → Stato value : restituisce lo stato del Client
-        """
-        return self.stato
