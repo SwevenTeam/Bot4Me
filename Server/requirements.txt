@@ -1,0 +1,8 @@
+ChatterBot==1.0.4
+Flask==2.1.2
+Flask_Cors==3.0.10
+pytest==7.1.2
+requests==2.27.1
+SQLAlchemy==1.2.19
+pytest-html
+pytest-cov
