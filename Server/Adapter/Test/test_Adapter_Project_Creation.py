@@ -159,6 +159,7 @@ def test_Adapter_Creation_End_Date_Incorrect():
     value = client.getResponse("2022-01-0111")
     assert value == "Data di Fine non accettata : Reinserire la data del progetto"
 
+
 def test_Adapter_Creation_Modify_Code():
     server = Server()
     client = Client(server)
@@ -176,6 +177,7 @@ def test_Adapter_Creation_Modify_Code():
     value = client.getResponse("5")
     assert "Codice progetto libero e dato aggiornato." in value
 
+
 def test_Adapter_Creation_Modify_Description():
     server = Server()
     client = Client(server)
@@ -192,7 +194,8 @@ def test_Adapter_Creation_Modify_Description():
     client.getResponse("dettagli")
     value = client.getResponse("asderino")
     assert "Descrizione Accettata e aggiornata." in value
-                
+
+
 def test_Adapter_Creation_Modify_Client():
     server = Server()
     client = Client(server)
@@ -209,7 +212,8 @@ def test_Adapter_Creation_Modify_Client():
     client.getResponse("cliente")
     value = client.getResponse("clientino")
     assert "Cliente Accettato e aggiornato." in value
-                
+
+
 def test_Adapter_Creation_Modify_Manager():
     server = Server()
     client = Client(server)
@@ -226,7 +230,8 @@ def test_Adapter_Creation_Modify_Manager():
     client.getResponse("manager")
     value = client.getResponse("managerino")
     assert "Manager Accettata e aggiornato." in value
-                
+
+
 def test_Adapter_Creation_Modify_Area():
     server = Server()
     client = Client(server)
@@ -243,7 +248,8 @@ def test_Adapter_Creation_Modify_Area():
     client.getResponse("area")
     value = client.getResponse("Imola")
     assert "Area Accettata e aggiornata." in value
-                
+
+
 def test_Adapter_Creation_Modify_Start_Date():
     server = Server()
     client = Client(server)
@@ -261,6 +267,7 @@ def test_Adapter_Creation_Modify_Start_Date():
     value = client.getResponse("2022-02-02")
     assert "Data di Inizio accettata e aggiornata." in value
 
+
 def test_Adapter_Creation_Modify_End_Date():
     server = Server()
     client = Client(server)
@@ -277,7 +284,8 @@ def test_Adapter_Creation_Modify_End_Date():
     client.getResponse("data Fine")
     value = client.getResponse("2022-02-02")
     assert "Data di Fine accettata e aggiornata." in value
-                
+
+
 '''
 def test_Adapter_Creation():
     server = Server()
