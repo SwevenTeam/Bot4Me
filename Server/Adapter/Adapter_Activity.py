@@ -196,7 +196,7 @@ class Adapter_Activity(LogicAdapter):
             if text.isnumeric():
                 s.addData("ore viaggio fatturabili", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "ore viaggio":
+                if dati["conferma"] == "ore viaggio fatturabili":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Ore di viaggio fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati " +

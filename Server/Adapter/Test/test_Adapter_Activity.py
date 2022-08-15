@@ -4,7 +4,6 @@ from Client import Client
 from Server import Server
 from .util import login
 
-
 def test_Adapter_Activity_Activate():
     server = Server()
     client = Client(server)
@@ -228,3 +227,182 @@ def test_Adapter_Activity_Description():
     assert value == "Descrizione Accettata : Inserimento completato <br>codice progetto : 1<br>data : 2022-01-01<br>ore fatturabili : 3<br>ore viaggio : 3<br>ore viaggio fatturabili : 3<br>sede : Imola<br>fatturabile : True<br>descrizione : Ez<br>conferma : non confermato<br>vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
 
 '''
+def test_Adapter_Activity_Modify_Code():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("codice progetto")
+    value = client.getResponse("1")
+    assert "Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati" in value 
+
+def test_Adapter_Activity_Modify_Date():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("data")
+    value = client.getResponse("2022-02-02")
+    assert "Data accettata e aggiornata. Visualizzazione Dati Aggiornati" in value 
+
+def test_Adapter_Activity_Modify_Billable_Hours():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("ore fatturabili")
+    value = client.getResponse("5")
+    assert "Ore Fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati" in value 
+
+def test_Adapter_Activity_Modify_Travel_Hours():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("ore viaggio")
+    value = client.getResponse("5")
+    assert "Ore di viaggio accettate e aggiornate. Visualizzazione Dati Aggiornati" in value 
+
+def test_Adapter_Activity_Modify_Billable_Travel_Hours():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("Modifica")
+    value = client.getResponse("Modifica")
+    assert "" in value 
+
+def test_Adapter_Activity_Modify_Billable_Travel_Hours():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("ore viaggio fatturabili")
+    value = client.getResponse("5")
+    assert "Ore di viaggio fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati" in value 
+
+def test_Adapter_Activity_Modify_Area():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("sede")
+    value = client.getResponse("Bologna")
+    assert "Sede Accettata e aggiornata." in value 
+
+def test_Adapter_Activity_Modify_Billable_True():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("no")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("fatturabile")
+    value = client.getResponse("sì")
+    assert "Fatturabilità Accettata e aggiornata" in value 
+
+def test_Adapter_Activity_Modify_Billable_False():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("fatturabile")
+    value = client.getResponse("no")
+    assert "Fatturabilità Accettata e aggiornata" in value 
+
+def test_Adapter_Activity_Modify_Description():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("consuntiva")
+    client.getResponse("1")
+    client.getResponse("2022-01-01")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("3")
+    client.getResponse("Imola")
+    client.getResponse("sì")
+    client.getResponse("Ez")
+    client.getResponse("Modifica")
+    client.getResponse("descrizione")
+    value = client.getResponse("zazazazazaza")
+    assert "Descrizione Accettata e aggiornata" in value 
