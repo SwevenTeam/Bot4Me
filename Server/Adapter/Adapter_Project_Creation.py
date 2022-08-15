@@ -104,7 +104,7 @@ class Adapter_Project_Creation(LogicAdapter):
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
         if (not dati["codice progetto"]
-                ) or dati["conferma"] == "codice progetto":
+            ) or dati["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkCodeProject(text, Api):
                 s.addData("codice progetto", text)
@@ -248,7 +248,7 @@ class Adapter_Project_Creation(LogicAdapter):
                 'manager',
                 'area',
                 'data Inizio',
-                'data Fine',]
+                'data Fine', ]
 
             if dati["conferma"] == "modifica":
                 if any(x in text for x in chiavi):
@@ -261,10 +261,10 @@ class Adapter_Project_Creation(LogicAdapter):
 
             else:
                 annulla = ['annulla', 'elimina']
-                modifica = ['modifica','modifica']
+                modifica = ['modifica', 'modifica']
                 consuntiva = ['sì', 'ok', 'consuntiva', 'procedi', 'conferma']
 
-                if similarStringMatch( text.split(),consuntiva):
+                if similarStringMatch(text.split(), consuntiva):
                     s.addData("conferma", "conferma")
                     Req = Request_Project_Creation(s, Api)
                     if Req.isReady():
@@ -278,11 +278,11 @@ class Adapter_Project_Creation(LogicAdapter):
                         output_statement = Statement_State(
                             "Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)", s)
 
-                elif similarStringMatch(text.split(),annulla):
+                elif similarStringMatch(text.split(), annulla):
                     output_statement = Statement_State(
                         "Operazione annullata", State_Null())
 
-                elif similarStringMatch(text.split(),modifica):
+                elif similarStringMatch(text.split(), modifica):
                     s.addData("conferma", "modifica")
                     output_statement = Statement_State(
                         "Inserire elemento che si vuole modificare", s)
