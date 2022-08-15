@@ -159,7 +159,125 @@ def test_Adapter_Creation_End_Date_Incorrect():
     value = client.getResponse("2022-01-0111")
     assert value == "Data di Fine non accettata : Reinserire la data del progetto"
 
+def test_Adapter_Creation_Modify_Code():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("codice progetto")
+    value = client.getResponse("5")
+    assert "Codice progetto libero e dato aggiornato." in value
 
+def test_Adapter_Creation_Modify_Description():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("dettagli")
+    value = client.getResponse("asderino")
+    assert "Descrizione Accettata e aggiornata." in value
+                
+def test_Adapter_Creation_Modify_Client():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("cliente")
+    value = client.getResponse("clientino")
+    assert "Cliente Accettato e aggiornato." in value
+                
+def test_Adapter_Creation_Modify_Manager():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("manager")
+    value = client.getResponse("managerino")
+    assert "Manager Accettata e aggiornato." in value
+                
+def test_Adapter_Creation_Modify_Area():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("area")
+    value = client.getResponse("Imola")
+    assert "Area Accettata e aggiornata." in value
+                
+def test_Adapter_Creation_Modify_Start_Date():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("data Inizio")
+    value = client.getResponse("2022-02-02")
+    assert "Data di Inizio accettata e aggiornata." in value
+
+def test_Adapter_Creation_Modify_End_Date():
+    server = Server()
+    client = Client(server)
+    login(client)
+    client.getResponse("crea progetto")
+    client.getResponse("1999")
+    client.getResponse("template description")
+    client.getResponse("template client")
+    client.getResponse("template manager")
+    client.getResponse("Bologna")
+    client.getResponse("2022-01-01")
+    client.getResponse("2022-01-02")
+    client.getResponse("Modifica")
+    client.getResponse("data Fine")
+    value = client.getResponse("2022-02-02")
+    assert "Data di Fine accettata e aggiornata." in value
+                
 '''
 def test_Adapter_Creation():
     server = Server()

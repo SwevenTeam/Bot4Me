@@ -147,7 +147,7 @@ class Adapter_Project_Creation(LogicAdapter):
             if dati["conferma"] == "cliente":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
-                    "Cliente Accettato e aggiornata. Visualizzazione Dati Aggiornati \n" +
+                    "Cliente Accettato e aggiornato. Visualizzazione Dati Aggiornati \n" +
                     returnAllData(s) +
                     " Confermare operazione di creazione?",
                     s)
@@ -163,7 +163,7 @@ class Adapter_Project_Creation(LogicAdapter):
             if dati["conferma"] == "manager":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
-                    "Manager Accettata e aggiornata. Visualizzazione Dati Aggiornati \n" +
+                    "Manager Accettata e aggiornato. Visualizzazione Dati Aggiornati \n" +
                     returnAllData(s) +
                     " Confermare operazione di creazione?",
                     s)
@@ -202,7 +202,7 @@ class Adapter_Project_Creation(LogicAdapter):
                 datetime.datetime.strptime(text, '%Y-%m-%d')
                 s.addData("data Inizio", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "data":
+                if dati["conferma"] == "data Inizio":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Data di Inizio accettata e aggiornata. Visualizzazione Dati Aggiornati \n" +
@@ -224,7 +224,7 @@ class Adapter_Project_Creation(LogicAdapter):
                 datetime.datetime.strptime(text, '%Y-%m-%d')
                 s.addData("data Fine", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "data":
+                if dati["conferma"] == "data Fine":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Data di Fine accettata e aggiornata. Visualizzazione Dati Aggiornati \n" +
@@ -242,15 +242,13 @@ class Adapter_Project_Creation(LogicAdapter):
         # Utente ha inserito tutti i dati richiesti, ora dovrà confermare
         elif dati:
             chiavi = [
-                'inizio',
                 'codice progetto',
                 'dettagli',
                 'cliente',
                 'manager',
-                'status',
                 'area',
                 'data Inizio',
-                'date Fine']
+                'data Fine',]
 
             if dati["conferma"] == "modifica":
                 if any(x in text for x in chiavi):
@@ -263,10 +261,10 @@ class Adapter_Project_Creation(LogicAdapter):
 
             else:
                 annulla = ['annulla', 'elimina']
-                modifica = ['modifica']
+                modifica = ['modifica','modifica']
                 consuntiva = ['sì', 'ok', 'consuntiva', 'procedi', 'conferma']
 
-                if any(x in text.split() for x in consuntiva):
+                if similarStringMatch( text.split(),consuntiva):
                     s.addData("conferma", "conferma")
                     Req = Request_Project_Creation(s, Api)
                     if Req.isReady():
@@ -280,11 +278,11 @@ class Adapter_Project_Creation(LogicAdapter):
                         output_statement = Statement_State(
                             "Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)", s)
 
-                elif any(x in text.split() for x in annulla):
+                elif similarStringMatch(text.split(),annulla):
                     output_statement = Statement_State(
                         "Operazione annullata", State_Null())
 
-                elif any(x in text.split() for x in modifica):
+                elif similarStringMatch(text.split(),modifica):
                     s.addData("conferma", "modifica")
                     output_statement = Statement_State(
                         "Inserire elemento che si vuole modificare", s)
