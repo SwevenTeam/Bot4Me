@@ -5,6 +5,7 @@ from State.State_Gate import State_Gate
 from State.State_Null import State_Null
 from .Util_Adapter import similarStringMatch_Location
 
+
 class Adapter_Gate(LogicAdapter):
     """
     ---
@@ -65,7 +66,7 @@ class Adapter_Gate(LogicAdapter):
         # vengono recuperate le sedi
 
         sede = ''
-        similarStringMatch_Location(input_statement.text,Api)
+        similarStringMatch_Location(input_statement.text, Api)
 
         if sede == '':
             return Statement_State(
@@ -81,12 +82,12 @@ class Adapter_Gate(LogicAdapter):
         # buon fine si è verificato un errore
         if Req_Gate.isReady() and Req_Gate.sendRequest():
             return Statement_State(
-                    "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
-                    State_Null(),
-                    Api)
+                "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
+                State_Null(),
+                Api)
         else:
             return Statement_State(
-                    "Sede non accettata : riprovare",
-                    state,
-                    Api
-                )
+                "Sede non accettata : riprovare",
+                state,
+                Api
+            )

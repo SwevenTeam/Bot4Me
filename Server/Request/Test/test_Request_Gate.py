@@ -2,7 +2,8 @@ from ..Request_Gate import Request_Gate
 from State.State_Gate import State_Gate
 from unittest.mock import patch
 
-class Test_Request_Gate() :
+
+class Test_Request_Gate():
     '''
     def test_Request_Gate_isReady(self):
         S = State_Gate()
