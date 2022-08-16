@@ -9,7 +9,7 @@ def returnAllData(s) -> string:
     sentence = ""
     values = s.getData()
     for x in values:
-        sentence += x + " : " + values[x] + "\n"
+        sentence += x + " : " + values[x] + "<br>"
 
     return sentence
 
@@ -59,8 +59,10 @@ def checkProjectExistance(code, Api) -> Boolean:
 def similarStringMatch(Statement, Dict) -> Boolean:
 
     for y in Dict:
+        y_lower = y.lower()
         for x in Statement:
-            if SequenceMatcher(None, x, y).ratio() >= 0.80:
+            x_lower = x.lower()
+            if SequenceMatcher(None, x_lower, y_lower).ratio() >= 0.80:
                 return True
     return False
 
@@ -70,8 +72,8 @@ def similarStringMatch_Location(Statement, Api) -> String:
     for y in getLocationList(Api):
         y_lower = y.lower()
         for x in Statement:
-            print(x + " : " + y_lower)
-            if SequenceMatcher(None, x, y_lower).ratio() >= 0.80:
+            x_lower = x.lower()
+            if SequenceMatcher(None, x_lower, y_lower).ratio() >= 0.80:
                 return y_lower
     return ''
 
