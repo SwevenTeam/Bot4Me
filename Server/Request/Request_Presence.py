@@ -1,7 +1,3 @@
-from decimal import InvalidOperation
-from chatterbot.logic import LogicAdapter
-from State.Statement_State import Statement_State
-from chatterbot.conversation import Statement
 from sqlalchemy import false, true
 import requests
 from requests import Response

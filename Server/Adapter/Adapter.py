@@ -3,7 +3,7 @@ from chatterbot.logic import LogicAdapter
 from chatterbot.conversation import Statement
 from sqlalchemy import true
 from State.Statement_State import Statement_State
-
+from chatterbot.adapters import Adapter
 
 class Adapter(LogicAdapter):
     """

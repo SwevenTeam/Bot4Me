@@ -3,7 +3,7 @@ from Request.Request_Gate import Request_Gate
 from State.Statement_State import Statement_State
 from State.State_Gate import State_Gate
 from State.State_Null import State_Null
-
+from .Util_Adapter import similarStringMatch_Location
 
 class Adapter_Gate(LogicAdapter):
     """
@@ -52,52 +52,41 @@ class Adapter_Gate(LogicAdapter):
         - Returns → Statement_State value : risposta del chatbot con eventuale cambio di state
         """
         state = input_statement.getState()
-
+        Api = input_statement.getApiKey()
         # L'Utente vuole avviare l'attività di apertura del cancello
         if state.getCurrentState() == State_Null().getCurrentState():
             return Statement_State(
                 "Apertura cancello avviata : Inserire la sede del cancello",
                 State_Gate(),
-                input_statement.getApiKey()
+                Api
             )
 
-        Req_Gate = Request_Gate(input_statement.getApiKey())
+        Req_Gate = Request_Gate(Api)
         # vengono recuperate le sedi
-        locations = Req_Gate.getLocations()
-        print(locations)
-        if len(locations) > 0:
-            # validazione della sede
-            sede = ''
-            for word in input_statement.getText().split():
-                if word.upper() in locations:
-                    sede = word.upper()
-                    break
 
-            if sede == '':
-                return Statement_State(
-                    "Sede non trovata : Reinserire la sede del cancello",
-                    state,
-                    input_statement.getApiKey()
-                )
+        sede = ''
+        similarStringMatch_Location(input_statement.text,Api)
 
-            state.addData("sede", sede)
-            Req_Gate.setSede(state)
+        if sede == '':
+            return Statement_State(
+                "Sede non trovata : Reinserire la sede del cancello",
+                state,
+                Api
+            )
 
-            # viene inviata la richiesta di apertura del cancello, se non va a
-            # buon fine si è verificato un errore
-            if Req_Gate.isReady() and Req_Gate.sendRequest():
-                return Statement_State(
+        state.addData("sede", sede)
+        Req_Gate.setSede(state)
+
+        # viene inviata la richiesta di apertura del cancello, se non va a
+        # buon fine si è verificato un errore
+        if Req_Gate.isReady() and Req_Gate.sendRequest():
+            return Statement_State(
                     "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
                     State_Null(),
-                    input_statement.getApiKey())
-            else:
-                return Statement_State(
-                    "Sede non accettata : riprovare",
-                    state,
-                    input_statement.getApiKey()
-                )
+                    Api)
         else:
             return Statement_State(
-                "Si è verificato un errore sconosciuto, riprova ad inviare la sede",
-                state,
-                input_statement.getApiKey())
+                    "Sede non accettata : riprovare",
+                    state,
+                    Api
+                )

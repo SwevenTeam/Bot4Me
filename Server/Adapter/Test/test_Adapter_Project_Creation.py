@@ -1,4 +1,5 @@
 import pytest
+from ..Adapter import Adapter
 from Client import Client
 from Server import Server
 from .util import login

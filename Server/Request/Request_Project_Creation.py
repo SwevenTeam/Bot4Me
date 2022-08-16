@@ -1,14 +1,6 @@
-from decimal import InvalidOperation
-from urllib import response
 from xmlrpc.client import Boolean
-from chatterbot.logic import LogicAdapter
-from State.Statement_State import Statement_State
-from chatterbot.conversation import Statement
 from sqlalchemy import false, true
 import requests
-from requests import Response
-import json
-
 
 class Request_Project_Creation():
     """
