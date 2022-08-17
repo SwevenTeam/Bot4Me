@@ -70,23 +70,3 @@ class Request_Project_Creation():
             return True
         else:
             return False
-
-    def checkCodeProject(self, code) -> Boolean:
-        """
-        ---
-        Name checkProjectExistance
-        ---
-        - Args → code (int) : rappresenta il codice del progetto
-        - Description → manda una richiesta get e ritorna se il lavoro è presente o meno
-        - Returns → boolean value : true se non esite, false altrimenti
-        """
-        myurl = "https://apibot4me.imolinfo.it/v1/projects/" + code
-        header = {'accept': 'application/json', 'api_key': self.Api, }
-
-        response = requests.get(myurl, headers=header, data={})
-
-        if response.status_code >= 200 and response.status_code < 300 and response.headers.get(
-                'Content-Length') == "0":
-            return True
-        else:
-            return False
