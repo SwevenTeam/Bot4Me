@@ -3,7 +3,7 @@ from ..Adapter import Adapter
 from Client import Client
 from Server import Server
 from .util import login
-
+from Request.Request_Presence import Request_Presence
 
 class Test_Adapter():
 

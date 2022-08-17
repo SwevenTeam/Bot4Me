@@ -13,6 +13,7 @@ class Request_Project_Creation():
 
     def __init__(self, s, apiKey):
         self.data = s.getData()
+        self.state = s.getCurrentState()
         self.Api = apiKey
 
     def isReady(self) -> bool:
@@ -24,8 +25,11 @@ class Request_Project_Creation():
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        if self.data["conferma"] == "conferma":
-            return True
+        if self.state == "creazione progetto":
+            if self.data["conferma"] == "conferma":
+                return True
+            else:
+                return False
         else:
             return False
 

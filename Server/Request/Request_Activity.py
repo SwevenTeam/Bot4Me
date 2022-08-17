@@ -14,6 +14,7 @@ class Request_Activity():
     """
 
     def __init__(self, s, apiKey):
+        self.state = s.getCurrentState()
         self.data = s.getData()
         self.Api = apiKey
 
@@ -26,8 +27,11 @@ class Request_Activity():
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        if self.data["conferma"] == "conferma":
-            return True
+        if self.state == "consuntivazione":
+            if self.data["conferma"] == "conferma":
+                return True
+            else:
+                return False
         else:
             return False
 

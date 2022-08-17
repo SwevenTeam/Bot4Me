@@ -5,7 +5,8 @@ class Request_Gate:
 
     def __init__(self, api_key) -> None:
         self.sede = ''
-        self.APIKEY = api_key
+        #self.state = s.getCurrentState()
+        self.Api = api_key
 
     def isReady(self) -> bool:
         """

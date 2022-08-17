@@ -13,7 +13,7 @@ class Request_Presence():
 
     def __init__(self, s, apiKey):
         self.dati = s.getData()
-        self.ready = s.getCurrentState()
+        self.state = s.getCurrentState()
         self.Api = apiKey
 
     def isReady(self) -> bool:
@@ -25,7 +25,7 @@ class Request_Presence():
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        if self.ready == "presenza Sede":
+        if self.state == "presenza Sede":
             if self.dati['sede'] != "":
                 return True
             else:
