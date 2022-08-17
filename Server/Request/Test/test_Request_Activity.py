@@ -24,7 +24,7 @@ class Test_Request_Activity():
         S = State_Null()
         Req = Request_Activity(S, "12345678-1234-1234-1234-123456789012")
         assert Req.isReady() == False
-    
+
     def test_Request_Activity_isReady_Error_Not_Ready(self):
         S = State_Activity()
         Req = Request_Activity(S, "12345678-1234-1234-1234-123456789012")

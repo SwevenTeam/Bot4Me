@@ -4,6 +4,7 @@ from State.State_Null import State_Null
 from unittest.mock import patch
 import requests
 
+
 class Test_Request_Project_Creation():
 
     def test_Request_Project_Creation_isReady(self):
@@ -23,16 +24,17 @@ class Test_Request_Project_Creation():
 
     def test_Request_Project_Creation_isReady_Error_Type(self):
         S = State_Null()
-        Req = Request_Project_Creation(S, "12345678-1234-1234-1234-123456789012")
+        Req = Request_Project_Creation(
+            S, "12345678-1234-1234-1234-123456789012")
         assert Req.isReady() == False
-    
+
     def test_Request_Project_Creation_isReady_Error_Not_Ready(self):
         S = State_Project_Creation()
-        Req = Request_Project_Creation(S, "12345678-1234-1234-1234-123456789012")
+        Req = Request_Project_Creation(
+            S, "12345678-1234-1234-1234-123456789012")
         assert Req.isReady() == False
 
     def test_Request_Activity_SendRequest_Error_Not_Ready(self):
         S = State_Project_Creation()
         Req = Request_Project_Creation(S, "")
         assert Req.sendRequest() == False
-
