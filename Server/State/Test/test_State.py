@@ -5,5 +5,5 @@ from ..State import State
 
 def test_State():
     S = State()
-    assert S.getData() == None
-    assert S.getCurrentState() == None
+    assert S.getData() is None
+    assert S.getCurrentState() is None

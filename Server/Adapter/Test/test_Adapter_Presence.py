@@ -5,6 +5,7 @@ from Server import Server
 from .util import login
 from Request.Request_Presence import Request_Presence
 
+
 class Test_Adapter():
 
     @pytest.fixture
