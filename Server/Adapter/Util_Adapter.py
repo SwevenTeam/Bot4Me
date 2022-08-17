@@ -87,6 +87,6 @@ def getLocationList(Api):
 
         responseUrl = requests.get(url, headers=header)
 
-        if responseUrl.status_code >= 200 and responseUrl.status_code < 300 :
+        if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return [data["name"] for data in responseUrl.json()]
     return []

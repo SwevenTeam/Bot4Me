@@ -220,7 +220,7 @@ class Test_Adapter_Activity():
         client.getResponse("codice progetto")
         value = client.getResponse("1")
         assert "Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati" in value
-    
+
     def test_Adapter_Activity_Modify_Fail(self, server):
         client = Client(server)
         login(client)
