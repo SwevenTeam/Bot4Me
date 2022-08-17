@@ -74,7 +74,7 @@ class Adapter_Undo(LogicAdapter):
                 " Annullata",
                 State_Null(),
                 input_statement.getApiKey()
-                )
+            )
         elif(input_statement.getApiKey() == null):
             output_statement = Statement_State(
                 "Non Sei Loggato e non Hai Operazioni Da Annullare", State_Null(), null)
