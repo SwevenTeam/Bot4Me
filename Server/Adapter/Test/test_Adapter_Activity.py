@@ -204,25 +204,6 @@ class Test_Adapter_Activity():
         value = client.getResponse("bzorg")
         assert value == "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)"
 
-    '''
-    def test_Adapter_Activity_Description(self,server):
-
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        value = client.getResponse("Ez")
-        print(value)
-        assert value == "Descrizione Accettata : Inserimento completato <br>codice progetto : 1<br>data : 2022-01-01<br>ore fatturabili : 3<br>ore viaggio : 3<br>ore viaggio fatturabili : 3<br>sede : Imola<br>fatturabile : True<br>descrizione : Ez<br>conferma : non confermato<br>vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
-
-    '''
-
     def test_Adapter_Activity_Modify_Code(self, server):
         client = Client(server)
         login(client)
@@ -239,6 +220,52 @@ class Test_Adapter_Activity():
         client.getResponse("codice progetto")
         value = client.getResponse("1")
         assert "Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati" in value
+    
+    def test_Adapter_Activity_Modify_Fail(self, server):
+        client = Client(server)
+        login(client)
+        client.getResponse("consuntiva")
+        client.getResponse("1")
+        client.getResponse("2022-01-01")
+        client.getResponse("3")
+        client.getResponse("3")
+        client.getResponse("3")
+        client.getResponse("Imola")
+        client.getResponse("sì")
+        client.getResponse("Ez")
+        client.getResponse("Modifica")
+        value = client.getResponse("asdasdasd")
+        assert "Chiave non accettata. Provare con una chiave diversa" in value
+
+    def test_Adapter_Activity_Modify_Undo(self, server):
+        client = Client(server)
+        login(client)
+        client.getResponse("consuntiva")
+        client.getResponse("1")
+        client.getResponse("2022-01-01")
+        client.getResponse("3")
+        client.getResponse("3")
+        client.getResponse("3")
+        client.getResponse("Imola")
+        client.getResponse("sì")
+        client.getResponse("Ez")
+        value = client.getResponse("Annulla")
+        assert "Operazione annullata" in value
+
+    def test_Adapter_Activity_Modify_Wrong_Input(self, server):
+        client = Client(server)
+        login(client)
+        client.getResponse("consuntiva")
+        client.getResponse("1")
+        client.getResponse("2022-01-01")
+        client.getResponse("3")
+        client.getResponse("3")
+        client.getResponse("3")
+        client.getResponse("Imola")
+        client.getResponse("sì")
+        client.getResponse("Ez")
+        value = client.getResponse("zazazaz")
+        assert "Input non valido, Reinserire" in value
 
     def test_Adapter_Activity_Modify_Date(self, server):
         client = Client(server)
@@ -290,23 +317,6 @@ class Test_Adapter_Activity():
         client.getResponse("ore viaggio")
         value = client.getResponse("5")
         assert "Ore di viaggio accettate e aggiornate. Visualizzazione Dati Aggiornati" in value
-
-    def test_Adapter_Activity_Modify_Billable_Travel_Hours(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("Modifica")
-        value = client.getResponse("Modifica")
-        assert "" in value
 
     def test_Adapter_Activity_Modify_Billable_Travel_Hours(self, server):
         client = Client(server)

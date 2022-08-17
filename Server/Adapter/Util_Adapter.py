@@ -73,17 +73,20 @@ def similarStringMatch_Location(Statement, Api) -> String:
         y_lower = y.lower()
         for x in Statement:
             x_lower = x.lower()
+            print(x_lower)
+            print(y_lower)
             if SequenceMatcher(None, x_lower, y_lower).ratio() >= 0.80:
                 return y_lower
     return ''
 
 
 def getLocationList(Api):
-    url = 'https://apibot4me.imolinfo.it/v1/locations'
-    header = {'accept': 'application/json', 'api_key': Api}
+    if Api != '':
+        url = 'https://apibot4me.imolinfo.it/v1/locations'
+        header = {'accept': 'application/json', 'api_key': Api}
 
-    responseUrl = requests.get(url, headers=header)
+        responseUrl = requests.get(url, headers=header)
 
-    if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
-        return [data["name"] for data in responseUrl.json()]
+        if responseUrl.status_code >= 200 and responseUrl.status_code < 300 :
+            return [data["name"] for data in responseUrl.json()]
     return []

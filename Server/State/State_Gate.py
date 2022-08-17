@@ -37,6 +37,6 @@ class State_Gate(State):
         """
         return self.data
 
-    def addData(self, key, value):
-        if key == "sede":
-            self.data[key] = value
+    def addData(self, x, y):
+        if x in self.data:
+            self.data[x] = y

@@ -26,7 +26,7 @@ class Request_Presence():
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         if self.ready == "presenza Sede":
-            if self.dati:
+            if self.dati['sede'] != "":
                 return True
             else:
                 return False
