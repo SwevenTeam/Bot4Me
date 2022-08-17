@@ -32,7 +32,7 @@ class Client:
         if self.state != updated_state:
             self.upgradeState(updated_state)
 
-        if self.state.getCurrentState(
+        if server_response.getApiKey() != null and self.state.getCurrentState(
         ) == "Iniziale" and self.apiKey != server_response.getApiKey():
             self.upgradeApiKey(server_response.getApiKey())
 
