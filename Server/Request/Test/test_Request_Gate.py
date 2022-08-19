@@ -3,7 +3,6 @@ from State.State_Gate import State_Gate
 from State.State_Null import State_Null
 
 
-
 class Test_Request_Gate():
     '''
     def test_Request_Gate_isReady(self):
