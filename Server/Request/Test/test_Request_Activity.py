@@ -1,8 +1,6 @@
 from ..Request_Activity import Request_Activity
 from State.State_Activity import State_Activity
 from State.State_Null import State_Null
-from unittest.mock import patch
-import requests_mock
 
 
 class Test_Request_Activity():
