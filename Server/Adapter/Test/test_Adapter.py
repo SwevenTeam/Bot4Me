@@ -6,6 +6,7 @@ from State.State_Null import State_Null
 from ..Util_Adapter import similarStringMatch_Location, getLocationList
 from sqlalchemy import null
 
+
 class Test_Adapter():
 
     # Creazione Chatbot Temporaneo per Test
@@ -15,19 +16,19 @@ class Test_Adapter():
 
     # Test Adapter
     def test_Adapter(self, chatbot):
-        S = Statement_State("ciao",State_Null(),null)
+        S = Statement_State("ciao", State_Null(), null)
         A = Adapter(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Ciao, sono Bot4Me"
 
-    # Test Errore Adapter 
+    # Test Errore Adapter
     def test_Adapter_Error(self, chatbot):
-        S = Statement_State("non esiste",State_Null())
+        S = Statement_State("non esiste", State_Null())
         A = Adapter(chatbot)
         assert A.can_process(S) == False
 
-    ### TEST UTILS
+    # TEST UTILS
     # Test String Match Location
     def test_Util_Location_Correct(self):
         statement = ['a', 'imola', 'maledetto']

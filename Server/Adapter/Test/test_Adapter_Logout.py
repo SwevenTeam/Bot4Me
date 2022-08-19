@@ -16,14 +16,17 @@ class Test_Adapter_Logout():
 
     # Test Logout
     def test_Logout_Correct(self, chatbot):
-        S = Statement_State("logout",State_Null(),'12345678-1234-1234-1234-123456789012')
+        S = Statement_State(
+            "logout",
+            State_Null(),
+            '12345678-1234-1234-1234-123456789012')
         A = Adapter_Logout(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Logout avvenuto con successo"
 
     # Test Errore Logout
     def test_Logout_Incorrect(self, chatbot):
-        S = Statement_State("logout",State_Null(),null)
+        S = Statement_State("logout", State_Null(), null)
         A = Adapter_Logout(chatbot)
         assert A.can_process(S) == False

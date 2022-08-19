@@ -15,10 +15,10 @@ class Test_Adapter_Gate():
 
     # Test Avvio Apertura Cancello
     def test_Adapter_Gate_Activate(self, chatbot):
-        S = Statement_State("apertura cancello",State_Null())
+        S = Statement_State("apertura cancello", State_Null())
         A = Adapter_Gate(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Apertura cancello avviata : Inserire la sede del cancello"
 
     '''
@@ -30,9 +30,13 @@ class Test_Adapter_Gate():
         assert value == "Sede accettata : Richiesta apertura del cancello avvenuta con successo"
     '''
     # Test Apertura Cancello Sede Incorretta
+
     def test_Adapter_Presence_Location_Incorrect(self, chatbot):
-        S = Statement_State("Imolaaaaaa",State_Gate(),'12345678-1234-1234-1234-123456789012')
+        S = Statement_State(
+            "Imolaaaaaa",
+            State_Gate(),
+            '12345678-1234-1234-1234-123456789012')
         A = Adapter_Gate(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Sede non trovata : Reinserire la sede del cancello"

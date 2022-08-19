@@ -4,6 +4,7 @@ from State.State_Null import State_Null
 from unittest.mock import patch
 import requests_mock
 
+
 class Test_Request_Activity():
 
     def test_Request_Activity_isReady(self):
@@ -34,4 +35,3 @@ class Test_Request_Activity():
         S = State_Activity()
         Req = Request_Activity(S, "")
         assert Req.sendRequest() == False
-                

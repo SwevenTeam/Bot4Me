@@ -5,6 +5,7 @@ from requests import Response
 import json
 from .Util_Request import IsDictionaryFilled
 
+
 class Request_Activity():
     """
     ---
