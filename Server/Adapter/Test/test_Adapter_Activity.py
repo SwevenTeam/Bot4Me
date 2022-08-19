@@ -1,404 +1,309 @@
 import pytest
-from ..Adapter import Adapter
-from Client import Client
-from Server import Server
-from .util import login
-
+from State.Statement_State import Statement_State
+from State.State_Null import State_Null
+from chatterbot import ChatBot
+from .util import ModifyActivity
+from Adapter.Adapter_Activity import Adapter_Activity
+from State.State_Activity import State_Activity
 
 class Test_Adapter_Activity():
 
+    # Creazione Chatbot Temporaneo per Test
     @pytest.fixture
-    def server(self):
-        return Server()
+    def chatbot(self):
+        return ChatBot("Test")
 
-    def test_Adapter_Activity_Activate(self, server):
-        client = Client(server)
-        login(client)
-        value = client.getResponse("consuntiva")
-        assert value == "Consuntivazione Avviata : Inserire il codice del Progetto"
+    # Test Avvio Consuntivazione
+    def test_Adapter_Activity_Activate(self,chatbot):
+        S = Statement_State("consuntiva",State_Null())
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Consuntivazione Avviata : Inserire il codice del Progetto"
 
-    def test_Adapter_Activity_Code_Correct(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        value = client.getResponse("1")
-        assert value == "Progetto esistente : Inserire la data di consuntivazione ( formato aaaa-mm-gg )"
+    # Test Inserimento Codice Corretto
+    def test_Adapter_Activity_Code_Correct(self, chatbot):
+        S = Statement_State("1",State_Activity(),'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Progetto esistente : Inserire la data di consuntivazione ( formato aaaa-mm-gg )" and S.currentState.getData()['codice progetto'] == "1"  
 
+    # Test Inserimento Codice Incorretto
     @pytest.mark.parametrize("code",
                              [("1999999999999999"),
                               ("esempio"),
                                  ("cacaca")])
-    def test_Adapter_Activity_Code_Incorrect(self, code, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        value = client.getResponse(code)
-        assert value == "Progetto non esistente : Reinserire un codice diverso o creare un nuovo progetto"
+    def test_Adapter_Activity_Code_Incorrect(self, code, chatbot):
+        S = Statement_State(code,State_Activity(),'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Progetto non esistente : Reinserire un codice diverso o creare un nuovo progetto" and S.currentState.getData()['codice progetto'] == ""
 
-    def test_Adapter_Activity_Date_Correct(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        value = client.getResponse("2022-01-01")
-        assert value == "Data accettata : Inserire le ore fatturabili"
+    # Test Inserimento Data Corretta
+    def test_Adapter_Activity_Date_Correct(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        S = Statement_State("2022-01-01",Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Data accettata : Inserire le ore fatturabili" and S.currentState.getData()['codice progetto'] == "1" and S.currentState.getData()['data'] == "2022-01-01"
 
+    # Test Inserimento Data Incorretta
     @pytest.mark.parametrize("date",
                              [("2022-02-30"),
                               ("2022-02-0111"),
                                  ("1999-13-25")])
-    def test_Adapter_Activity_Date_Incorrect(self, date, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        value = client.getResponse(date)
-        assert value == "Data non accettata : Reinserire la data del progetto"
+    def test_Adapter_Activity_Date_Incorrect(self, date, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        S = Statement_State(date,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Data non accettata : Reinserire la data del progetto" and S.currentState.getData()['data'] == ""
 
-    def test_Adapter_Activity_Billable_Hours_Correct(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        value = client.getResponse("3")
-        assert value == "Ore fatturabili accettate : Inserire le ore di viaggio"
+    # Test Inserimento Ore Fatturabili Corrette
+    def test_Adapter_Activity_Billable_Hours_Correct(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        S = Statement_State("3",Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Ore fatturabili accettate : Inserire le ore di viaggio" and S.currentState.getData()['ore fatturabili'] == "3"
 
+    # Test Inserimento Ore Fatturabili Incorrette
     @pytest.mark.parametrize("billable_hours", [("no"), ("-5.4"), ("cinque")])
     def test_Adapter_Activity_Billable_Hours_Incorrect(
-            self, billable_hours, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        value = client.getResponse(billable_hours)
-        assert value == "Ore fatturabili non accettate : Reinserire le ore fatturabili come numero"
+            self, billable_hours, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        S = Statement_State(billable_hours,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Ore fatturabili non accettate : Reinserire le ore fatturabili come numero" and S.currentState.getData()['ore fatturabili'] == ""
 
-    def test_Adapter_Activity_Travel_Hours_Correct(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        value = client.getResponse("3")
-        assert value == "Ore viaggio accettate : Inserire le ore di viaggio fatturabili"
+    # Test Inserimento Ore di Viaggio Corrette
+    def test_Adapter_Activity_Travel_Hours_Correct(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        S = Statement_State("3",Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Ore viaggio accettate : Inserire le ore di viaggio fatturabili" and S.currentState.getData()['ore viaggio'] == "3"
 
+    # Test Inserimento Ore di Viaggio Incorrette
     @pytest.mark.parametrize("travel_hours", [("no"), ("-5.4"), ("cinque")])
     def test_Adapter_Activity_Travel_Hours_Incorrect(
-            self, travel_hours, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        value = client.getResponse(travel_hours)
-        assert value == "Ore viaggio non accettate : Reinserire le ore di viaggio come numero"
+            self, travel_hours, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        S = Statement_State(travel_hours,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Ore viaggio non accettate : Reinserire le ore di viaggio come numero" and S.currentState.getData()['ore viaggio'] == ""
 
-    def test_Adapter_Activity_Billable_Travel_Hours_Correct(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        value = client.getResponse("3")
-        assert value == "Ore viaggio fatturabili Accettate : Inserire la sede"
+    # Test Inserimento Ore di Viaggio Fatturabili Corrette
+    def test_Adapter_Activity_Billable_Travel_Hours_Correct(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        Sa.addData('ore viaggio',"3")
+        S = Statement_State("3",Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Ore viaggio fatturabili Accettate : Inserire la sede" and S.currentState.getData()['ore viaggio fatturabili'] == "3"
 
+    # Test Inserimento Ore di Viaggio Fatturabili Incorrette
     @pytest.mark.parametrize("billable_travel_hours",
                              [("no"), ("-5.4"), ("cinque")])
     def test_Adapter_Activity_Billable_Travel_Hours_Incorrect(
-            self, billable_travel_hours, server):
+            self, billable_travel_hours, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        Sa.addData('ore viaggio',"3")
+        S = Statement_State(billable_travel_hours,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Ore viaggio fatturabili non accettate : Reinserire le ore di viaggio fatturabili come numero" and S.currentState.getData()['ore viaggio fatturabili'] == ""
 
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        value = client.getResponse(billable_travel_hours)
-        assert value == "Ore viaggio fatturabili non accettate : Reinserire le ore di viaggio fatturabili come numero"
-
-    @pytest.mark.parametrize("Imola", [("Imona"), ("Imola"), ("Imole")])
-    def test_Adapter_Activity_Area_Correct_Imola(self, Imola, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        value = client.getResponse(Imola)
-        assert value == "Sede Accettata : È fatturabile?"
-
-    @pytest.mark.parametrize("Bologna",
-                             [("boligna"), ("Bologna"), ("bolonia")])
-    def test_Adapter_Activity_Area_Correct_Bologna(self, Bologna, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        value = client.getResponse(Bologna)
-        assert value == "Sede Accettata : È fatturabile?"
-
+    # Test Inserimento Sede Corretta
+    @pytest.mark.parametrize("Sede", [("Imona"), ("Imola"), ("Imole"),("boligna"), ("Bologna"), ("bolonia")])
+    def test_Adapter_Activity_Area_Correct_Imola(self, Sede, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        Sa.addData('ore viaggio',"3")
+        Sa.addData('ore viaggio fatturabili',"3")
+        S = Statement_State(Sede,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Sede Accettata : È fatturabile?" and any(i in S.currentState.getData()['sede'] for i in Sede)
+        
+    # Test Inserimento Sede Incorretta
     @pytest.mark.parametrize("Sede", [("Padova"), ("Molise"), ("Francia")])
-    def test_Adapter_Activity_Area_Incorrect(self, Sede, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        value = client.getResponse(Sede)
-        assert value == "Sede non Accettata : Reinserire il nome della Sede"
+    def test_Adapter_Activity_Area_Incorrect(self, Sede, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        Sa.addData('ore viaggio',"3")
+        Sa.addData('ore viaggio fatturabili',"3")
+        S = Statement_State(Sede,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Sede non Accettata : Reinserire il nome della Sede" and S.currentState.getData()['sede'] == ""
 
-    @pytest.mark.parametrize("Conferma", [("sì"), ("true"), ("vero")])
-    def test_Adapter_Activity_Billable_True(self, Conferma, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        value = client.getResponse(Conferma)
-        assert value == "Scelta Fatturabilità accettata : Inserire la descrizione"
+    # Test Scelta Fatturabilità Corretta
+    @pytest.mark.parametrize("Scelta", [("sì"), ("true"), ("vero"), ("no"), ("false"), ("falso")])
+    def test_Adapter_Activity_Billable_True(self, Scelta, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        Sa.addData('ore viaggio',"3")
+        Sa.addData('ore viaggio fatturabili',"3")
+        Sa.addData('sede',"imola")
+        S = Statement_State(Scelta,Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Scelta Fatturabilità accettata : Inserire la descrizione" and (S.currentState.getData()['fatturabile'] == 'True' or S.currentState.getData()['fatturabile'] == 'False')
 
-    @pytest.mark.parametrize("Negazione", [("no"), ("false"), ("falso")])
-    def test_Adapter_Activity_Billable_No(self, Negazione, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        value = client.getResponse(Negazione)
-        assert value == "Scelta Fatturabilità accettata : Inserire la descrizione"
+    # Test Scelta Fatturabilità Incorretta
+    def test_Adapter_Activity_Billable_Incorrect(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto',"1")
+        Sa.addData('data',"2022-01-01")
+        Sa.addData('ore fatturabili',"3")
+        Sa.addData('ore viaggio',"3")
+        Sa.addData('ore viaggio fatturabili',"3")
+        Sa.addData('sede',"imola")
+        S = Statement_State('bzorg',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert value.text == "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)" and S.currentState.getData()['fatturabile'] == ''
 
-    def test_Adapter_Activity_Billable_Incorrect(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        value = client.getResponse("bzorg")
-        assert value == "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)"
+    # Test Modifica Chiave Non Accettata
+    def test_Adapter_Activity_Modify_Fail(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','modifica')
+        S = Statement_State('asdasdsadsadsadsadsadsadsa',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Chiave non accettata. Provare con una chiave diversa" in value.text
 
-    def test_Adapter_Activity_Modify_Code(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("codice progetto")
-        value = client.getResponse("1")
-        assert "Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati" in value
+    # Test Annullamento Operazione
+    def test_Adapter_Activity_Modify_Undo(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        S = Statement_State('Annulla',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Operazione annullata" in value.text
 
-    def test_Adapter_Activity_Modify_Fail(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        value = client.getResponse("asdasdasd")
-        assert "Chiave non accettata. Provare con una chiave diversa" in value
+    # Test Input non Valido 
+    def test_Adapter_Activity_Modify_Wrong_Input(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        S = Statement_State('5',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Input non valido, Reinserire" in value.text
 
-    def test_Adapter_Activity_Modify_Undo(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        value = client.getResponse("Annulla")
-        assert "Operazione annullata" in value
+    # Test Modifica Codice
+    def test_Adapter_Activity_Modify_Code(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','codice progetto')
+        S = Statement_State('1',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati" in value.text and S.currentState.getData()['codice progetto'] == "1" 
+    
+    # Test Modifica Data
+    def test_Adapter_Activity_Modify_Date(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','data')
+        S = Statement_State('2022-02-02',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Data accettata e aggiornata. Visualizzazione Dati Aggiornati" in value.text and S.currentState.getData()['data'] == "2022-02-02" 
 
-    def test_Adapter_Activity_Modify_Wrong_Input(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        value = client.getResponse("zazazaz")
-        assert "Input non valido, Reinserire" in value
+    # Test Modifica Ore Fatturabili
+    def test_Adapter_Activity_Modify_Billable_Hours(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','ore fatturabili')
+        S = Statement_State('5',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Ore Fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati" in value.text and S.currentState.getData()['ore fatturabili'] == "5" 
 
-    def test_Adapter_Activity_Modify_Date(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("data")
-        value = client.getResponse("2022-02-02")
-        assert "Data accettata e aggiornata. Visualizzazione Dati Aggiornati" in value
+    # Test Modifica Ore Vaggio
+    def test_Adapter_Activity_Modify_Travel_Hours(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','ore viaggio')
+        S = Statement_State('5',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Ore di viaggio accettate e aggiornate. Visualizzazione Dati Aggiornati" in value.text and S.currentState.getData()['ore viaggio'] == "5" 
 
-    def test_Adapter_Activity_Modify_Billable_Hours(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("ore fatturabili")
-        value = client.getResponse("5")
-        assert "Ore Fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati" in value
+    # Test Modifica Ore Vaggio Fatturabili
+    def test_Adapter_Activity_Modify_Billable_Travel_Hours(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','ore viaggio fatturabili')
+        S = Statement_State('5',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Ore di viaggio fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati" in value.text and S.currentState.getData()['ore viaggio fatturabili'] == "5" 
 
-    def test_Adapter_Activity_Modify_Travel_Hours(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("ore viaggio")
-        value = client.getResponse("5")
-        assert "Ore di viaggio accettate e aggiornate. Visualizzazione Dati Aggiornati" in value
+    # Test Modifica Sede
+    def test_Adapter_Activity_Modify_Area(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','sede')
+        S = Statement_State('Bologna',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Sede Accettata e aggiornata." in value.text and S.currentState.getData()['sede'] == "bologna" 
 
-    def test_Adapter_Activity_Modify_Billable_Travel_Hours(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("ore viaggio fatturabili")
-        value = client.getResponse("5")
-        assert "Ore di viaggio fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati" in value
+    # Test Modifica Fatturabile Vero
+    def test_Adapter_Activity_Modify_Billable_True(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','fatturabile')
+        S = Statement_State('True',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Fatturabilità Accettata e aggiornata" in value.text and S.currentState.getData()['fatturabile'] == "True" 
 
-    def test_Adapter_Activity_Modify_Area(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("sede")
-        value = client.getResponse("Bologna")
-        assert "Sede Accettata e aggiornata." in value
+    # Test Modifica Fatturabile Vero        
+    def test_Adapter_Activity_Modify_Billable_False(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','fatturabile')
+        S = Statement_State('False',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Fatturabilità Accettata e aggiornata" in value.text and S.currentState.getData()['fatturabile'] == "False" 
 
-    def test_Adapter_Activity_Modify_Billable_True(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("no")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("fatturabile")
-        value = client.getResponse("sì")
-        assert "Fatturabilità Accettata e aggiornata" in value
-
-    def test_Adapter_Activity_Modify_Billable_False(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("fatturabile")
-        value = client.getResponse("no")
-        assert "Fatturabilità Accettata e aggiornata" in value
-
-    def test_Adapter_Activity_Modify_Description(self, server):
-        client = Client(server)
-        login(client)
-        client.getResponse("consuntiva")
-        client.getResponse("1")
-        client.getResponse("2022-01-01")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("3")
-        client.getResponse("Imola")
-        client.getResponse("sì")
-        client.getResponse("Ez")
-        client.getResponse("Modifica")
-        client.getResponse("descrizione")
-        value = client.getResponse("zazazazazaza")
-        assert "Descrizione Accettata e aggiornata" in value
+    # Test Modifica Descrizione Vero
+    def test_Adapter_Activity_Modify_Description(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma','descrizione')
+        S = Statement_State('Nuova Descrizione',Sa,'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S,None)
+        assert "Descrizione Accettata e aggiornata" in value.text and S.currentState.getData()['descrizione'] == "Nuova Descrizione" 

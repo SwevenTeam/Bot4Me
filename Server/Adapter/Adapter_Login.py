@@ -17,7 +17,7 @@ class Adapter_Login(LogicAdapter):
 
         state = statement.getState()
 
-        if(state.getCurrentState() == "Iniziale"):
+        if state.getCurrentState() == "Iniziale":
             words = [
                 'login',
                 'autenticazione',
@@ -29,7 +29,7 @@ class Adapter_Login(LogicAdapter):
             else:
                 return False
 
-        if(state.getCurrentState() == "Login"):
+        if state.getCurrentState() == "Login":
             return True
 
         return False
@@ -52,14 +52,14 @@ class Adapter_Login(LogicAdapter):
 
         s = input_statement.getState()
 
-        if(input_statement.getApiKey() == null):
-            if (s.getCurrentState() and s.getCurrentState() == "Iniziale"):
+        if input_statement.getApiKey() == null:
+            if s.getCurrentState() and s.getCurrentState() == "Iniziale":
                 s = State_Login()
                 output_statement = Statement_State(
                     "Autenticazione Avviata : Inserire l'API-KEY", s)
 
-            elif(s.getCurrentState() == 'Login'):
-                if(input_statement.getText() == '12345678-1234-1234-1234-123456789012'):
+            elif s.getCurrentState() == 'Login':
+                if input_statement.getText() == '12345678-1234-1234-1234-123456789012':
                     output_statement = Statement_State(
                         "Autenticazione Avvenuta Con Successo",
                         State_Null(),

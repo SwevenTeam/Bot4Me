@@ -1,7 +1,7 @@
 from xmlrpc.client import Boolean
 from sqlalchemy import false, true
 import requests
-
+from .Util_Request import IsDictionaryFilled
 
 class Request_Project_Creation():
     """
@@ -26,7 +26,7 @@ class Request_Project_Creation():
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         if self.state == "creazione progetto":
-            if self.data["conferma"] == "conferma":
+            if IsDictionaryFilled(self.data):
                 return True
             else:
                 return False

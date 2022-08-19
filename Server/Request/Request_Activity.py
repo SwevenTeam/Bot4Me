@@ -3,7 +3,7 @@ from sqlalchemy import false, true
 import requests
 from requests import Response
 import json
-
+from .Util_Request import IsDictionaryFilled
 
 class Request_Activity():
     """
@@ -28,7 +28,7 @@ class Request_Activity():
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         if self.state == "consuntivazione":
-            if self.data["conferma"] == "conferma":
+            if IsDictionaryFilled(self.data):
                 return True
             else:
                 return False

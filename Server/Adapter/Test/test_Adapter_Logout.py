@@ -1,23 +1,29 @@
 import pytest
-from ..Adapter import Adapter
-from Client import Client
-from Server import Server
-from .util import login
+from State.Statement_State import Statement_State
+from State.State_Null import State_Null
+from State.State_Presence import State_Presence
+from chatterbot import ChatBot
+from Adapter.Adapter_Logout import Adapter_Logout
+from sqlalchemy import null
 
 
 class Test_Adapter_Logout():
 
+    # Creazione Chatbot Temporaneo per Test
     @pytest.fixture
-    def server(self):
-        return Server()
+    def chatbot(self):
+        return ChatBot("Test")
 
-    def test_Logout_Correct(self, server):
-        client = Client(server)
-        login(client)
-        value = client.getResponse("logout")
-        assert value == "Logout avvenuto con successo"
+    # Test Logout
+    def test_Logout_Correct(self, chatbot):
+        S = Statement_State("logout",State_Null(),'12345678-1234-1234-1234-123456789012')
+        A = Adapter_Logout(chatbot)
+        if A.can_process(S):
+            value = A.process(S,None)
+        assert value.text == "Logout avvenuto con successo"
 
-    def test_Logout_Incorrect(self, server):
-        client = Client(server)
-        value = client.getResponse("logout")
-        assert value == "Devi prima effettuare l'accesso per utilizzare i nostri servizi"
+    # Test Errore Logout
+    def test_Logout_Incorrect(self, chatbot):
+        S = Statement_State("logout",State_Null(),null)
+        A = Adapter_Logout(chatbot)
+        assert A.can_process(S) == False

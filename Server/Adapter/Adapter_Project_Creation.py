@@ -163,7 +163,7 @@ class Adapter_Project_Creation(LogicAdapter):
             if dati["conferma"] == "manager":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
-                    "Manager Accettata e aggiornato. Visualizzazione Dati Aggiornati \n" +
+                    "Manager Accettato e aggiornato. Visualizzazione Dati Aggiornati \n" +
                     returnAllData(s) +
                     " Confermare operazione di creazione?",
                     s)

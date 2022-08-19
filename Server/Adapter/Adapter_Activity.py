@@ -347,5 +347,5 @@ class Adapter_Activity(LogicAdapter):
         # Aggiorno il valore di s, il cui state sarà salvato su Client,
         # in questo modo alla prossima iterazione, il substate sarà
         # modificato e si procederà con l'inserimento
-
+        
         return output_statement

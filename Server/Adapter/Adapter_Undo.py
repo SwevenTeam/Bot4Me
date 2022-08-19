@@ -84,6 +84,6 @@ class Adapter_Undo(LogicAdapter):
         # assegno una confidence MOLTO alta per questa operazione perché DEVE
         # prendere la priorità
 
-        output_statement.confidence = 100
+        output_statement.confidence = 0.9
 
         return output_statement

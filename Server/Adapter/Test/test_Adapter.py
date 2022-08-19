@@ -1,41 +1,51 @@
 import pytest
 from ..Adapter import Adapter
-from Client import Client
-from Server import Server
-from State.State_Presence import State_Presence
+from chatterbot import ChatBot
+from State.Statement_State import Statement_State
+from State.State_Null import State_Null
 from ..Util_Adapter import similarStringMatch_Location, getLocationList
-
+from sqlalchemy import null
 
 class Test_Adapter():
 
+    # Creazione Chatbot Temporaneo per Test
     @pytest.fixture
-    def server(self):
-        return Server()
+    def chatbot(self):
+        return ChatBot("Test")
 
-    def test_Adapter(self, server):
-        client = Client(server)
-        value = client.getResponse("ciao")
-        assert value == "Ciao, sono Bot4Me"
+    # Test Adapter
+    def test_Adapter(self, chatbot):
+        S = Statement_State("ciao",State_Null(),null)
+        A = Adapter(chatbot)
+        if A.can_process(S):
+            value = A.process(S,None)
+        assert value.text == "Ciao, sono Bot4Me"
 
-    def test_Adapter_Error(self, server):
-        client = Client(server)
-        value = client.getResponse("non esiste")
-        assert value == "Devi prima effettuare l'accesso per utilizzare i nostri servizi"
+    # Test Errore Adapter 
+    def test_Adapter_Error(self, chatbot):
+        S = Statement_State("non esiste",State_Null())
+        A = Adapter(chatbot)
+        assert A.can_process(S) == False
 
-    def test_Util_Location_Error(self):
-        value = similarStringMatch_Location("Ciao", '')
-        assert value == ''
-
+    ### TEST UTILS
+    # Test String Match Location
     def test_Util_Location_Correct(self):
         statement = ['a', 'imola', 'maledetto']
         value = similarStringMatch_Location(
             statement, '12345678-1234-1234-1234-123456789012')
         assert value == 'imola'
 
-    def test_Util_getLocationList_Error(self):
-        value = getLocationList('')
-        assert value == []
+    # Test Errore String Match Location
+    def test_Util_Location_Error(self):
+        value = similarStringMatch_Location("Ciao", '')
+        assert value == ''
 
+    # Test Get Location List
     def test_Util_getLocationList_Correct(self):
         value = getLocationList('12345678-1234-1234-1234-123456789012')
         assert value == ['IMOLA', 'BOLOGNA']
+
+    # Test Errore Get Location List
+    def test_Util_getLocationList_Error(self):
+        value = getLocationList('')
+        assert value == []
