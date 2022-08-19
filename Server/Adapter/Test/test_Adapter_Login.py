@@ -14,33 +14,36 @@ class Test_Adapter_Login():
     def chatbot(self):
         return ChatBot("Test")
 
-
     def test_Adapter_Login_Activate(self, chatbot):
-        S = Statement_State("login",State_Null(),null)
+        S = Statement_State("login", State_Null(), null)
         A = Adapter_Login(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Autenticazione Avviata : Inserire l'API-KEY"
 
-
     def test_Adapter_Login_Api_Correct(self, chatbot):
-        S = Statement_State("12345678-1234-1234-1234-123456789012",State_Login(),null)
+        S = Statement_State(
+            "12345678-1234-1234-1234-123456789012",
+            State_Login(),
+            null)
         A = Adapter_Login(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Autenticazione Avvenuta Con Successo"
 
-
     def test_Adapter_Login_Api_Incorrect(self, chatbot):
-        S = Statement_State("1",State_Login(),null)
+        S = Statement_State("1", State_Login(), null)
         A = Adapter_Login(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"
 
     def test_Adapter_Login_Already_Logged(self, chatbot):
-        S = Statement_State("login",State_Null(),"12345678-1234-1234-1234-123456789012")
+        S = Statement_State(
+            "login",
+            State_Null(),
+            "12345678-1234-1234-1234-123456789012")
         A = Adapter_Login(chatbot)
         if A.can_process(S):
-            value = A.process(S,None)
+            value = A.process(S, None)
         assert value.text == "Hai già effettuato l'accesso"
