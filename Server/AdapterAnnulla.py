@@ -64,7 +64,7 @@ class AdapterAnnulla(LogicAdapter):
         
          # s rappresenta lo StatementStato
         if input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() :
-          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale(),null)
+          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale())
         elif(input_statement.getApiKey() == null):
           output_statement=StatementStato("Non Sei Loggato Non Hai Operazioni Da Annullare",StatoIniziale(),null)
         else:
