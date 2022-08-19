@@ -11,8 +11,8 @@ class StatoCancello(Stato):
     """   
     def __init__(self):
         super().__init__()
-        self.dati = { "sede": '' }
-        self.STATO = "cancello"
+        self.dati = { 'sede': '' }
+        self.STATO = 'cancello'
 
     def getStatoAttuale(self) -> str:
         """
@@ -37,5 +37,5 @@ class StatoCancello(Stato):
         return self.dati
 
     def addDati(self, key, value):
-        if key == "sede":
+        if key == 'sede':
             self.dati[key]=value

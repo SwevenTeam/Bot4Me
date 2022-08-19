@@ -60,39 +60,70 @@ class AdapterCancello(Adapter):
                 input_statement.getApiKey()
             )
 
-        
         request_cancello = RequestCancello(input_statement.getApiKey())
-        # vengono recuperate le sedi
-        locations = request_cancello.getLocations()
+        if stato.getDati()['sede'] == '':
+            # vengono recuperate le sedi
+            locations = request_cancello.getLocations()
 
-        if len(locations) > 0:
-            # validazione della sede
-            sede = ''
-            for word in input_statement.getText().split():
-                if word.upper() in locations:
-                    sede = word.upper()
-                    break
+            if len(locations) > 0:
+                # validazione della sede
+                sede = ''
+                for word in input_statement.getText().split():
+                    if word.upper() in locations:
+                        sede = word.upper()
+                        break
 
-            if sede == '':
+                if sede == '':
+                    return StatementStato(
+                        "Sede non trovata : Reinserire la sede del cancello",
+                        stato,
+                        input_statement.getApiKey()
+                    )
+
+                stato.addDati("sede", sede)
                 return StatementStato(
-                    "Sede non trovata : Reinserire la sede del cancello",
+                    f"Sede accettata : Confermare l'apertura del cancello della sede di {stato.getDati()['sede']}? (si, modifica, annulla)",
+                    stato,
+                    input_statement.getApiKey()
+                )
+        else:
+            # controllo se l'utente vuole modificare la sede
+            for word in input_statement.getText().split():
+                if word == 'modifica':
+                    # viene fatto il reset della sede
+                    stato.addDati('sede', '')
+                    return StatementStato(
+                        "Modifica della sede : Inserire la sede del cancello",
+                        stato,
+                        input_statement.getApiKey()
+                    )
+
+            conferma = ['si', 'sì', 'ok', 'apri', 'procedi', 'conferma']
+            if any(word in conferma for word in input_statement.getText().split()):
+                request_cancello.setSede(stato)
+
+                # viene inviata la richiesta di apertura del cancello, se non va a buon fine si è verificato un errore
+                if request_cancello.isReady() and request_cancello.sendRequest():
+                    return StatementStato(
+                        "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
+                        StatoIniziale(),
+                        input_statement.getApiKey()
+                    )
+                else:
+                    return StatementStato(
+                        "Si è verificato un errore sconosciuto, riprova a confermare",
+                        stato,
+                        input_statement.getApiKey()
+                    )
+            else:
+                return StatementStato(
+                    f"Confermare l'apertura del cancello della sede di {stato.getDati()['sede']}? (si, modifica annulla)",
                     stato,
                     input_statement.getApiKey()
                 )
 
-            stato.addDati("sede", sede)
-            request_cancello.setSede(stato)
-
-            # viene inviata la richiesta di apertura del cancello, se non va a buon fine si è verificato un errore
-            if request_cancello.isReady() and request_cancello.sendRequest():
-                return StatementStato(
-                    "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
-                    StatoIniziale(),
-                    input_statement.getApiKey()
-                )
-
         return StatementStato(
-            "Si è verificato un errore sconosciuto, riprova ad inviare la sede",
+            "Si è verificato un errore sconosciuto, riprovare ad inviare la sede",
             stato,
             input_statement.getApiKey()
         )

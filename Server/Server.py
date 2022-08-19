@@ -28,7 +28,8 @@ class Server:
             {'import_path': 'AdapterPresenza.AdapterPresenza'},
             {'import_path': 'AdapterAnnulla.AdapterAnnulla'},
             {'import_path': 'AdapterConsuntivazione.AdapterConsuntivazione'},
-            {'import_path': 'AdapterCreazioneProgetto.AdapterCreazioneProgetto'}])
+            {'import_path': 'AdapterCreazioneProgetto.AdapterCreazioneProgetto'},
+            {'import_path': 'AdapterCancello.AdapterCancello'}])
     
     def getResponse(self, text, stato, apiKey) -> StatementStato:
         """
