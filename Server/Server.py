@@ -49,7 +49,7 @@ class Server:
         for adapter in self.chatterbot.logic_adapters:
             if adapter.can_process(input_statement):
                 output = adapter.process(input_statement, None)
-                
+
                 if output.confidence > max_confidence:
                     textoutput = output
                     max_confidence = output.confidence

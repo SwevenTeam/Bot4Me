@@ -57,4 +57,3 @@ class Test_Adapter_Get_Activity():
         value = A.process(S, None)
         assert value.text == "Inserire il codice del Progetto come numero" and S.currentState.getData()[
             'codice progetto'] == ""
-   

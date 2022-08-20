@@ -61,7 +61,11 @@ class Adapter_Get_Activity(LogicAdapter):
                 'con',
                 'consuntiva',
                 'consuntivo']
-            return similarStringMatch(statement.text.split(), words1) and similarStringMatch(statement.text.split(), words2)
+            return similarStringMatch(
+                statement.text.split(),
+                words1) and similarStringMatch(
+                statement.text.split(),
+                words2)
 
         elif state.getCurrentState() == "restituzione consuntivazione":
             return True
@@ -94,35 +98,34 @@ class Adapter_Get_Activity(LogicAdapter):
         s = input_statement.getState()
         Api = input_statement.getApiKey()
         text = input_statement.getText()
-        
+
         if s.getCurrentState() and s.getCurrentState() == "Iniziale":
             s = State_Get_Activity()
-            output_statement= Statement_State(
-              "Operazione Restituzione di Consuntivazione Avviata : Inserire il codice del Progetto", s)
-        else :
-            if text.isnumeric() :       
+            output_statement = Statement_State(
+                "Operazione Restituzione di Consuntivazione Avviata : Inserire il codice del Progetto", s)
+        else:
+            if text.isnumeric():
                 if checkProjectExistance(text, Api):
-                    s.addData("codice progetto",text)
+                    s.addData("codice progetto", text)
                     Req = Request_Get_Activity(s, Api)
                     if Req.isReady():
                         result = Req.sendRequest()
                         if result == []:
-                          output_statement = Statement_State(
-                            "Nessun elemento da visualizzare", State_Null())
+                            output_statement = Statement_State(
+                                "Nessun elemento da visualizzare", State_Null())
                         else:
-                          output_statement = Statement_State(
-                            result, State_Null())
+                            output_statement = Statement_State(
+                                result, State_Null())
                     else:
                         output_statement = Statement_State(
                             "Sembra che tu debba ancora Inserire il codice", s)
-                else :
+                else:
                     output_statement = Statement_State(
                         "Progetto Inesistente : Inserire un nuovo codice", s)
-                  
+
             else:
-                output_statement= Statement_State(
-                  "Inserire il codice del Progetto come numero", s)
-        
+                output_statement = Statement_State(
+                    "Inserire il codice del Progetto come numero", s)
 
         output_statement.confidence = 0.8
         return output_statement
