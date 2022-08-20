@@ -5,6 +5,7 @@ from requests import Response
 import json
 from .Util_Request import IsDictionaryFilled, parseResponseGetActivity
 
+
 class Request_Get_Activity():
     """
     ---
@@ -54,7 +55,7 @@ class Request_Get_Activity():
             'Content-Type': 'application/json'}
 
         informazioni = [
-            ]
+        ]
 
         responseUrl = requests.get(
             url=myurl,
