@@ -266,7 +266,7 @@ class Test_Adapter_Activity():
         value = A.process(S, None)
         assert "Chiave non accettata. Provare con una chiave diversa" in value.text
 
-    # Test Modifica  
+    # Test Modifica
     def test_Adapter_Activity_Modify(self, chatbot):
         Sa = State_Activity()
         Sa = ModifyActivity(Sa)
@@ -278,7 +278,7 @@ class Test_Adapter_Activity():
         value = A.process(S, None)
         assert "Inserire elemento che si vuole modificare" in value.text
 
-    # Test Modifica Chiave 
+    # Test Modifica Chiave
     def test_Adapter_Activity_Modify_Key(self, chatbot):
         Sa = State_Activity()
         Sa = ModifyActivity(Sa)
@@ -303,7 +303,7 @@ class Test_Adapter_Activity():
         A = Adapter_Activity(chatbot)
         value = A.process(S, None)
         assert "È avvenuto un errore sconosciuto" == value.text
-    
+
     # Test Annullamento Operazione
     def test_Adapter_Activity_Modify_Undo(self, chatbot):
         Sa = State_Activity()
