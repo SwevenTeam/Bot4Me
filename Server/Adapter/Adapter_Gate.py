@@ -37,7 +37,7 @@ class Adapter_Gate(LogicAdapter):
 
         if state.getCurrentState() == "Iniziale":
             words = ['cancello', 'varco', 'entrata', 'apertura', 'apri']
-            return similarStringMatch(statement.text.split(),words)
+            return similarStringMatch(statement.text.split(), words)
 
         return False
 
@@ -69,62 +69,58 @@ class Adapter_Gate(LogicAdapter):
 
         # L'utente ha già avviato la procedura e deve inserire la sede
         elif state.getData()['sede'] == '':
-            location = similarStringMatch_Location(text.split(),Api)
+            location = similarStringMatch_Location(text.split(), Api)
             if location == '':
                 output_statement = Statement_State(
-                        "Sede non trovata : Reinserire la sede del cancello",
-                        state,
-                        Api
-                )
-            else :
-                state.addData("sede", location)
-                output_statement = Statement_State(
-                        f"Sede accettata : Confermare l'apertura del cancello della sede di {state.getData()['sede']}? (si, modifica, annulla)",
-                        state,
-                        Api
-                )
-        else:
-            # controllo se l'utente vuole modificare la sede
-            modifica = ['cambia', 'modifica',]
-            conferma = ['si', 'sì', 'ok', 'apri', 'procedi', 'conferma']
-            if similarStringMatch(text.split(),modifica):
-            # viene fatto il reset della sede
-                state.addData('sede', '')
-                output_statement = Statement_State(
-                        "Modifica della sede : Inserire la sede del cancello",
-                        state,
-                        Api
-                )
-            
-            elif similarStringMatch(text.split(),conferma):
-                request_cancello = Request_Gate(state, Api)
-
-                # viene inviata la richiesta di apertura del cancello, se non va a buon fine si è verificato un errore
-                if request_cancello.isReady():
-                    if request_cancello.sendRequest():
-                      output_statement = Statement_State(
-                          "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
-                          State_Null(),
-                          Api
-                      )
-                    else:
-                      output_statement = Statement_State(
-                          "Si è verificato un errore sconosciuto, riprova a confermare",
-                          state,
-                          Api
-                      )
-                else :
-                    output_statement = Statement_State(
-                        "Dati non inseriti correttamente, provare a modificare e reinserire",
-                        state,
-                        Api
-                    )
-            
-            else:
-                output_statement = Statement_State(
-                    "Confermare l'apertura del cancello della sede di " + state.getData()['sede'] + "? (si, modifica annulla)",
+                    "Sede non trovata : Reinserire la sede del cancello",
                     state,
                     Api
                 )
+            else:
+                state.addData("sede", location)
+                output_statement = Statement_State(
+                    f"Sede accettata : Confermare l'apertura del cancello della sede di {state.getData()['sede']}? (si, modifica, annulla)",
+                    state,
+                    Api
+                )
+        else:
+            # controllo se l'utente vuole modificare la sede
+            modifica = ['cambia', 'modifica', ]
+            conferma = ['si', 'sì', 'ok', 'apri', 'procedi', 'conferma']
+            if similarStringMatch(text.split(), modifica):
+                # viene fatto il reset della sede
+                state.addData('sede', '')
+                output_statement = Statement_State(
+                    "Modifica della sede : Inserire la sede del cancello",
+                    state,
+                    Api
+                )
+
+            elif similarStringMatch(text.split(), conferma):
+                request_cancello = Request_Gate(state, Api)
+
+                # viene inviata la richiesta di apertura del cancello, se non
+                # va a buon fine si è verificato un errore
+                if request_cancello.isReady():
+                    if request_cancello.sendRequest():
+                        output_statement = Statement_State(
+                            "Sede accettata : Richiesta apertura del cancello avvenuta con successo",
+                            State_Null(),
+                            Api
+                        )
+                    else:
+                        output_statement = Statement_State(
+                            "Si è verificato un errore sconosciuto, riprova a confermare", state, Api)
+                else:
+                    output_statement = Statement_State(
+                        "Dati non inseriti correttamente, provare a modificare e reinserire", state, Api)
+
+            else:
+                output_statement = Statement_State(
+                    "Confermare l'apertura del cancello della sede di " +
+                    state.getData()['sede'] +
+                    "? (si, modifica annulla)",
+                    state,
+                    Api)
 
         return output_statement
