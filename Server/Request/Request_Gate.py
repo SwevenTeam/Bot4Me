@@ -3,7 +3,7 @@ import requests
 
 class Request_Gate:
 
-    def __init__(self,s, api_key) -> None:
+    def __init__(self, s, api_key) -> None:
         self.state = s.getCurrentState()
         self.data = s.getData()
         self.Api = api_key
@@ -18,7 +18,7 @@ class Request_Gate:
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
         if self.state == "cancello":
-            if self.data["sede"] =="":
+            if self.data["sede"] == "":
                 return False
             else:
                 return True
@@ -34,14 +34,15 @@ class Request_Gate:
         - Description → assembla la richiesta di apertura del cancello e la invia
         - Returns → boolean value : true se ha eseguito, false altrimenti
         """
-        # da cambiare URL con quello reale https://apibot4me.imolinfo.it/v1/locations/imola/devices/example/status
+        # da cambiare URL con quello reale
+        # https://apibot4me.imolinfo.it/v1/locations/imola/devices/example/status
         url = 'https://apibot4me.imolinfo.it/v1/locations/' + \
             self.data['sede'] + '/devices/cancello/status'
         header = {
             'accept': 'application/json',
             'api_key': self.Api,
             'Content-Type': 'application/json'}
-        data = {'status': 'string',}
+        data = {'status': 'string', }
 
         responseUrl = requests.put(url, headers=header, json=data)
         print(responseUrl)
