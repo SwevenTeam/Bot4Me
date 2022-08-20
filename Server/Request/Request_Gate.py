@@ -3,9 +3,9 @@ import requests
 
 class Request_Gate:
 
-    def __init__(self, api_key) -> None:
-        self.sede = ''
-        #self.state = s.getCurrentState()
+    def __init__(self,s, api_key) -> None:
+        self.state = s.getCurrentState()
+        self.data = s.getData()
         self.Api = api_key
 
     def isReady(self) -> bool:
@@ -17,7 +17,13 @@ class Request_Gate:
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        return self.sede != ''
+        if self.state == "cancello":
+            if self.data["sede"] =="":
+                return False
+            else:
+                return True
+        else:
+            return False
 
     def sendRequest(self) -> bool:
         """
@@ -28,50 +34,17 @@ class Request_Gate:
         - Description → assembla la richiesta di apertura del cancello e la invia
         - Returns → boolean value : true se ha eseguito, false altrimenti
         """
-        # da cambiare URL con quello reale
-        URL = 'https://apibot4me.imolinfo.it/v1/locations/' + \
-            self.sede + '/devices/cancello/open'
-        HEADERS = {
+        # da cambiare URL con quello reale https://apibot4me.imolinfo.it/v1/locations/imola/devices/example/status
+        url = 'https://apibot4me.imolinfo.it/v1/locations/' + \
+            self.data['sede'] + '/devices/cancello/status'
+        header = {
             'accept': 'application/json',
-            'api_key': self.APIKEY,
+            'api_key': self.Api,
             'Content-Type': 'application/json'}
-        DATA = {'open': 'string'}
+        data = {'status': 'string',}
 
-        responseUrl = requests.put(URL, data=DATA, headers=HEADERS)
-
+        responseUrl = requests.put(url, headers=header, json=data)
+        print(responseUrl)
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
-
         return False
-
-    def setSede(self, stato):
-        """
-        ---
-        Function Name : setSede
-        ---
-        - Args →
-          - stato ( type Stato): stato dell'operazione in corso
-        - Description → imposta la sede per l'apertura del cancello
-        - Returns → None
-        """
-        self.sede = stato.getData()["sede"]
-
-    def getLocations(self):
-        """
-        ---
-        Function Name : getLocations
-        ---
-        - Args → None
-        - Description → richiede le possibili sedi in cui aprire un cancello
-        - Returns → list value : ritorna una lista di tutte le sedi, oppure None in caso di errore
-        """
-
-        URL = 'https://apibot4me.imolinfo.it/v1/locations'
-        HEADERS = {'accept': 'application/json', 'api_key': self.APIKEY}
-
-        responseUrl = requests.get(URL, headers=HEADERS)
-
-        if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
-            return [data["name"] for data in responseUrl.json()]
-
-        return []

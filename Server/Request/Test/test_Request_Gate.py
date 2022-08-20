@@ -4,10 +4,15 @@ from State.State_Null import State_Null
 
 
 class Test_Request_Gate():
-    '''
+    
     def test_Request_Gate_isReady(self):
         S = State_Gate()
-        S.addData("Imola","sede")
+        S.addData("sede","Imola")
         Req = Request_Gate(S,"12345678-1234-1234-1234-123456789012")
-        assert Req.isReady() == True
-    '''
+        assert Req.isReady()
+    
+    def test_Request_Gate_Error(self):
+        S = State_Gate()
+        S.addData("sede","Imola")
+        Req = Request_Gate(S,"")
+        assert Req.sendRequest() == False
