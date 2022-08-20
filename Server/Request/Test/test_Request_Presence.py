@@ -7,6 +7,7 @@ import json
 
 class Test_Request_Presence():
 
+    # Test Request Presence isReady
     def test_Request_Presence_isReady(self):
         S = State_Presence()
         S.addData("sede", "Imola")
