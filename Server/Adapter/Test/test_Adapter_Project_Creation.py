@@ -197,6 +197,53 @@ class Test_Adapter_Project_Creation():
         assert value.text == "Data di Fine non accettata : Reinserire la data del progetto" and S.currentState.getData()[
             'data Fine'] == ""
 
+    # Test Annulla
+    def test_Adapter_Creation_Undo(self, chatbot):
+        Spc = State_Project_Creation()
+        Spc = ModifyCreation(Spc)
+        S = Statement_State('annulla', Spc, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Project_Creation(chatbot)
+        value = A.process(S, None)
+        assert "Operazione annullata" in value.text 
+
+    # Test Modifica
+    def test_Adapter_Creation_Modify(self, chatbot):
+        Spc = State_Project_Creation()
+        Spc = ModifyCreation(Spc)
+        S = Statement_State('modifica', Spc, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Project_Creation(chatbot)
+        value = A.process(S, None)
+        assert "Inserire elemento che si vuole modificare" in value.text 
+
+    # Test Chiave non accettata
+    def test_Adapter_Creation_Key_Incorrect(self, chatbot):
+        Spc = State_Project_Creation()
+        Spc = ModifyCreation(Spc)
+        Spc.addData("conferma", "modifica")
+        S = Statement_State('asdasdasd', Spc, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Project_Creation(chatbot)
+        value = A.process(S, None)
+        assert "Chiave non accettata. Provare con una chiave diversa" in value.text 
+
+    # Test Errore
+    def test_Adapter_Creation_Incorrect(self, chatbot):
+        Spc = State_Project_Creation()
+        Spc = ModifyCreation(Spc)
+        S = Statement_State('asdasdasd', Spc, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Project_Creation(chatbot)
+        value = A.process(S, None)
+        assert "Input non valido, Reinserire" in value.text 
+
+    # Test Errore
+    def test_Adapter_Creation_Incorrect(self, chatbot):
+        Spc = State_Project_Creation()
+        Spc = ModifyCreation(Spc)
+        Spc.addData("conferma","")
+        S = Statement_State('asdasdasd', Spc, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Project_Creation(chatbot)
+        value = A.process(S, None)
+        assert "È avvenuto un errore sconosciuto" in value.text 
+
     # Test Modifica Codice Progetto
     def test_Adapter_Creation_Modify_Code(self, chatbot):
         Sc = State_Project_Creation()

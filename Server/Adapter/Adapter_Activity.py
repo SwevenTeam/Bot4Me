@@ -8,6 +8,7 @@ from State.State_Activity import State_Activity
 from sqlalchemy import false, null, true
 from State.State_Null import State_Null
 import datetime
+from Request.Util_Request import IsDictionaryFilled
 from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch, similarStringMatch_Location
 
 
@@ -100,17 +101,17 @@ class Adapter_Activity(LogicAdapter):
             return Statement_State(
                 "Consuntivazione Avviata : Inserire il codice del Progetto", s)
 
-        dati = s.getData()
+        data = s.getData()
 
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
-        if (not dati["codice progetto"]
-                ) or dati["conferma"] == "codice progetto":
+        if (not data["codice progetto"]
+                ) or data["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkProjectExistance(text, Api):
                 s.addData("codice progetto", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "codice progetto":
+                if data["conferma"] == "codice progetto":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Progetto esistente e dato aggiornato. Visualizzazione Dati Aggiornati <br> " +
@@ -127,13 +128,13 @@ class Adapter_Activity(LogicAdapter):
 
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la
         # data
-        elif (not dati["data"] and dati["codice progetto"]) or dati["conferma"] == "data":
+        elif (not data["data"] and data["codice progetto"]) or data["conferma"] == "data":
             # Formato aaaa-mm-gg
             try:
                 datetime.datetime.strptime(text, '%Y-%m-%d')
                 s.addData("data", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "data":
+                if data["conferma"] == "data":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Data accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" +
@@ -150,11 +151,11 @@ class Adapter_Activity(LogicAdapter):
 
         # Utente ha inserito la data nel formato corretto, ora dovrà inserire
         # le ore fatturabili
-        elif (not dati["ore fatturabili"] and dati["data"]) or dati["conferma"] == "ore fatturabili":
+        elif (not data["ore fatturabili"] and data["data"]) or data["conferma"] == "ore fatturabili":
             if text.isnumeric():
                 s.addData("ore fatturabili", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "ore fatturabili":
+                if data["conferma"] == "ore fatturabili":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Ore Fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati <br>" +
@@ -171,11 +172,11 @@ class Adapter_Activity(LogicAdapter):
 
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la
         # data
-        elif (not dati["ore viaggio"] and dati["ore fatturabili"]) or dati["conferma"] == "ore viaggio":
+        elif (not data["ore viaggio"] and data["ore fatturabili"]) or data["conferma"] == "ore viaggio":
             if text.isnumeric():
                 s.addData("ore viaggio", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "ore viaggio":
+                if data["conferma"] == "ore viaggio":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Ore di viaggio accettate e aggiornate. Visualizzazione Dati Aggiornati " +
@@ -192,11 +193,11 @@ class Adapter_Activity(LogicAdapter):
 
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la
         # data
-        elif (not dati["ore viaggio fatturabili"] and dati["ore viaggio"]) or dati["conferma"] == "ore viaggio fatturabili":
+        elif (not data["ore viaggio fatturabili"] and data["ore viaggio"]) or data["conferma"] == "ore viaggio fatturabili":
             if text.isnumeric():
                 s.addData("ore viaggio fatturabili", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "ore viaggio fatturabili":
+                if data["conferma"] == "ore viaggio fatturabili":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Ore di viaggio fatturabili accettate e aggiornate. Visualizzazione Dati Aggiornati " +
@@ -213,7 +214,7 @@ class Adapter_Activity(LogicAdapter):
 
         # Controllo quindi se nel messaggio inviato dall'utente sia presente
         # una delle due Sedi
-        elif (not dati["sede"] and dati["ore viaggio fatturabili"]) or dati["conferma"] == "sede":
+        elif (not data["sede"] and data["ore viaggio fatturabili"]) or data["conferma"] == "sede":
             sedi = similarStringMatch_Location(text.split(), Api)
             if sedi == '':
                 output_statement = Statement_State(
@@ -221,7 +222,7 @@ class Adapter_Activity(LogicAdapter):
             else:
                 s.addData("sede", sedi)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "sede":
+                if data["conferma"] == "sede":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Sede Accettata e aggiornata. Visualizzazione Dati Aggiornati <br> " +
@@ -232,7 +233,7 @@ class Adapter_Activity(LogicAdapter):
                 else:
                     output_statement = Statement_State(
                         "Sede Accettata : È fatturabile?", s)
-        elif (not dati["fatturabile"] and dati["sede"]) or dati["conferma"] == "fatturabile":
+        elif (not data["fatturabile"] and data["sede"]) or data["conferma"] == "fatturabile":
 
             negative = ['no', 'falso', 'false']
 
@@ -241,7 +242,7 @@ class Adapter_Activity(LogicAdapter):
             if similarStringMatch(text.split(), affermative):
                 s.addData("fatturabile", "True")
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "fatturabile":
+                if data["conferma"] == "fatturabile":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Fatturabilità Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" +
@@ -256,7 +257,7 @@ class Adapter_Activity(LogicAdapter):
             elif similarStringMatch(text.split(), negative):
                 s.addData("fatturabile", "False")
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "fatturabile":
+                if data["conferma"] == "fatturabile":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Fatturabilità Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" +
@@ -272,10 +273,10 @@ class Adapter_Activity(LogicAdapter):
                     "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)", s)
 
         # Utente ha inserito la sede, ora dovrà inserire la descrizione
-        elif (not dati["descrizione"] and dati["fatturabile"]) or dati["conferma"] == "descrizione":
+        elif (not data["descrizione"] and data["fatturabile"]) or data["conferma"] == "descrizione":
             s.addData("descrizione", text)
             # Se è un'operazione di modifica
-            if dati["conferma"] == "descrizione":
+            if data["conferma"] == "descrizione":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
                     "Descrizione Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" +
@@ -288,8 +289,8 @@ class Adapter_Activity(LogicAdapter):
                     returnAllData(s) + "vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
                 output_statement = Statement_State(statement, s)
 
-        # Utente ha inserito tutti i dati richiesti, ora dovrà confermare
-        elif dati:
+        # Utente ha inserito tutti i data richiesti, ora dovrà confermare
+        elif IsDictionaryFilled(data):
             chiavi = [
                 'codice progetto',
                 'data',
@@ -300,7 +301,7 @@ class Adapter_Activity(LogicAdapter):
                 'fatturabile',
                 'descrizione']
 
-            if dati["conferma"] == "modifica":
+            if data["conferma"] == "modifica":
                 if any(x in text for x in chiavi):
                     s.addData("conferma", text)
                     output_statement = Statement_State(

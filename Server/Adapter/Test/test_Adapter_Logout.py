@@ -1,7 +1,6 @@
 import pytest
 from State.Statement_State import Statement_State
 from State.State_Null import State_Null
-from State.State_Presence import State_Presence
 from chatterbot import ChatBot
 from Adapter.Adapter_Logout import Adapter_Logout
 from sqlalchemy import null

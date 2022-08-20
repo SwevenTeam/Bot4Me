@@ -4,6 +4,7 @@ from doctest import OutputChecker
 import string
 import datetime
 from chatterbot.logic import LogicAdapter
+from Request.Util_Request import IsDictionaryFilled
 from State.Statement_State import Statement_State
 from chatterbot.conversation import Statement
 from sqlalchemy import false, true
@@ -99,17 +100,17 @@ class Adapter_Project_Creation(LogicAdapter):
             return Statement_State(
                 "Creazione Progetto Avviata : Inserire il codice del Progetto", s)
 
-        dati = s.getData()
+        data = s.getData()
 
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
-        if (not dati["codice progetto"]
-            ) or dati["conferma"] == "codice progetto":
+        if (not data["codice progetto"]
+            ) or data["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkCodeProject(text, Api):
                 s.addData("codice progetto", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "codice progetto":
+                if data["conferma"] == "codice progetto":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Codice progetto libero e dato aggiornato. Visualizzazione Dati Aggiornati \n " +
@@ -125,10 +126,10 @@ class Adapter_Project_Creation(LogicAdapter):
                     "Codice progetto in uso : Reinserire un codice diverso", s)
 
         # Utente ha inserito la sede, ora dovrà inserire la descrizione
-        elif (not dati["dettagli"] and dati["codice progetto"]) or dati["conferma"] == "dettagli":
+        elif (not data["dettagli"] and data["codice progetto"]) or data["conferma"] == "dettagli":
             s.addData("dettagli", text)
             # Se è un'operazione di modifica
-            if dati["conferma"] == "dettagli":
+            if data["conferma"] == "dettagli":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
                     "Descrizione Accettata e aggiornata. Visualizzazione Dati Aggiornati \n" +
@@ -141,10 +142,10 @@ class Adapter_Project_Creation(LogicAdapter):
                 output_statement = Statement_State(statement, s)
 
         # Utente ha inserito i dettagli, ora dovrà inserire il cliente
-        elif (not dati["cliente"] and dati["dettagli"]) or dati["conferma"] == "cliente":
+        elif (not data["cliente"] and data["dettagli"]) or data["conferma"] == "cliente":
             s.addData("cliente", text)
             # Se è un'operazione di modifica
-            if dati["conferma"] == "cliente":
+            if data["conferma"] == "cliente":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
                     "Cliente Accettato e aggiornato. Visualizzazione Dati Aggiornati \n" +
@@ -157,10 +158,10 @@ class Adapter_Project_Creation(LogicAdapter):
                 output_statement = Statement_State(statement, s)
 
         # Utente ha inserito il cliente, ora dovrà inserire i dettagli
-        elif (not dati["manager"] and dati["cliente"]) or dati["conferma"] == "manager":
+        elif (not data["manager"] and data["cliente"]) or data["conferma"] == "manager":
             s.addData("manager", text)
             # Se è un'operazione di modifica
-            if dati["conferma"] == "manager":
+            if data["conferma"] == "manager":
                 s.addData("conferma", "non confermato")
                 output_statement = Statement_State(
                     "Manager Accettato e aggiornato. Visualizzazione Dati Aggiornati \n" +
@@ -174,7 +175,7 @@ class Adapter_Project_Creation(LogicAdapter):
 
         # Controllo quindi se nel messaggio inviato dall'utente sia presente
         # una delle due Sedi
-        elif (not dati["area"] and dati["manager"]) or dati["conferma"] == "area":
+        elif (not data["area"] and data["manager"]) or data["conferma"] == "area":
             area = similarStringMatch_Location(text.split(), Api)
             if area == '':
                 output_statement = Statement_State(
@@ -182,7 +183,7 @@ class Adapter_Project_Creation(LogicAdapter):
             else:
                 s.addData("area", area)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "area":
+                if data["conferma"] == "area":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Area Accettata e aggiornata. Visualizzazione Dati Aggiornati \n " +
@@ -196,13 +197,13 @@ class Adapter_Project_Creation(LogicAdapter):
 
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la
         # data
-        elif (not dati["data Inizio"] and dati["area"]) or dati["conferma"] == "data Inizio":
+        elif (not data["data Inizio"] and data["area"]) or data["conferma"] == "data Inizio":
             # Formato aaaa-mm-gg
             try:
                 datetime.datetime.strptime(text, '%Y-%m-%d')
                 s.addData("data Inizio", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "data Inizio":
+                if data["conferma"] == "data Inizio":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Data di Inizio accettata e aggiornata. Visualizzazione Dati Aggiornati \n" +
@@ -218,13 +219,13 @@ class Adapter_Project_Creation(LogicAdapter):
                     "Data di Inizio non accettata : Reinserire la data del progetto", s)
         # Utente ha inserito il codice e questo esiste, ora dovrà inserire la
         # data
-        elif (not dati["data Fine"] and dati["data Inizio"]) or dati["conferma"] == "data Fine":
+        elif (not data["data Fine"] and data["data Inizio"]) or data["conferma"] == "data Fine":
             # Formato aaaa-mm-gg
             try:
                 datetime.datetime.strptime(text, '%Y-%m-%d')
                 s.addData("data Fine", text)
                 # Se è un'operazione di modifica
-                if dati["conferma"] == "data Fine":
+                if data["conferma"] == "data Fine":
                     s.addData("conferma", "non confermato")
                     output_statement = Statement_State(
                         "Data di Fine accettata e aggiornata. Visualizzazione Dati Aggiornati \n" +
@@ -239,8 +240,8 @@ class Adapter_Project_Creation(LogicAdapter):
                 output_statement = Statement_State(
                     "Data di Fine non accettata : Reinserire la data del progetto", s)
 
-        # Utente ha inserito tutti i dati richiesti, ora dovrà confermare
-        elif dati:
+        # Utente ha inserito tutti i data richiesti, ora dovrà confermare
+        elif IsDictionaryFilled(data):
             chiavi = [
                 'codice progetto',
                 'dettagli',
@@ -250,7 +251,7 @@ class Adapter_Project_Creation(LogicAdapter):
                 'data Inizio',
                 'data Fine', ]
 
-            if dati["conferma"] == "modifica":
+            if data["conferma"] == "modifica":
                 if any(x in text for x in chiavi):
                     s.addData("conferma", text)
                     output_statement = Statement_State(

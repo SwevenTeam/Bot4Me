@@ -2,7 +2,6 @@ import pytest
 from State.Statement_State import Statement_State
 from State.State_Null import State_Null
 from chatterbot import ChatBot
-from .util import ModifyActivity
 from Adapter.Adapter_Get_Activity import Adapter_Get_Activity
 from State.State_Get_Activity import State_Get_Activity
 

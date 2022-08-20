@@ -236,6 +236,23 @@ class Test_Adapter_Activity():
         assert value.text == "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)" and S.currentState.getData()[
             'fatturabile'] == ''
 
+    # Test Descrizione
+    def test_Adapter_Activity_Description(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto', "1")
+        Sa.addData('data', "2022-01-01")
+        Sa.addData('ore fatturabili', "3")
+        Sa.addData('ore viaggio', "3")
+        Sa.addData('ore viaggio fatturabili', "3")
+        Sa.addData('sede', "imola")
+        Sa.addData('fatturabile', "True")
+        S = Statement_State(
+            'bzorg', Sa, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "Descrizione Accettata : Inserimento completato <br>" in value.text and S.currentState.getData()[
+            'descrizione'] == "bzorg"
+
     # Test Modifica Chiave Non Accettata
     def test_Adapter_Activity_Modify_Fail(self, chatbot):
         Sa = State_Activity()
@@ -249,6 +266,44 @@ class Test_Adapter_Activity():
         value = A.process(S, None)
         assert "Chiave non accettata. Provare con una chiave diversa" in value.text
 
+    # Test Modifica  
+    def test_Adapter_Activity_Modify(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        S = Statement_State(
+            'modifica',
+            Sa,
+            '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "Inserire elemento che si vuole modificare" in value.text
+
+    # Test Modifica Chiave 
+    def test_Adapter_Activity_Modify_Key(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma', 'modifica')
+        S = Statement_State(
+            'data',
+            Sa,
+            '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "Inserire nuovo valore per data" in value.text
+
+    # Test Errore
+    def test_Adapter_Activity_Error(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        Sa.addData('conferma', "")
+        S = Statement_State(
+            'data',
+            Sa,
+            '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "È avvenuto un errore sconosciuto" == value.text
+    
     # Test Annullamento Operazione
     def test_Adapter_Activity_Modify_Undo(self, chatbot):
         Sa = State_Activity()
