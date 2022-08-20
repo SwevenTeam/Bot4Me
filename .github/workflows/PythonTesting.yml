@@ -1,6 +1,5 @@
 name: Pytest Python Testing
 on: 
-  on: push
   workflow_run:
     workflows: ["Autopep"]
     types:

@@ -2,7 +2,7 @@
 name: ReactTesting
 
 # execute on events
-on: push
+on: 
   workflow_run:
     workflows: ["Autopep"]
     types:
