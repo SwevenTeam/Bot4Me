@@ -27,7 +27,8 @@ class Server:
             {'import_path': 'Adapter.Adapter_Logout.Adapter_Logout'},
             {'import_path': 'Adapter.Adapter_Presence.Adapter_Presence'},
             {'import_path': 'Adapter.Adapter_Activity.Adapter_Activity'},
-            {'import_path': 'Adapter.Adapter_Project_Creation.Adapter_Project_Creation'}])
+            {'import_path': 'Adapter.Adapter_Project_Creation.Adapter_Project_Creation'},
+            {'import_path': 'Adapter.Adapter_Get_Activity.Adapter_Get_Activity'}])
 
     def getResponse(self, text, state, apiKey) -> Statement_State:
         """
@@ -48,7 +49,7 @@ class Server:
         for adapter in self.chatterbot.logic_adapters:
             if adapter.can_process(input_statement):
                 output = adapter.process(input_statement, None)
-
+                
                 if output.confidence > max_confidence:
                     textoutput = output
                     max_confidence = output.confidence

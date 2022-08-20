@@ -1,9 +1,10 @@
 name: Pytest Python Testing
 on: 
-  push:
-    branches:
-      - '*'
-      - '!main'
+  on: push
+  workflow_run:
+    workflows: ["Autopep"]
+    types:
+      - completed
 
 jobs:
   build:
