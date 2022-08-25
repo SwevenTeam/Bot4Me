@@ -33,7 +33,6 @@ class RequestCancello:
         HEADERS={'accept': 'application/json','api_key': self.APIKEY, 'Content-Type': 'application/json'}
         DATA = {'open': 'string'}
 
-        payload = json.dumps(payload)
         responseUrl = requests.put(URL, headers=HEADERS, data=DATA)
 
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
