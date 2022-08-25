@@ -1,3 +1,4 @@
+import json
 import requests
 
 
@@ -28,11 +29,12 @@ class RequestCancello:
         - Returns → boolean value : true se ha eseguito, false altrimenti
         """
         # da cambiare URL con quello reale
-        URL = 'https://apibot4me.imolinfo.it/v1/locations/' + self.sede + '/devices/cancello/open'
+        URL = 'https://apibot4me.imolinfo.it/v1/locations/' + self.sede + '/devices/cancello/status'
         HEADERS={'accept': 'application/json','api_key': self.APIKEY, 'Content-Type': 'application/json'}
         DATA = {'open': 'string'}
 
-        responseUrl = requests.put(URL, data=DATA, headers=HEADERS)
+        payload = json.dumps(payload)
+        responseUrl = requests.put(URL, headers=HEADERS, data=DATA)
 
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
