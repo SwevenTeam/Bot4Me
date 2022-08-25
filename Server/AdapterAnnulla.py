@@ -64,11 +64,11 @@ class AdapterAnnulla(LogicAdapter):
         
          # s rappresenta lo StatementStato
         if input_statement.getStato().getStatoAttuale() != StatoIniziale().getStatoAttuale() :
-          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale())
+          output_statement=StatementStato("Operazione di "+input_statement.getStato().getStatoAttuale() +" Annullata",StatoIniziale(),input_statement.getApiKey())
         elif(input_statement.getApiKey() == null):
           output_statement=StatementStato("Non Sei Loggato Non Hai Operazioni Da Annullare",StatoIniziale(),null)
         else:
-          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale())
+          output_statement=StatementStato("Nessuna Operazione da Annullare",StatoIniziale(),input_statement.getApiKey())
         # assegno una confidence MOLTO alta per questa operazione perché DEVE prendere la priorità
 
         output_statement.confidence = 100

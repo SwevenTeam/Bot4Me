@@ -1,3 +1,4 @@
+from calendar import c
 from StatementStato import StatementStato
 from Stato import Stato
 from StatoConsuntivazione import StatoConsuntivazione
@@ -14,11 +15,20 @@ CORS(app)
 server = Server()
 client = Client(server)
 
+@app.route("/getID", methods=['POST'])
+def get_client_id():
+    if request.method == 'POST':
+        clientID = request.json.get('clientID')
+        clientID = "111"
+        return str(clientID)
+
 @app.route("/get", methods=['POST'])
 def get_bot_response():
     #userText = request.args.get('msg').lower()
     if request.method == 'POST':
         userText = request.json.get('textInput')
+        clientID = request.json.get('clientID')
+        print(clientID)
         return str(client.getResponse(userText))
 
 if __name__ == "__main__":

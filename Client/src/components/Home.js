@@ -9,14 +9,11 @@ const Home = () => {
     const [message, setMessage] = useState("");
 
     const [apikey, setApiKey] = useState("");
+    const [clientId, setClientID] = useState("");
     const [hidden, setHidden] = useState (false);
     const inputApiKey = useRef(null);
 
-
-    const msgerForm = get(".msger-inputarea");
-    const msgerInput = get(".msger-input");
     const msgerChat = get(".msger-chat");
-
 
     const BOT_IMG = "{{ url_for('static', filename='img/logo.png') }}";
     const PERSON_IMG = "{{ url_for('static', filename='img/user.png') }}";
@@ -24,9 +21,9 @@ const Home = () => {
     const PERSON_NAME = "Utente X";
 
     useEffect(() => {
-      const items = JSON.parse(localStorage.getItem('apikey'));
-      if (items) {
-       setApiKey(items);
+      const api = JSON.parse(localStorage.getItem('apikey'));
+      if (api) {
+       setApiKey(api);
        setHidden(true);
       }
       else {
@@ -67,18 +64,12 @@ const Home = () => {
       }  
     }
 
-    const login = () => {
-      changeHidden()
-      /*appendMessage(PERSON_NAME, PERSON_IMG, "right", "login");
-      botResponse("login")*/
-    }
-
     const logout = () => {
       setApiKey("")
       localStorage.setItem('apikey', JSON.stringify(""));
+      setClientID("")
+      localStorage.setItem('clientId',JSON.stringify(""))
       setHidden(false)
-      /*appendMessage(PERSON_NAME, PERSON_IMG, "right", "login");
-      botResponse("login")*/
     }
 
     const finish = () => {
@@ -125,15 +116,40 @@ const Home = () => {
     }
 
     function botResponse(rawText) {
-
      const url = 'http://127.0.0.1:5000/get'
-     
      axios.post(url,{
       textInput: rawText,
+      clientID: clientId
      }).then(function(response) {
             appendMessage(BOT_NAME, BOT_IMG, "left", JSON.stringify(response.data).replaceAll('"',''))
       });
     }
+
+    function getClientID() {
+      const client = JSON.parse(localStorage.getItem('clientId'));
+      if( client === ""){
+        const url = 'http://127.0.0.1:5000/getID'
+        axios.post(url,{
+          clientID: clientId,
+        }).then(function(response) {
+              saveClientId((response.data))
+          });
+      }
+      else {
+        setClientID(client)
+      }
+    }
+
+      useEffect(() => {
+        getClientID();
+      }, [""]);
+
+     const saveClientId = (idFromServer) => {
+        if(!clientId && idFromServer){
+          localStorage.setItem('clientId',idFromServer);
+          setClientID(idFromServer)
+        }
+      }
 
     // Utils
     function get(selector, root = document) {
@@ -154,7 +170,7 @@ const Home = () => {
           </div>
 
           <CustomButton text={"API KEY"} isDisabled={!hidden} 
-            className={"msger-apikey-btn"} onSubmit={()=>{login()}} 
+            className={"msger-apikey-btn"} 
             hidden={hidden} icon="Login"/>
 
           <CustomButton text={"LOGOUT"} isDisabled={!hidden} 
