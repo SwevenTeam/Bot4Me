@@ -9,8 +9,9 @@ from sqlalchemy import false, true
 import requests
 from requests import Response
 import json
+from Request import Request
 
-class RequestConsuntivazione():
+class RequestConsuntivazione(Request):
     """
     ---
     Class Name : RequestConsuntivazione 
@@ -76,7 +77,7 @@ class RequestConsuntivazione():
         else :
             return False
 
-    def checkProjectExistance(self, code) -> Boolean :
+    def checkProjectExistance(self, code) -> bool :
         """
         ---
         Name checkProjectExistance 

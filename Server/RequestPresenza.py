@@ -6,8 +6,9 @@ from chatterbot.conversation import Statement
 from sqlalchemy import false, true
 import requests
 from requests import Response
+from Request import Request
 
-class RequestPresenza():
+class RequestPresenza(Request):
     """
     ---
     Class Name : RequestPresenza 

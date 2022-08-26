@@ -9,8 +9,9 @@ from sqlalchemy import false, true
 import requests
 from requests import Response
 import json
+from Request import Request
 
-class RequestCreazioneProgetto():
+class RequestCreazioneProgetto(Request):
     """
     ---
     Class Name : RequestCreazioneProgetto 
@@ -36,7 +37,7 @@ class RequestCreazioneProgetto():
         else:
           return False
 
-    def sendRequest(self) -> Boolean :
+    def sendRequest(self) -> bool :
         """
         ---
         Function Name : sendRequest
@@ -74,7 +75,7 @@ class RequestCreazioneProgetto():
         else :
             return False
 
-    def checkCodeProject(self, code) -> Boolean :
+    def checkCodeProject(self, code) -> bool :
         """
         ---
         Name checkProjectExistance 
