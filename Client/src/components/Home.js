@@ -126,18 +126,13 @@ const Home = () => {
     }
 
     function getClientID() {
-      const client = JSON.parse(localStorage.getItem('clientId'));
-      if( client === ""){
-        const url = 'http://127.0.0.1:5000/getID'
-        axios.post(url,{
-          clientID: clientId,
-        }).then(function(response) {
-              saveClientId((response.data))
-          });
-      }
-      else {
-        setClientID(client)
-      }
+    
+      const url = 'http://127.0.0.1:5000/getID'
+      axios.post(url,{
+        clientID: clientId,
+      }).then(function(response) {
+            saveClientId((response.data))
+        });
     }
 
       useEffect(() => {
@@ -145,10 +140,8 @@ const Home = () => {
       }, [""]);
 
      const saveClientId = (idFromServer) => {
-        if(!clientId && idFromServer){
-          localStorage.setItem('clientId',idFromServer);
-          setClientID(idFromServer)
-        }
+        localStorage.setItem('clientId',idFromServer);
+        setClientID(idFromServer)
       }
 
     // Utils
