@@ -15,7 +15,7 @@ class Test_Adapter_Undo():
         return ChatBot("Test")
 
     # Test Adapter Undo /w Presence
-    #T_U44
+    # T_U44
     def test_Adapter_Undo_Presence(self, chatbot):
         S = Statement_State("annulla", State_Presence())
         A = Adapter_Undo(chatbot)
@@ -31,7 +31,7 @@ class Test_Adapter_Undo():
         assert value.text == "Non Sei Loggato e non Hai Operazioni Da Annullare"
 
     # Test Adapter Undo - Nothing to Undo and Logged
-    #T_U45
+    # T_U45
     def test_output_No_Operation(self, chatbot):
         S = Statement_State("annulla", State_Null(), '123')
         A = Adapter_Undo(chatbot)

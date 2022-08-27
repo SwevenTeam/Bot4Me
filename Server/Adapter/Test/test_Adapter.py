@@ -15,7 +15,7 @@ class Test_Adapter():
         return ChatBot("Test")
 
     # Test Adapter
-    #T_U27
+    # T_U27
     def test_Adapter(self, chatbot):
         S = Statement_State("ciao", State_Null(), null)
         A = Adapter(chatbot)
@@ -24,7 +24,7 @@ class Test_Adapter():
         assert value.text == "Ciao, sono Bot4Me"
 
     # Test Errore Adapter
-    #T_U28
+    # T_U28
     def test_Adapter_Error(self, chatbot):
         S = Statement_State("non esiste", State_Null())
         A = Adapter(chatbot)
