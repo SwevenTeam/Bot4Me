@@ -8,6 +8,7 @@ import json
 class Test_Request_Presence():
 
     # Test Request Presence isReady
+    #U_T50
     def test_Request_Presence_isReady(self):
         S = State_Presence()
         S.addData("sede", "Imola")
@@ -20,6 +21,7 @@ class Test_Request_Presence():
         Req = Request_Presence(S, "12345678-1234-1234-1234-123456789012")
         assert Req.isReady() == False
 
+    #U_T51
     def test_Request_Presence_isReady_Error_State(self):
         S = State_Gate()
         S.addData("sede", "Imola")

@@ -16,6 +16,7 @@ class Test_Adapter_Gate():
         return ChatBot("Test")
 
     # Test Avvio Apertura Cancello
+    #T_U31
     def test_Adapter_Gate_Activate(self, chatbot):
         S = Statement_State("apertura cancello", State_Null())
         A = Adapter_Gate(chatbot)
@@ -48,6 +49,7 @@ class Test_Adapter_Gate():
         assert value.text == "Modifica della sede : Inserire la sede del cancello"
 
     # Test Apertura Cancello conferma errore
+    #T_U32
     def test_Adapter_Gate_Error(self, chatbot):
         Sg = State_Gate()
         Sg.addData("sede", "imola")

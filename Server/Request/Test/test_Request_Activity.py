@@ -5,6 +5,7 @@ from State.State_Null import State_Null
 
 class Test_Request_Activity():
 
+    #T_U46
     def test_Request_Activity_isReady(self):
         S = State_Activity()
         S.addData("codice progetto", "1")
@@ -24,6 +25,7 @@ class Test_Request_Activity():
         Req = Request_Activity(S, "12345678-1234-1234-1234-123456789012")
         assert Req.isReady() == False
 
+    #U_T47
     def test_Request_Activity_isReady_Error_Not_Ready(self):
         S = State_Activity()
         Req = Request_Activity(S, "12345678-1234-1234-1234-123456789012")

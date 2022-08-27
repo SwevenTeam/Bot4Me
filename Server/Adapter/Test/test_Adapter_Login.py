@@ -14,6 +14,7 @@ class Test_Adapter_Login():
     def chatbot(self):
         return ChatBot("Test")
 
+    #T_U35
     def test_Adapter_Login_Activate(self, chatbot):
         S = Statement_State("login", State_Null(), null)
         A = Adapter_Login(chatbot)
@@ -38,6 +39,7 @@ class Test_Adapter_Login():
             value = A.process(S, None)
         assert value.text == "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"
 
+    #T_U36
     def test_Adapter_Login_Already_Logged(self, chatbot):
         S = Statement_State(
             "login",
