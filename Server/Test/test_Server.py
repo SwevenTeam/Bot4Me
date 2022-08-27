@@ -13,13 +13,13 @@ class Test_Server():
     def server(self):
         return Server()
 
-    #T_U5
+    # T_U5
     def test_Server_No_Login(self, server):
         client = Client(server)
         value = client.getResponse("esempio")
         assert value == "Devi prima effettuare l'accesso per utilizzare i nostri servizi"
 
-    #T_U6
+    # T_U6
     def test_Server_No_Adapter(self, server):
         client = Client(server)
         client.getResponse("login")
@@ -27,7 +27,7 @@ class Test_Server():
         value = client.getResponse("esempio")
         assert value == "Nessun Logic Adapter Adatto Trovato"
 
-    #T_U7
+    # T_U7
     def test_Double_Adapter(self, server):
         client = Client(server)
         client.getResponse("login")
@@ -35,7 +35,7 @@ class Test_Server():
         value = client.getResponse("annulla get con")
         assert value == "Nessuna Operazione da Annullare"
 
-    #T_U8
+    # T_U8
     def test_Adapter_Update(self, server):
         client = Client(server)
         client.getResponse("login")
