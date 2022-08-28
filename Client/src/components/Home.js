@@ -22,15 +22,15 @@ const Home = () => {
 
     useEffect(() => {
       const api = JSON.parse(localStorage.getItem('apikey'));
-      if (api) {
+      if (api && apikey==="") {
        setApiKey(api);
        setHidden(true);
       }
       else {
-        setApiKey("")
-        setHidden(false)
+        localStorage.removeItem('apikey');
+        setHidden(false);
       }
-    }, []);
+    }, [apikey]);
 
     const handleMessageChange = (e) =>{
       setMessage(e.target.value)
@@ -49,27 +49,35 @@ const Home = () => {
     }
     
     const saveApiKey = () => {
+      if(!localStorage.getItem('clientId')){
+        getClientID();
+      }
+      else {
+        setClientID(localStorage.getItem('clientId'));
+      }
       if(inputApiKey.current.value !== null){
         if (!validateApiKey.test(inputApiKey.current.value)) {
           alert("API-KEY formato non valido, riprova");
           setApiKey("")
-          changeHidden()
-       }
-       else {
-        setApiKey(inputApiKey.current.value);
-        localStorage.setItem('apikey', JSON.stringify(apikey));
-        //botResponse(apikey)
-        changeHidden()
-       }
+        }
+        else {
+          setApiKey(inputApiKey.current.value);
+          localStorage.setItem('apikey', JSON.stringify(apikey));    
+          botResponse('login');
+          botResponse(apikey);      
+          changeHidden();
+        }
       }  
     }
 
     const logout = () => {
-      setApiKey("")
-      localStorage.setItem('apikey', JSON.stringify(""));
-      setClientID("")
-      localStorage.setItem('clientId',JSON.stringify(""))
-      setHidden(false)
+      setApiKey("");
+      localStorage.removeItem('apikey');
+      setClientID("");
+      localStorage.removeItem('clientId');
+      botResponse('logout');
+      setHidden(false);
+      window.location.reload();
     }
 
     const finish = () => {
@@ -98,7 +106,6 @@ const Home = () => {
     }
 
     function appendMessage(name, img, side, text) {
-      //   Simple solution for small apps
       const msgHTML = `
         <div class="msg ${side}-msg">
           <div class="msg-img" style="background-image: url(${img})"></div>
@@ -113,6 +120,9 @@ const Home = () => {
       `;
       msgerChat.insertAdjacentHTML("beforeend", msgHTML);
       msgerChat.scrollTop += 500;
+      if(text === "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"){
+        setHidden(true);
+      }
     }
 
     function botResponse(rawText) {
@@ -121,12 +131,14 @@ const Home = () => {
       textInput: rawText,
       clientID: clientId
      }).then(function(response) {
-            appendMessage(BOT_NAME, BOT_IMG, "left", JSON.stringify(response.data).replaceAll('"',''))
+        if(JSON.stringify(response.data).replaceAll('"','') === "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"){
+          const myTimeout = setTimeout(logout, 2000);
+        }
+        appendMessage(BOT_NAME, BOT_IMG, "left", JSON.stringify(response.data).replaceAll('"',''));
       });
     }
 
     function getClientID() {
-    
       const url = 'http://127.0.0.1:5000/getID'
       axios.post(url,{
         clientID: clientId,
