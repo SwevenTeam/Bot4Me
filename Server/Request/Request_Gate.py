@@ -1,7 +1,7 @@
 import requests
+from Request.MyRequest import MyRequest
 
-
-class Request_Gate:
+class Request_Gate(MyRequest):
 
     def __init__(self, s, api_key) -> None:
         self.state = s.getCurrentState()

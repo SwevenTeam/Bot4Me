@@ -4,9 +4,9 @@ import requests
 from requests import Response
 import json
 from .Util_Request import IsDictionaryFilled, parseResponseGetActivity
+from Request.MyRequest import MyRequest
 
-
-class Request_Get_Activity():
+class Request_Get_Activity(MyRequest):
     """
     ---
     Class Name : Request_Activity
@@ -36,7 +36,7 @@ class Request_Get_Activity():
         else:
             return False
 
-    def sendRequest(self) -> Boolean:
+    def sendRequest(self) -> bool:
         """
         ---
         Function Name : sendRequest

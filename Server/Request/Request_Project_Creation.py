@@ -2,9 +2,9 @@ from xmlrpc.client import Boolean
 from sqlalchemy import false, true
 import requests
 from .Util_Request import IsDictionaryFilled
+from Request.MyRequest import MyRequest
 
-
-class Request_Project_Creation():
+class Request_Project_Creation(MyRequest):
     """
     ---
     Class Name : Request_Project_Creation
@@ -34,7 +34,7 @@ class Request_Project_Creation():
         else:
             return False
 
-    def sendRequest(self) -> Boolean:
+    def sendRequest(self) -> bool:
         """
         ---
         Function Name : sendRequest

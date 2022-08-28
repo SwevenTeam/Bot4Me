@@ -1,9 +1,9 @@
 from sqlalchemy import false, true
 import requests
 from requests import Response
+from Request.MyRequest import MyRequest
 
-
-class Request_Presence():
+class Request_Presence(MyRequest):
     """
     ---
     Class Name : Request_Presence
@@ -33,7 +33,7 @@ class Request_Presence():
         else:
             return False
 
-    def sendRequest(self):
+    def sendRequest(self) -> bool:
         """
         ---
         Function Name : sendRequest
