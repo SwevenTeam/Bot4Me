@@ -15,6 +15,7 @@ class Test_Adapter_Activity():
         return ChatBot("Test")
 
     # Test Avvio Consuntivazione
+    # T_U29
     def test_Adapter_Activity_Activate(self, chatbot):
         S = Statement_State("consuntiva", State_Null())
         A = Adapter_Activity(chatbot)

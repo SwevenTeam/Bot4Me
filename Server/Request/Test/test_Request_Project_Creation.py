@@ -6,6 +6,7 @@ import requests
 
 class Test_Request_Project_Creation():
 
+    # U_T52
     def test_Request_Project_Creation_isReady(self):
         S = State_Project_Creation()
         S.addData("codice progetto", "1")
@@ -27,6 +28,7 @@ class Test_Request_Project_Creation():
             S, "12345678-1234-1234-1234-123456789012")
         assert Req.isReady() == False
 
+    # U_T53
     def test_Request_Project_Creation_isReady_Error_Not_Ready(self):
         S = State_Project_Creation()
         Req = Request_Project_Creation(

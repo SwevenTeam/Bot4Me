@@ -15,6 +15,7 @@ class Test_Adapter():
         return ChatBot("Test")
 
     # Test Avvio Registrazione Presenza
+    # T_U39
     def test_Adapter_Presence_Activate(self, chatbot):
         S = Statement_State(
             "presenza",
@@ -26,6 +27,7 @@ class Test_Adapter():
         assert value.text == "Operazione di registrazione della presenza avviata : inserire il nome di una sede"
 
     # Test Registrazione Presenza Corretta
+    # T_U40
     @pytest.mark.parametrize("sede", [("Imola"), ("Bologna")])
     def test_Adapter_Presence_Location_Correct(self, sede, chatbot):
         S = Statement_State(
@@ -49,6 +51,7 @@ class Test_Adapter():
         assert value.text == "Registrazione presenza Fallita"
     '''
     # Test Registrazione Presenza Incorretta
+    # T_U41
 
     def test_Adapter_Presence_Location_Incorrect(self, chatbot):
         S = Statement_State(

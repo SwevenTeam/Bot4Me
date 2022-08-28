@@ -14,6 +14,7 @@ class Test_Adapter_Logout():
         return ChatBot("Test")
 
     # Test Logout
+    # T_U37
     def test_Logout_Correct(self, chatbot):
         S = Statement_State(
             "logout",
@@ -25,6 +26,7 @@ class Test_Adapter_Logout():
         assert value.text == "Logout avvenuto con successo"
 
     # Test Errore Logout
+    # T_U38
     def test_Logout_Incorrect(self, chatbot):
         S = Statement_State("logout", State_Null(), null)
         A = Adapter_Logout(chatbot)

@@ -22,6 +22,7 @@ class Test_Adapter_Get_Activity():
         assert value.text == "Operazione Restituzione di Consuntivazione Avviata : Inserire il codice del Progetto"
 
     # Test Inserimento Codice Corretto
+    # T_U33
     def test_Adapter_Activity_Code_Correct(self, chatbot):
         S = Statement_State(
             "1",
@@ -33,6 +34,7 @@ class Test_Adapter_Get_Activity():
         assert "Consuntivazione del giorno" in value.text
 
     # Test Inserimento Codice Incorretto Numero
+    # T_U34
     def test_Adapter_Activity_Code_Incorrect_Number(self, chatbot):
         S = Statement_State(
             "1999999999999999",
