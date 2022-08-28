@@ -1,4 +1,3 @@
-import json
 import requests
 
 
@@ -33,7 +32,7 @@ class RequestCancello:
         HEADERS={'accept': 'application/json','api_key': self.APIKEY, 'Content-Type': 'application/json'}
         DATA = {'open': 'string'}
 
-        responseUrl = requests.put(URL, headers=HEADERS, data=DATA)
+        responseUrl = requests.put(URL, headers=HEADERS, json=DATA)
 
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
