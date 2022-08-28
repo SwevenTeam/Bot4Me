@@ -3,7 +3,7 @@ import App from './App';
 
 test('test main chat render', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Benvenuto su Bot4Me, sarò il tuo assistente personale 😄/i);
+  const linkElement = screen.getByText(/ sarò il tuo assistente personale 😄/i);
   expect(linkElement).toBeInTheDocument();
 });
 
@@ -39,7 +39,7 @@ test('test main chat info 5 render', () => {
 
 test('test main chat info 6 render', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Mettimi alla prova!/i);
+  const linkElement = screen.getByText(/Per mettermi alla prova /i);
   expect(linkElement).toBeInTheDocument();
 });
 
