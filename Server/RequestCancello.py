@@ -1,8 +1,8 @@
 import json
 import requests
+from Request import Request
 
-
-class RequestCancello:
+class RequestCancello(Request):
 
     def __init__(self, api_key) -> None:
         self.sede = ''

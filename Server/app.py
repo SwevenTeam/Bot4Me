@@ -11,17 +11,15 @@ app = Flask(__name__)
 CORS(app)
 
 server = Server()
-clients = {
-    uuid4() : Client(server)
-}
+clients = {}
 
 @app.route("/getID", methods=['POST'])
 def get_client_id():
     #userText = request.args.get('msg').lower()
     if request.method == 'POST':
-        userId = uuid4()
-        clients.update({str(userId) : Client(server)})
-        return str(userId)
+        userId = str(uuid4())
+        clients.update({userId : Client(server)})
+        return userId
 
 
 @app.route("/get", methods=['POST'])

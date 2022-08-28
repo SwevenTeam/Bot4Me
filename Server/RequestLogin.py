@@ -6,8 +6,9 @@ from chatterbot.conversation import Statement
 from sqlalchemy import false, true
 import requests
 from requests import Response
+from Request import Request
 
-class RequestLogin():
+class RequestLogin(Request):
     def __init__(self, s, apiKey):
         self.dati = s.getDati()
         self.ready = s.getStatoAttuale()
