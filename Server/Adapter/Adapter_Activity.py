@@ -321,7 +321,7 @@ class Adapter_Activity(LogicAdapter):
                     if Req.isReady():
                         if Req.sendRequest():
                             output_statement = Statement_State(
-                                "Operazione avvenuta correttamente", State_Null())
+                                "Operazione avvenuta correttamente", State_Null(), Api)
                         else:
                             output_statement = Statement_State(
                                 "Operazione non avvenuta, riprovare? (inviare annulla per annullare)", s)
@@ -331,7 +331,7 @@ class Adapter_Activity(LogicAdapter):
 
                 elif similarStringMatch(text.split(), annulla):
                     output_statement = Statement_State(
-                        "Operazione annullata", State_Null())
+                        "Operazione annullata", State_Null(), Api)
 
                 elif similarStringMatch(text.split(), modifica):
                     s.addData("conferma", "modifica")

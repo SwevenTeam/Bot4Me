@@ -102,10 +102,10 @@ class Adapter_Presence(LogicAdapter):
                 if Req.isReady():
                     if Req.sendRequest():
                         output_statement = Statement_State(
-                            "Registrazione presenza effettuata con Successo", State_Null())
+                            "Registrazione presenza effettuata con Successo", State_Null(),Api)
                     else:
                         output_statement = Statement_State(
-                            "Registrazione presenza Fallita", State_Null())
+                            "Registrazione presenza Fallita", s)
                 else:
                     output_statement = Statement_State(
                         "Request non pronto a soddisfare la richiesta",

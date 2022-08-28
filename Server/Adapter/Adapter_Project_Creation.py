@@ -281,7 +281,7 @@ class Adapter_Project_Creation(LogicAdapter):
 
                 elif similarStringMatch(text.split(), annulla):
                     output_statement = Statement_State(
-                        "Operazione annullata", State_Null())
+                        "Operazione annullata", State_Null(), Api)
 
                 elif similarStringMatch(text.split(), modifica):
                     s.addData("conferma", "modifica")

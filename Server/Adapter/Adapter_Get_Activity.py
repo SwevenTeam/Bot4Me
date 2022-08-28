@@ -112,7 +112,7 @@ class Adapter_Get_Activity(LogicAdapter):
                         result = Req.sendRequest()
                         if result == []:
                             output_statement = Statement_State(
-                                "Nessun elemento da visualizzare", State_Null())
+                                "Nessun elemento da visualizzare", State_Null(), Api)
                         else:
                             output_statement = Statement_State(
                                 result, State_Null())
