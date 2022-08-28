@@ -3,6 +3,7 @@ import requests
 from requests import Response
 from Request.MyRequest import MyRequest
 
+
 class Request_Presence(MyRequest):
     """
     ---

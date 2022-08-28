@@ -13,12 +13,13 @@ CORS(app)
 server = Server()
 clients = {}
 
+
 @app.route("/getID", methods=['POST'])
 def get_client_id():
     #userText = request.args.get('msg').lower()
     if request.method == 'POST':
         userId = str(uuid4())
-        clients.update({userId : Client(server)})
+        clients.update({userId: Client(server)})
         return userId
 
 
@@ -29,6 +30,7 @@ def get_bot_response():
         userText = request.json.get('textInput')
         userID = request.json.get('clientID')
         return clients.get(userID).getResponse(userText)
+
 
 if __name__ == "__main__":
     app.run()

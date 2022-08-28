@@ -1,6 +1,7 @@
 import requests
 from Request.MyRequest import MyRequest
 
+
 class Request_Gate(MyRequest):
 
     def __init__(self, s, api_key) -> None:
