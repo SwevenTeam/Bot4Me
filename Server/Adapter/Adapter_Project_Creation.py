@@ -271,7 +271,7 @@ class Adapter_Project_Creation(LogicAdapter):
                     if Req.isReady():
                         if Req.sendRequest():
                             output_statement = Statement_State(
-                                "Operazione avvenuta correttamente", State_Null())
+                                "Operazione avvenuta correttamente", State_Null(), Api)
                         else:
                             output_statement = Statement_State(
                                 "Operazione non avvenuta, riprovare? (inviare annulla per annullare)", s)

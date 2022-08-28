@@ -115,7 +115,7 @@ class Adapter_Get_Activity(LogicAdapter):
                                 "Nessun elemento da visualizzare", State_Null(), Api)
                         else:
                             output_statement = Statement_State(
-                                result, State_Null())
+                                result, State_Null(), Api)
                     else:
                         output_statement = Statement_State(
                             "Sembra che tu debba ancora Inserire il codice", s)
