@@ -10,7 +10,7 @@ class State:
     def getData(self):
         pass
 
-    #param x: nome del dato da inserire
-    #param y: valore del dato da inserire
+    # param x: nome del dato da inserire
+    # param y: valore del dato da inserire
     def addData(self, x, y):
         pass
