@@ -1,5 +1,3 @@
-from cgi import test
-from turtle import textinput
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer

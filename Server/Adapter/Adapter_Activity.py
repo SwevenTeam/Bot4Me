@@ -1,6 +1,4 @@
-from ast import And
-from decimal import InvalidOperation
-import string
+
 from chatterbot.logic import LogicAdapter
 from Server.Request.Request_Activity import Request_Activity
 from Server.State.Statement_State import Statement_State

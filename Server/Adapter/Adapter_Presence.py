@@ -1,4 +1,3 @@
-from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
 from Server.State.Statement_State import Statement_State
 from Server.State.State_Presence import State_Presence

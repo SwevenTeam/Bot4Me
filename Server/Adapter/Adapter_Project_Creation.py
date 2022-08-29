@@ -1,7 +1,3 @@
-from ast import And
-from decimal import InvalidOperation
-from doctest import OutputChecker
-import string
 import datetime
 from chatterbot.logic import LogicAdapter
 from Server.Request.Util_Request import IsDictionaryFilled

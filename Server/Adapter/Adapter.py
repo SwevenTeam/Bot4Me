@@ -1,4 +1,3 @@
-from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
 from chatterbot.conversation import Statement
 from sqlalchemy import true
