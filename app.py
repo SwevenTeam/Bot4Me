@@ -4,7 +4,6 @@ from Server.Server import Server
 from flask import Flask, render_template, send_from_directory,request, session
 from flask_cors import CORS
 from uuid import uuid4
-from sqlalchemy import null
 
 app =Flask(__name__ ,static_folder='Client/build',static_url_path='')
 
