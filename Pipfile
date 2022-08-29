@@ -7,6 +7,9 @@ name = "pypi"
 flask = "*"
 gunicorn = "*"
 flask-sqlalchemy = "*"
+chatterbot-corpus = "*"
+pytz = "*"
+requests = "*"
 
 [dev-packages]
 
