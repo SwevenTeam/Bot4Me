@@ -3,6 +3,7 @@ from chatterbot.logic import LogicAdapter
 from chatterbot.conversation import Statement
 from sqlalchemy import true
 from State.Statement_State import Statement_State
+from State.State_Null import State_Null
 from chatterbot.adapters import Adapter
 
 
@@ -32,7 +33,7 @@ class Adapter(LogicAdapter):
         - Description → restituisce True se l'elemento in Input contiene keyword corretta
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        if(statement.getText() == "ciao"):
+        if statement.getState() == State_Null() and statement.getText() == "ciao" :
             return True
         else:
             return False
