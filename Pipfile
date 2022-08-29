@@ -13,6 +13,7 @@ blis = "*"
 preshed = "*"
 chatterbot = "==1.0.4"
 flask-cors = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
