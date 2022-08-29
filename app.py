@@ -1,17 +1,22 @@
 from http import client
 from Server.Client import Client
 from Server.Server import Server
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, send_from_directory,request, session
 from flask_cors import CORS
 from uuid import uuid4
 from sqlalchemy import null
 
-app =Flask(__name__ ,static_folder='Client/Build',static_url_path='')
+app =Flask(__name__ ,static_folder='Client/build',static_url_path='')
 
 CORS(app)
 
 server = Server()
 clients = {}
+
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 @app.route("/getID", methods=['POST'])
