@@ -7,9 +7,11 @@ name = "pypi"
 flask = "*"
 gunicorn = "*"
 flask-sqlalchemy = "*"
-chatterbot-corpus = "*"
 pytz = "*"
 requests = "*"
+blis = "*"
+preshed = "*"
+chatterbot = "==1.0.4"
 
 [dev-packages]
 
