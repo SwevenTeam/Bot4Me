@@ -1,5 +1,4 @@
 from cgi import test
-from tkinter.messagebox import NO
 from turtle import textinput
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
