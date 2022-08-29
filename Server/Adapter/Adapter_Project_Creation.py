@@ -4,13 +4,13 @@ from doctest import OutputChecker
 import string
 import datetime
 from chatterbot.logic import LogicAdapter
-from Request.Util_Request import IsDictionaryFilled
-from State.Statement_State import Statement_State
+from Server.Request.Util_Request import IsDictionaryFilled
+from Server.State.Statement_State import Statement_State
 from chatterbot.conversation import Statement
 from sqlalchemy import false, true
-from State.State_Project_Creation import State_Project_Creation
-from State.State_Null import State_Null
-from Request.Request_Project_Creation import Request_Project_Creation
+from Server.State.State_Project_Creation import State_Project_Creation
+from Server.State.State_Null import State_Null
+from Server.Request.Request_Project_Creation import Request_Project_Creation
 from .Util_Adapter import returnAllData, checkCodeProject, similarStringMatch, similarStringMatch_Location
 
 

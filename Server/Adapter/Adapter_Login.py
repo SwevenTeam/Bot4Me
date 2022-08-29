@@ -2,11 +2,11 @@ from ast import And
 from cmath import log
 from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
-from State.State_Login import State_Login
-from State.Statement_State import Statement_State
+from Server.State.State_Login import State_Login
+from Server.State.Statement_State import Statement_State
 from chatterbot.conversation import Statement
 from sqlalchemy import false, true, null
-from State.State_Null import State_Null
+from Server.State.State_Null import State_Null
 
 
 class Adapter_Login(LogicAdapter):

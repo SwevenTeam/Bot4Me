@@ -2,7 +2,7 @@ from xmlrpc.client import Boolean
 from sqlalchemy import false, true
 import requests
 from .Util_Request import IsDictionaryFilled
-from Request.MyRequest import MyRequest
+from Server.Request.MyRequest import MyRequest
 
 
 class Request_Project_Creation(MyRequest):

@@ -4,7 +4,7 @@ import requests
 from requests import Response
 import json
 from .Util_Request import IsDictionaryFilled, parseResponseGetActivity
-from Request.MyRequest import MyRequest
+from Server.Request.MyRequest import MyRequest
 
 
 class Request_Get_Activity(MyRequest):

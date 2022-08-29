@@ -1,9 +1,9 @@
 from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
-from State.Statement_State import Statement_State
-from State.State_Presence import State_Presence
-from Request.Request_Presence import Request_Presence
-from State.State_Null import State_Null
+from Server.State.Statement_State import Statement_State
+from Server.State.State_Presence import State_Presence
+from Server.Request.Request_Presence import Request_Presence
+from Server.State.State_Null import State_Null
 from chatterbot.conversation import Statement
 from sqlalchemy import true
 from .Util_Adapter import similarStringMatch, similarStringMatch_Location

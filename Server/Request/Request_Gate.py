@@ -1,5 +1,5 @@
 import requests
-from Request.MyRequest import MyRequest
+from Server.Request.MyRequest import MyRequest
 
 
 class Request_Gate(MyRequest):

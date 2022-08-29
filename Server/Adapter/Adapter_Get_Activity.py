@@ -2,11 +2,11 @@ from ast import And
 from decimal import InvalidOperation
 import string
 from chatterbot.logic import LogicAdapter
-from Request.Request_Get_Activity import Request_Get_Activity
-from State.Statement_State import Statement_State
-from State.State_Get_Activity import State_Get_Activity
+from Server.Request.Request_Get_Activity import Request_Get_Activity
+from Server.State.Statement_State import Statement_State
+from Server.State.State_Get_Activity import State_Get_Activity
 from sqlalchemy import false, null, true
-from State.State_Null import State_Null
+from Server.State.State_Null import State_Null
 import datetime
 from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch, similarStringMatch_Location
 

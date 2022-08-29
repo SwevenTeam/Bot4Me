@@ -4,9 +4,9 @@ from turtle import textinput
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
-from State.Statement_State import Statement_State
-from Adapter.Adapter import Adapter
-from State.State_Null import State_Null
+from Server.State.Statement_State import Statement_State
+from Server.Adapter.Adapter import Adapter
+from Server.State.State_Null import State_Null
 from sqlalchemy import null
 
 
@@ -20,15 +20,15 @@ class Server:
 
     def __init__(self):
         self.chatterbot = ChatBot("botforme", logic_adapters=[
-            {'import_path': 'Adapter.Adapter.Adapter'},
-            {'import_path': 'Adapter.Adapter_Login.Adapter_Login'},
-            {'import_path': 'Adapter.Adapter_Gate.Adapter_Gate'},
-            {'import_path': 'Adapter.Adapter_Undo.Adapter_Undo'},
-            {'import_path': 'Adapter.Adapter_Logout.Adapter_Logout'},
-            {'import_path': 'Adapter.Adapter_Presence.Adapter_Presence'},
-            {'import_path': 'Adapter.Adapter_Activity.Adapter_Activity'},
-            {'import_path': 'Adapter.Adapter_Project_Creation.Adapter_Project_Creation'},
-            {'import_path': 'Adapter.Adapter_Get_Activity.Adapter_Get_Activity'}])
+            {'import_path': 'Server.Adapter.Adapter.Adapter'},
+            {'import_path': 'Server.Adapter.Adapter_Login.Adapter_Login'},
+            {'import_path': 'Server.Adapter.Adapter_Gate.Adapter_Gate'},
+            {'import_path': 'Server.Adapter.Adapter_Undo.Adapter_Undo'},
+            {'import_path': 'Server.Adapter.Adapter_Logout.Adapter_Logout'},
+            {'import_path': 'Server.Adapter.Adapter_Presence.Adapter_Presence'},
+            {'import_path': 'Server.Adapter.Adapter_Activity.Adapter_Activity'},
+            {'import_path': 'Server.Adapter.Adapter_Project_Creation.Adapter_Project_Creation'},
+            {'import_path': 'Server.Adapter.Adapter_Get_Activity.Adapter_Get_Activity'}])
 
     def getResponse(self, text, state, apiKey) -> Statement_State:
         """

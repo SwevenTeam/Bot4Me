@@ -1,7 +1,7 @@
 from sqlalchemy import false, true
 import requests
 from requests import Response
-from Request.MyRequest import MyRequest
+from Server.Request.MyRequest import MyRequest
 
 
 class Request_Presence(MyRequest):

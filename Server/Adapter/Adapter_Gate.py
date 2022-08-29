@@ -1,8 +1,8 @@
 from chatterbot.logic import LogicAdapter
-from Request.Request_Gate import Request_Gate
-from State.Statement_State import Statement_State
-from State.State_Gate import State_Gate
-from State.State_Null import State_Null
+from Server.Request.Request_Gate import Request_Gate
+from Server.State.Statement_State import Statement_State
+from Server.State.State_Gate import State_Gate
+from Server.State.State_Null import State_Null
 from .Util_Adapter import getLocationList, similarStringMatch_Location, similarStringMatch
 
 

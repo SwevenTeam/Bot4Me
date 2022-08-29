@@ -1,6 +1,6 @@
 from http import client
-from Client import Client
-from Server import Server
+from Server.Client import Client
+from Server.Server import Server
 from flask import Flask, render_template, request, session
 from flask_cors import CORS
 from uuid import uuid4

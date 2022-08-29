@@ -1,11 +1,11 @@
 from ast import And
 from decimal import InvalidOperation
 from chatterbot.logic import LogicAdapter
-from State.Statement_State import Statement_State
+from Server.State.Statement_State import Statement_State
 from chatterbot.conversation import Statement
 from sqlalchemy import false, true
 from sqlalchemy import null
-from State.State_Null import State_Null
+from Server.State.State_Null import State_Null
 
 
 class Adapter_Undo(LogicAdapter):
