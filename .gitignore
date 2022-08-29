@@ -5,7 +5,6 @@ Client/node_modules/.bin/
 .idea/
 .vscode/
 Client/node_modules/
-Client/build/
 *.tgz
 my-app*
 Client/template/src/__tests__/__snapshots__/

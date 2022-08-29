@@ -6,7 +6,7 @@ from flask_cors import CORS
 from uuid import uuid4
 from sqlalchemy import null
 
-app = Flask(__name__)
+app =Flask(__name__ ,static_folder='Client/Build',static_url_path='')
 
 CORS(app)
 
