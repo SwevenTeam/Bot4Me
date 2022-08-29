@@ -126,7 +126,7 @@ const Home = () => {
     }
 
     function botResponse(rawText) {
-     const url = 'http://127.0.0.1:5000/get'
+     const url = 'https://bot4mesweventeam.herokuapp.com/get'
      axios.post(url,{
       textInput: rawText,
       clientID: clientId
@@ -139,7 +139,7 @@ const Home = () => {
     }
 
     function getClientID() {
-      const url = 'http://127.0.0.1:5000/getID'
+      const url = 'https://bot4mesweventeam.herokuapp.com/getID'
       axios.post(url,{
         clientID: clientId,
       }).then(function(response) {
