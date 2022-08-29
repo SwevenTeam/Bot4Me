@@ -235,7 +235,9 @@ class Adapter_Project_Creation(LogicAdapter):
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement = Statement_State(
-                        "Data di Fine accettata : Confermare la creazione?", s)
+                        "Data di Fine accettata  <br> " +
+                        returnAllData(s) +
+                        "Confermare la creazione?", s)
             except ValueError:
                 output_statement = Statement_State(
                     "Data di Fine non accettata : Reinserire la data del progetto", s)
