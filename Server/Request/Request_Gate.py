@@ -4,7 +4,7 @@ from Request.MyRequest import MyRequest
 
 class Request_Gate(MyRequest):
 
-    def __init__(self, s, api_key) -> None:
+    def __init__(self, s, api_key):
         self.state = s.getCurrentState()
         self.data = s.getData()
         self.Api = api_key
