@@ -31,14 +31,15 @@ class Client:
         updated_state = server_response.getState()
         if self.state != updated_state:
             self.upgradeState(updated_state)
-        # Se il nuovo stato non è null, lo stato corrente è iniziale e i due stati sono diversi
+        # Se il nuovo stato non è null, lo stato corrente è iniziale e i due
+        # stati sono diversi
         if server_response.getApiKey() != null and self.state.getCurrentState(
         ) == "Iniziale" and self.apiKey != server_response.getApiKey():
             self.upgradeApiKey(server_response.getApiKey())
-        # altrimenti se il nuovo stato è null e lo stato corrente è diverso da null
+        # altrimenti se il nuovo stato è null e lo stato corrente è diverso da
+        # null
         elif server_response.getApiKey() == null and self.apiKey != server_response.getApiKey():
             self.upgradeApiKey(null)
-
 
         return str(server_response)
 
