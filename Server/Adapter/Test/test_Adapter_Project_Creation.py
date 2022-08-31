@@ -175,7 +175,7 @@ class Test_Adapter_Project_Creation():
         A = Adapter_Project_Creation(chatbot)
         if A.can_process(S):
             value = A.process(S, None)
-        assert value.text == "Data di Fine accettata : Confermare la creazione?" and S.currentState.getData()[
+        assert "Data di Fine accettata" in value.text and S.currentState.getData()[
             'data Fine'] == "2022-01-02"
 
     # Test Inserimento Data Fine Incorretta
