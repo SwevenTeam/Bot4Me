@@ -1,23 +1,66 @@
 from re import S
 from sqlalchemy import null
-from StatementStato import StatementStato
-from StatoPresenzaSede import StatoPresenzaSede
-from StatoIniziale import StatoIniziale
+from State.State_Null import State_Null
+
 
 class Client:
+    """
+    ---
+    Class Name : Client
+    ---
+    - Description → Rappresenta il Client che fa una richiesta al server
+    """
+
     def __init__(self, server):
-        self.stato = StatoIniziale()
+        self.state = State_Null()
         self.apiKey = null
         self.server = server
 
     def getResponse(self, text):
-        s = self.server.getResponse(text, self.stato, self.apiKey)
-        self.upgradeStato(s.getStato())
-        self.upgradeApiKey(s.getApiKey())
-        return str(s)
+        """
+        ---
+        Function Name :  getResponse
+        ---
+        - Args → text ( type String) : frase in input inviata dall'utente
+        - Description → invia il messaggio al server e restituisce la risposta
+        - Returns → string value : restituisce la risposta del server
+        """
+        server_response = self.server.getResponse(
+            text, self.state, self.apiKey)
+        # nuovo stato
+        updated_state = server_response.getState()
+        if self.state != updated_state:
+            self.upgradeState(updated_state)
+        # Se il nuovo stato non è null, lo stato corrente è iniziale e i due
+        # stati sono diversi
+        if server_response.getApiKey() != null and self.state.getCurrentState(
+        ) == "Iniziale" and self.apiKey != server_response.getApiKey():
+            self.upgradeApiKey(server_response.getApiKey())
+        # altrimenti se il nuovo stato è null e lo stato corrente è diverso da
+        # null
+        elif server_response.getApiKey() == null and self.apiKey != server_response.getApiKey():
+            self.upgradeApiKey(null)
 
-    def upgradeStato(self, stato):
-        self.stato = stato
+        return str(server_response)
+
+    def upgradeState(self, state):
+        """
+        ---
+        Function Name : upgradeState
+        ---
+        - Args → stato ( type String) : nuovo stato
+        - Description → aggiorna lo stato del Client
+        - Returns → None
+        """
+        self.state = state
 
     def upgradeApiKey(self, apiKey):
-        self.apiKey=apiKey
+        """
+        ---
+        Function Name : upgradeApiKey
+        ---
+        - Args → apiKey ( type String) : nuova API Key
+        - Description → aggiorna la ApiKey
+        - Returns → None
+        """
+        self.apiKey = apiKey

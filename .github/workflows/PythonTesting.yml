@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - '*'
-      - '!master'
+      - '!main'
 
 jobs:
   build:
@@ -13,11 +13,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.9'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r Server/requirements.txt
       - name: Test with pytest
         run: |
-            pytest --cov-branch --junitxml=pytest.xml --covreport=term-missing:skip.covered --cov --html=report.html        
+            pytest --cov-report term-missing --cov     
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          flags: UnitTestingPython
+          name: codecov-umbrella
+          verbose: true
