@@ -22,3 +22,4 @@ Componenti del Gruppo :
 * Avviare il file python: app.py
 * Accedere alla cartella Client tramite il comando: cd Client 
 * Solo per la prima installazione eseguire il comando npm install, il quale permetterà di installare tutte le dipendenze di cui necessita l'applicazione lato React 
+* Eseguire il comando npm start per avviare l'applicazione 
