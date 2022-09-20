@@ -1,8 +1,8 @@
 import React from "react";
 
-const LoadingSpinner=({hidden}) => {
+const LoadingSpinner = () => {
   return (
-    <div className={(hidden ? "spinner-container" : "spinner-hidden")}>
+    <div className={"spinner-container"}>
       <div className="loading-spinner">
       </div>
     </div>
