@@ -49,8 +49,8 @@ class Test_Adapter_Get_Activity():
         assert value.text == "Progetto Inesistente : Inserire un nuovo codice" and S.currentState.getData()[
             'codice progetto'] == ""
 
-
     # T_U??
+
     def test_Adapter_Activity_Date_Incorrect(self, chatbot):
         State = State_Get_Activity()
         S = Statement_State(
@@ -60,11 +60,11 @@ class Test_Adapter_Get_Activity():
         A = Adapter_Get_Activity(chatbot)
         value = A.process(S, None)
         assert value.text == "Data non accettata : Reinserire la data del progetto" and S.currentState.getData()[
-            'data'] == ""       
+            'data'] == ""
 
     # T_U??
     @pytest.mark.parametrize("data",
-                            [("oggi"),
+                             [("oggi"),
                               ("2022-02-02")])
     def test_Adapter_Activity_Date_Correct(self, chatbot, data):
         State = State_Get_Activity()
