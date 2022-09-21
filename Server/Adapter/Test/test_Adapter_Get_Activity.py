@@ -25,7 +25,7 @@ class Test_Adapter_Get_Activity():
     # T_U33
     def test_Adapter_Activity_Code_Correct(self, chatbot):
         State = State_Get_Activity()
-        State.addData("data","2022-02-02")
+        State.addData("data", "2022-02-02")
         S = Statement_State(
             "1",
             State,
@@ -39,7 +39,7 @@ class Test_Adapter_Get_Activity():
     # T_U34
     def test_Adapter_Activity_Code_Incorrect_Number(self, chatbot):
         State = State_Get_Activity()
-        State.addData("data","2022-02-02")
+        State.addData("data", "2022-02-02")
         S = Statement_State(
             "1999999999999999",
             State,
@@ -55,7 +55,7 @@ class Test_Adapter_Get_Activity():
                                  ("cacaca")])
     def test_Adapter_Activity_Code_Incorrect_String(self, code, chatbot):
         State = State_Get_Activity()
-        State.addData("data","2022-02-02")
+        State.addData("data", "2022-02-02")
         S = Statement_State(
             code,
             State,

@@ -105,13 +105,13 @@ class Adapter_Get_Activity(LogicAdapter):
             s = State_Get_Activity()
             output_statement = Statement_State(
                 "Operazione Restituzione di Consuntivazione Avviata : Inserire la data da cui iniziare a visualizzare", s)
-        elif s.getCurrentState() == "restituzione consuntivazione" :
-            if not data["data"] :
-                if similarStringMatch("oggi",text) :
-                    s.addData("data",  date.today().strftime('%Y-%m-%d'))
+        elif s.getCurrentState() == "restituzione consuntivazione":
+            if not data["data"]:
+                if similarStringMatch("oggi", text):
+                    s.addData("data", date.today().strftime('%Y-%m-%d'))
                     output_statement = Statement_State(
                         "Data accettata : Inserire il codice del Progetto", s)
-                else :
+                else:
                     try:
                         datetime.datetime.strptime(text, '%Y-%m-%d')
                         s.addData("data", text)
@@ -121,7 +121,7 @@ class Adapter_Get_Activity(LogicAdapter):
                     except ValueError:
                         output_statement = Statement_State(
                             "Data non accettata : Reinserire la data del progetto", s)
-            elif data["data"] and not data["codice progetto"] :
+            elif data["data"] and not data["codice progetto"]:
                 if text.isnumeric():
                     if checkProjectExistance(text, Api):
                         s.addData("codice progetto", text)
@@ -144,9 +144,9 @@ class Adapter_Get_Activity(LogicAdapter):
                 else:
                     output_statement = Statement_State(
                         "Inserire il codice del Progetto come numero", s)
-        else :
+        else:
             output_statement = Statement_State(
-                    "È avvenuto un errore, provare a reinserire", s)
+                "È avvenuto un errore, provare a reinserire", s)
 
         output_statement.confidence = 0.8
         return output_statement

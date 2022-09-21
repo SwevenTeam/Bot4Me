@@ -1,6 +1,7 @@
 import json
 from operator import itemgetter
 
+
 def IsDictionaryFilled(Dictionary):
     return all(value != '' for value in Dictionary.values())
 
@@ -24,4 +25,4 @@ def parseResponseGetActivity(response):
 
 
 def orderGetActivity(response):
-    return sorted(response, key=itemgetter('date')) 
+    return sorted(response, key=itemgetter('date'))
