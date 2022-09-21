@@ -15,7 +15,8 @@ class State_Get_Activity(State):
     def __init__(self):
         self.currentState = "restituzione consuntivazione"
         self.data = {
-            "codice progetto": ""
+            "codice progetto": "",
+            "data":""
         }
 
     def addData(self, x, y):

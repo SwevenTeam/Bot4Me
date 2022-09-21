@@ -19,14 +19,16 @@ class Test_Adapter_Get_Activity():
         A = Adapter_Get_Activity(chatbot)
         if A.can_process(S):
             value = A.process(S, None)
-        assert value.text == "Operazione Restituzione di Consuntivazione Avviata : Inserire il codice del Progetto"
+        assert value.text == "Operazione Restituzione di Consuntivazione Avviata : Inserire la data da cui iniziare a visualizzare"
 
     # Test Inserimento Codice Corretto
     # T_U33
     def test_Adapter_Activity_Code_Correct(self, chatbot):
+        State = State_Get_Activity()
+        State.addData("data","2022-02-02")
         S = Statement_State(
             "1",
-            State_Get_Activity(),
+            State,
             '12345678-1234-1234-1234-123456789012')
         A = Adapter_Get_Activity(chatbot)
         if A.can_process(S):
@@ -36,9 +38,11 @@ class Test_Adapter_Get_Activity():
     # Test Inserimento Codice Incorretto Numero
     # T_U34
     def test_Adapter_Activity_Code_Incorrect_Number(self, chatbot):
+        State = State_Get_Activity()
+        State.addData("data","2022-02-02")
         S = Statement_State(
             "1999999999999999",
-            State_Get_Activity(),
+            State,
             '12345678-1234-1234-1234-123456789012')
         A = Adapter_Get_Activity(chatbot)
         value = A.process(S, None)
@@ -50,9 +54,11 @@ class Test_Adapter_Get_Activity():
                              [("esempio"),
                                  ("cacaca")])
     def test_Adapter_Activity_Code_Incorrect_String(self, code, chatbot):
+        State = State_Get_Activity()
+        State.addData("data","2022-02-02")
         S = Statement_State(
             code,
-            State_Get_Activity(),
+            State,
             '12345678-1234-1234-1234-123456789012')
         A = Adapter_Get_Activity(chatbot)
         value = A.process(S, None)

@@ -73,8 +73,6 @@ def similarStringMatch_Location(Statement, Api) -> String:
         y_lower = y.lower()
         for x in Statement:
             x_lower = x.lower()
-            print(x_lower)
-            print(y_lower)
             if SequenceMatcher(None, x_lower, y_lower).ratio() >= 0.80:
                 return y_lower
     return ''
