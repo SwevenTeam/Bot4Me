@@ -18,7 +18,7 @@ jobs:
           pip install -r Server/requirements.txt
       - name: Test with pytest
         run: |
-            pytest --cov-report term-missing --cov     
+            pytest --cov-report term-missing --cov --cov-config=.coveragerc    
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
