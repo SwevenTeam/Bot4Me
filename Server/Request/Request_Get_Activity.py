@@ -57,13 +57,11 @@ class Request_Get_Activity(MyRequest):
             'Content-Type': 'application/json'}
 
         today = date.today().strftime('%Y-%m-%d')
-        
 
         informazioni = {
-            'from': self.data["data"], 
+            'from': self.data["data"],
             'to': today
-          }
-        
+        }
 
         print(today)
 
@@ -72,7 +70,7 @@ class Request_Get_Activity(MyRequest):
             headers=header,
             params=informazioni
         )
-        
+
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return parseResponseGetActivity(responseUrl.json())
         else:
