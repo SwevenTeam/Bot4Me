@@ -34,7 +34,7 @@ class Request_Presence(MyRequest):
         else:
             return False
 
-    def sendRequest(self) -> bool:
+    def sendRequest(self, bool=True) -> bool:
         """
         ---
         Function Name : sendRequest
@@ -43,17 +43,23 @@ class Request_Presence(MyRequest):
         - Description → assembla la richiesta di registrazione presenza e la invia
         - Returns → boolean value : true se ha eseguito, false altrimenti
         """
-        # L'url credo sia giusto così
         url = "https://apibot4me.imolinfo.it/v1/locations/" + \
             self.dati["sede"] + "/presence"
         header = {
             'api_key': self.Api,
             'accept': 'application/json',
             'Content-Type': 'application/json'}
+        if bool :
+            responseUrl = requests.post(url, headers=header, data={})
 
-        responseUrl = requests.post(url, headers=header, data={})
+            if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
+                return True
+            else:
+                return False
+        else :
+            responseUrl = requests.delete(url, headers=header, data={})
 
-        if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
-            return True
-        else:
-            return False
+            if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
+                return True
+            else:
+                return False

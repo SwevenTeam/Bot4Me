@@ -59,7 +59,7 @@ const Home = () => {
       } else {
         setApiKey(inputApiKey.current.value);
         localStorage.setItem("apikey", JSON.stringify(apikey));
-        botResponse("login");
+        botResponseWithoutResponse("login");
         botResponse(apikey);
         changeHidden();
       }
@@ -145,6 +145,23 @@ const Home = () => {
         );
       });
   }
+
+  function botResponseWithoutResponse(rawText) {
+    const url = "http://127.0.0.1:5000/get";
+    axios
+      .post(url, {
+        textInput: rawText,
+        clientID: clientId,
+      })
+      .then(function (response) {
+        if (
+          JSON.stringify(response.data).replaceAll('"', "") ===
+          "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"
+        ) {
+          const myTimeout = setTimeout(logout, 2000);
+        };
+      });
+  }  
 
   function getClientID() {
     const url = "http://127.0.0.1:5000/getID";

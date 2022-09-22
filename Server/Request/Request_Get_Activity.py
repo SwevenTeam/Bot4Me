@@ -63,8 +63,6 @@ class Request_Get_Activity(MyRequest):
             'to': today
         }
 
-        print(today)
-
         responseUrl = requests.get(
             url=myurl,
             headers=header,

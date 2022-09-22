@@ -218,7 +218,7 @@ class Test_Adapter_Activity():
         S = Statement_State(Scelta, Sa, '12345678-1234-1234-1234-123456789012')
         A = Adapter_Activity(chatbot)
         value = A.process(S, None)
-        assert value.text == "Scelta Fatturabilità accettata : Inserire la descrizione" and (
+        assert value.text == "Scelta Fatturabilità accettata : Inserire la descrizione (tra Sviluppo, Formazione e Collaborazione )" and (
             S.currentState.getData()['fatturabile'] == 'True' or S.currentState.getData()['fatturabile'] == 'False')
 
     # Test Scelta Fatturabilità Incorretta
@@ -248,11 +248,11 @@ class Test_Adapter_Activity():
         Sa.addData('sede', "imola")
         Sa.addData('fatturabile', "True")
         S = Statement_State(
-            'bzorg', Sa, '12345678-1234-1234-1234-123456789012')
+            'sviluppo', Sa, '12345678-1234-1234-1234-123456789012')
         A = Adapter_Activity(chatbot)
         value = A.process(S, None)
         assert "Descrizione Accettata : Inserimento completato <br>" in value.text and S.currentState.getData()[
-            'descrizione'] == "bzorg"
+            'descrizione'] == "sviluppo"
 
     # Test Modifica Chiave Non Accettata
     def test_Adapter_Activity_Modify_Fail(self, chatbot):
@@ -423,10 +423,10 @@ class Test_Adapter_Activity():
         Sa = ModifyActivity(Sa)
         Sa.addData('conferma', 'descrizione')
         S = Statement_State(
-            'Nuova Descrizione',
+            'Collaborazione',
             Sa,
             '12345678-1234-1234-1234-123456789012')
         A = Adapter_Activity(chatbot)
         value = A.process(S, None)
         assert "Descrizione Accettata e aggiornata" in value.text and S.currentState.getData()[
-            'descrizione'] == "Nuova Descrizione"
+            'descrizione'] == "Collaborazione"

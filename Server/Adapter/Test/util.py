@@ -7,7 +7,7 @@ def ModifyActivity(Sa):
     Sa.addData('ore viaggio fatturabili', "3")
     Sa.addData('sede', "imola")
     Sa.addData('fatturabile', "True")
-    Sa.addData('descrizione', "descrizione esempio")
+    Sa.addData('descrizione', "sviluppo")
     return Sa
 
 
