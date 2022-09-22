@@ -44,7 +44,13 @@ class Adapter_Presence(LogicAdapter):
 
             # Controllo su presenza stringhe che identificano la richiesta di
             # presenza o di checkout
-            words = ['presenza', 'presenze','checkin','checkout','check-out','esci']
+            words = [
+                'presenza',
+                'presenze',
+                'checkin',
+                'checkout',
+                'check-out',
+                'esci']
             return similarStringMatch(statement.text.split(), words)
 
         # Altrimenti, controllo se lo state è presenza sede
@@ -82,15 +88,15 @@ class Adapter_Presence(LogicAdapter):
         text = input_statement.text.split()
         Api = input_statement.getApiKey()
         # Parole Chiave per Check Out
-        checkout = ['checkout','check-out','esci']
+        checkout = ['checkout', 'check-out', 'esci']
         # Nel caso in cui sia settato ad "Iniziale",
         # riassegno il valore come una nuova inizializzazione di  StatoPresenza
         if s.getCurrentState() and s.getCurrentState() == "Iniziale":
             # Controllo se si vuole effettuare un Check In o un Check Out
-            
-            if similarStringMatch(text,checkout) :
+
+            if similarStringMatch(text, checkout):
                 place = checkPresence(Api)
-                if place == '' :
+                if place == '':
                     output_statement = Statement_State(
                         "Impossibile effetuare il Check Out senza prima effettuare una registrazione",
                         s,
@@ -104,22 +110,23 @@ class Adapter_Presence(LogicAdapter):
                     if Req.isReady():
                         if Req.sendRequest(False):
                             output_statement = Statement_State(
-                            "Check Out effettuato con successo",
-                            State_Null(),
-                            Api)
-                        else :
+                                "Check Out effettuato con successo",
+                                State_Null(),
+                                Api)
+                        else:
                             output_statement = Statement_State(
-                            "È avvenuto un errore nella richiesta, riprovare ",
+                                "È avvenuto un errore nella richiesta, riprovare ",
+                                input_statement.getState(),
+                                Api)
+                    else:
+                        output_statement = Statement_State(
+                            "Request non pronto a soddisfare la richiesta",
                             input_statement.getState(),
                             Api)
-                    else :
-                        output_statement = Statement_State(
-                          "Request non pronto a soddisfare la richiesta",
-                          input_statement.getState(),
-                          Api)
 
-            else :
-                answer = "Hai già registrato una presenza, inserire una nuove sede per effettuare un'altra registrazione (annulla per annullare)" if checkPresence(Api) else "Operazione di registrazione della presenza avviata : inserire il nome di una sede"
+            else:
+                answer = "Hai già registrato una presenza, inserire una nuove sede per effettuare un'altra registrazione (annulla per annullare)" if checkPresence(
+                    Api) else "Operazione di registrazione della presenza avviata : inserire il nome di una sede"
                 s = State_Presence()
                 output_statement = Statement_State(
                     answer,
@@ -132,7 +139,7 @@ class Adapter_Presence(LogicAdapter):
                     "Sede non Accettata : Reinserire il nome della Sede", s)
             else:
                 s.addData("sede", sedi)
-                
+
                 Req = Request_Presence(
                     input_statement.getState(),
                     Api)

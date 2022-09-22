@@ -49,14 +49,14 @@ class Request_Presence(MyRequest):
             'api_key': self.Api,
             'accept': 'application/json',
             'Content-Type': 'application/json'}
-        if bool :
+        if bool:
             responseUrl = requests.post(url, headers=header, data={})
 
             if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
                 return True
             else:
                 return False
-        else :
+        else:
             responseUrl = requests.delete(url, headers=header, data={})
 
             if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
