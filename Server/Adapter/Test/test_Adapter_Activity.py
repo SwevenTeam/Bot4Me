@@ -253,7 +253,7 @@ class Test_Adapter_Activity():
         value = A.process(S, None)
         assert "Descrizione Accettata : Inserimento completato <br>" in value.text and S.currentState.getData()[
             'descrizione'] == "sviluppo"
-    
+
     # Test Descrizione
     def test_Adapter_Activity_Description_Incorrect(self, chatbot):
         Sa = State_Activity()
@@ -271,8 +271,8 @@ class Test_Adapter_Activity():
         assert "Descrizione non accettata : reinserire una descrizione valida (tra Sviluppo, Formazione e Collaborazione )" in value.text and S.currentState.getData()[
             'descrizione'] == ""
 
-
     # Test Modifica Chiave Non Accettata
+
     def test_Adapter_Activity_Modify_Fail(self, chatbot):
         Sa = State_Activity()
         Sa = ModifyActivity(Sa)
@@ -471,4 +471,3 @@ class Test_Adapter_Activity():
         A = Adapter_Activity(chatbot)
         value = A.process(S, None)
         assert "Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)" == value.text
-

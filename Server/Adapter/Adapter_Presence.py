@@ -115,9 +115,9 @@ class Adapter_Presence(LogicAdapter):
                                 Api)
                         else:
                             output_statement = Statement_State(
-                            "È avvenuto un errore nella richiesta, riprovare",
-                            input_statement.getState(),
-                            Api)
+                                "È avvenuto un errore nella richiesta, riprovare",
+                                input_statement.getState(),
+                                Api)
 
             else:
                 answer = "Hai già registrato una presenza, inserire una nuove sede per effettuare un'altra registrazione (annulla per annullare)" if checkPresence(
