@@ -26,7 +26,7 @@ class Request_Presence(MyRequest):
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        if self.state == "presenza Sede":
+        if self.state == "presenza Sede" and self.Api:
             if self.dati['sede'] != "":
                 return True
             else:

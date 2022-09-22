@@ -253,6 +253,24 @@ class Test_Adapter_Activity():
         value = A.process(S, None)
         assert "Descrizione Accettata : Inserimento completato <br>" in value.text and S.currentState.getData()[
             'descrizione'] == "sviluppo"
+    
+    # Test Descrizione
+    def test_Adapter_Activity_Description_Incorrect(self, chatbot):
+        Sa = State_Activity()
+        Sa.addData('codice progetto', "1")
+        Sa.addData('data', "2022-01-01")
+        Sa.addData('ore fatturabili', "3")
+        Sa.addData('ore viaggio', "3")
+        Sa.addData('ore viaggio fatturabili', "3")
+        Sa.addData('sede', "imola")
+        Sa.addData('fatturabile', "True")
+        S = Statement_State(
+            'lul', Sa, '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "Descrizione non accettata : reinserire una descrizione valida (tra Sviluppo, Formazione e Collaborazione )" in value.text and S.currentState.getData()[
+            'descrizione'] == ""
+
 
     # Test Modifica Chiave Non Accettata
     def test_Adapter_Activity_Modify_Fail(self, chatbot):
@@ -430,3 +448,27 @@ class Test_Adapter_Activity():
         value = A.process(S, None)
         assert "Descrizione Accettata e aggiornata" in value.text and S.currentState.getData()[
             'descrizione'] == "Collaborazione"
+
+    # Test Modifica Descrizione Vero
+    def test_Adapter_Activity_Confirm_Fail(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        S = Statement_State(
+            'Conferma',
+            Sa,
+            '12345672')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "Operazione non avvenuta, riprovare? (inviare annulla per annullare)" == value.text
+
+    def test_Adapter_Activity_Confirm_Fail_Api(self, chatbot):
+        Sa = State_Activity()
+        Sa = ModifyActivity(Sa)
+        S = Statement_State(
+            'Conferma',
+            Sa,
+            '')
+        A = Adapter_Activity(chatbot)
+        value = A.process(S, None)
+        assert "Operazione non avvenuta correttamente, riprovare? (inviare annulla per annullare)" == value.text
+

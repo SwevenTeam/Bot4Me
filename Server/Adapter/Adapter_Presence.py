@@ -115,12 +115,7 @@ class Adapter_Presence(LogicAdapter):
                                 Api)
                         else:
                             output_statement = Statement_State(
-                                "È avvenuto un errore nella richiesta, riprovare ",
-                                input_statement.getState(),
-                                Api)
-                    else:
-                        output_statement = Statement_State(
-                            "Request non pronto a soddisfare la richiesta",
+                            "È avvenuto un errore nella richiesta, riprovare",
                             input_statement.getState(),
                             Api)
 
