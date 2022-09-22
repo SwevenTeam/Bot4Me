@@ -250,6 +250,7 @@ const Home = () => {
           hidden={hidden}
           className="msger-input"
           id="apikeyInput"
+          data-testid="apikeyInput"
           placeholder="Scrivi qui la tua ApiKey..."
           onChange={handleApiKeyChange}
         />

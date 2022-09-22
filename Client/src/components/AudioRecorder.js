@@ -28,10 +28,12 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
   const startRecording = () => {
     changeMessage("Sto registrando ...");
     // Check if recording isn't blocked by browser
-    recorder.current.stop();
-    recorder.current.start().then(() => {
-      setIsRecording(true);
-    });
+    if (recorder.current) {
+      recorder.current.stop();
+      recorder.current.start().then(() => {
+        setIsRecording(true);
+      });
+    }
   };
 
   const stopRecording = () => {
@@ -79,14 +81,11 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
         .then((res) => setUploadURL(res.data.upload_url))
         .catch((err) => console.error(err));
     }
-    console.log(audioFile);
   }, [audioFile]);
 
   // Submit the Upload URL to AssemblyAI and retrieve the Transcript ID
   const submitTranscriptionHandler = () => {
-    console.log("submitTranscriptionHandler");
     if (audioFile && uploadURL !== "") {
-      console.log("INSIDE IF submitTranscriptionHandler");
       assemblyAI
         .post("/transcript", {
           audio_url: uploadURL,
@@ -102,17 +101,14 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
   // Check the status of the Transcript
   const checkStatusHandler = async () => {
     setIsLoading(true);
-    console.log("checkStatusHandler");
     try {
       if (transcriptID !== "") {
-        console.log("INSIDE IF checkStatusHandler");
         await assemblyAI.get(`/transcript/${transcriptID}`).then((res) => {
           if (res.data.text !== null) {
             setTranscriptData(res.data);
             changeMessage(res.data.text);
             setIsLoading(false);
             resetAudio();
-            console.log("CIAO STO SCRIVENDO TRANSCRIPT" + res.data.text);
           }
         });
       }
