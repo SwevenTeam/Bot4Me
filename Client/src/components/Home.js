@@ -175,6 +175,7 @@ const Home = () => {
         clientID: clientId,
       })
       .then(function (response) {
+        /* istanbul ignore next */
         if (
           JSON.stringify(response.data).replaceAll('"', "") ===
           "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"
@@ -198,6 +199,7 @@ const Home = () => {
         clientID: clientId,
       })
       .then(function (response) {
+        /* istanbul ignore next */        
         if (
           JSON.stringify(response.data).replaceAll('"', "") ===
           "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"
