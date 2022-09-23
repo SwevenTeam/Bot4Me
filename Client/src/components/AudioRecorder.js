@@ -26,6 +26,14 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
   }, []);
 
   const startRecording = () => {
+    /*
+      ---
+      Function Name :  startRecording
+      ---
+      - Args → 
+      - Description → funzione che si occupa dell'avvio della registrazione del messaggio vocale, richiedendo l'autorizzazione per l'utilizzo del microfono e iniziando la registrtazione. 
+      - Returns → 
+    */
     changeMessage("Sto registrando ...");
     // Check if recording isn't blocked by browser
     if (recorder.current) {
@@ -37,6 +45,14 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
   };
 
   const stopRecording = () => {
+    /*
+      ---
+      Function Name :  stopRecording
+      ---
+      - Args → 
+      - Description → funzione che si occupa della gestione della fine della registrazione del messaggio vocale e successiva creazione del file audio in formato mp3. 
+      - Returns → 
+    */
     changeMessage("Sto traducendo il tuo messaggio ...");
     recorder.current
       .stop()
@@ -75,6 +91,14 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
 
   // Upload the Audio File and retrieve the Upload URL
   useEffect(() => {
+    /*
+      ---
+      Function Name :  useEffect
+      ---
+      - Args → 
+      - Description → funzione innescata in seguito ad un cambiamento avvenuto alla variabile audioFile, effettua l'upload del file stesso presso il servizio esterno AssemblyAI.
+      - Returns → 
+    */
     if (audioFile) {
       assemblyAI
         .post("/upload", audioFile)
@@ -83,8 +107,15 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
     }
   }, [audioFile]);
 
-  // Submit the Upload URL to AssemblyAI and retrieve the Transcript ID
   const submitTranscriptionHandler = () => {
+    /*
+      ---
+      Function Name :  submitTranscriptionHandler
+      ---
+      - Args → 
+      - Description → funzione che richiede l'effettuazione della trascrizione sul file audio precedentemente caricato, ottendo l'id della trascrizione nella variabile transcriptID.
+      - Returns → 
+    */
     if (audioFile && uploadURL !== "") {
       assemblyAI
         .post("/transcript", {
@@ -98,8 +129,15 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
     }
   };
 
-  // Check the status of the Transcript
   const checkStatusHandler = async () => {
+    /*
+      ---
+      Function Name :  checkStatusHandler
+      ---
+      - Args → 
+      - Description → funzione asincrona che attende che il servizio esterno completi la trascrizione del file audio inviato. 
+      - Returns → 
+    */
     setIsLoading(true);
     try {
       if (transcriptID !== "") {
@@ -117,7 +155,6 @@ const AudioRecorder = ({ changeMessage, hidden }) => {
     }
   };
 
-  //Periodically check the status of the Transcript
   useEffect(() => {
     const interval = setInterval(() => {
       if (transcriptData.status !== "completed" && isLoading) {

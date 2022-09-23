@@ -47,6 +47,17 @@ const Home = () => {
   };
 
   const saveApiKey = () => {
+    /*
+      ---
+      Function Name :  saveApiKey
+      ---
+      - Args → 
+      - Description → come prima cosa controlla se è presente un clientID nel localStorage altrimenti, 
+        manda la richiesta al Server per riceverne uno, successivamente controlla se l'API-KEY fornita dall'utente è valida,
+        se lo è la salva all'interno del LocalStorage del browser ed effettua la procedura di Login passando alla schermata di Utente Autenticato; 
+        altrimenti comunica all'utente la non validità.
+      - Returns → 
+    */
     if (!localStorage.getItem("clientId")) {
       getClientID();
     } else {
@@ -67,6 +78,16 @@ const Home = () => {
   };
 
   const logout = () => {
+    /*
+      ---
+      Function Name :  logout
+      ---
+      - Args → 
+      - Description → 
+        - Effettua la procedura di Logout dal sistema rimuovendo, se presenti nel LocalStorage, clientID e API-KEY.
+          Effettua il reload della pagina mostrando la schermata di Utente Non Autenticato.
+      - Returns → 
+    */
     setApiKey("");
     localStorage.removeItem("apikey");
     setClientID("");
@@ -88,7 +109,6 @@ const Home = () => {
 
   const onSubmit = () => {
     if (!message) return;
-
     appendMessage(PERSON_NAME, PERSON_IMG, "right", message);
     setMessage("");
     botResponse(message);
@@ -101,6 +121,18 @@ const Home = () => {
   };
 
   function appendMessage(name, img, side, text) {
+    /*
+      ---
+      Function Name :  appendMessage
+      ---
+      - Args → 
+        - name: nome dell'utente o del chatbot che ha inviato quel dato messaggio.
+        - img: icona associata all'utente o al chatbot da visualizzare assieme al messaggio
+        - side: posizione del messaggio nello schermo se nel lato sinistro ovvero del chatbot oppure in quello destro ovvero quello dell'utente
+        - text: contenuto effettivo del messaggio inviato
+      - Description → genera porzione di codice HTML contenenti le informazioni principali del messaggio e le aggiunge alla schermata di visualizzazione della chat
+      - Returns → 
+    */
     const msgHTML = `
         <div class="msg ${side}-msg">
           <div class="msg-img" style="background-image: url(${img})"></div>
@@ -124,6 +156,15 @@ const Home = () => {
   }
 
   function botResponse(rawText) {
+    /*
+      ---
+      Function Name :  botResponse
+      ---
+      - Args → 
+        - rawText: variabile testuale che rappresenta la stringa da inviare al Server
+      - Description → funzione che invia il messaggio scritto dall'utente al Server, rimananedo in attesa della risposta e stampando a video il risultato della richiesta. 
+      - Returns → 
+    */
     const url = "http://127.0.0.1:5000/get";
     axios
       .post(url, {
@@ -147,6 +188,15 @@ const Home = () => {
   }
 
   function getClientID() {
+    /*
+      ---
+      Function Name :  getClientID
+      ---
+      - Args → 
+      - Description → funzione che richiede al Server di fornire un UUID per il client avviato che verrà poi salvato all'interno del LocalStorage 
+        del browser con il nome di ClientID in uso e servirà per mantenere la sessione di comunicazione
+      - Returns → 
+    */
     const url = "http://127.0.0.1:5000/getID";
     axios
       .post(url, {
@@ -178,6 +228,14 @@ const Home = () => {
   }
 
   return (
+    /*
+      ---
+      Function Name :  return 
+      ---
+      - Args → 
+      - Description → funzione che genera il codice HTML relativo ai componenti che compongono la pagina Home.
+      - Returns → 
+    */
     <div className="msger">
       <header className="msger-header">
         <div className="msger-header-title">

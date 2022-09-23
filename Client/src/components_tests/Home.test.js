@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import Home from "../components/Home";
-import axios from "axios";
 
 test("test Home render", () => {
   render(<Home />);
@@ -92,7 +91,7 @@ describe("test Integration Messagge", () => {
     expect(divElement).toBeInTheDocument();
   });
 
-  /*it("test per effettuare il logout", async () => {
+  it("test per effettuare il logout", async () => {
     render(<Home />);
     const inputApiKey = screen.getByTestId(/apikeyInput/i);
     const buttonElement = screen.getByTestId(/SALVA API-KEY/i);
@@ -111,66 +110,38 @@ describe("test Integration Messagge", () => {
 
     const divElement = screen.getByTestId(/API KEY/i);
     expect(divElement).toBeInTheDocument();
-  });*/
+  });
 
-  it("test per verificare la traduzione di un messaggio", async () => {
+  it("test per verificare la trascrizione di un messaggio", async () => {
     render(<Home />);
-    // const inputApiKey = screen.getByTestId(/apikeyInput/i);
-    // const buttonElement = screen.getByTestId(/SALVA API-KEY/i);
+    functionToMock = jest.fn().mockReturnValue("messaggio tradotto");
 
-    // fireEvent.change(inputApiKey, {
-    //   target: { value: "" },
-    // });
+    const inputApiKey = screen.getByTestId(/apikeyInput/i);
+    const buttonElement = screen.getByTestId(/SALVA API-KEY/i);
 
-    // fireEvent.change(inputApiKey, {
-    //   target: { value: "12345678-1234-1234-1234-123456789012" },
-    // });
-
-    // fireEvent.click(buttonElement);
-
-    // const inputElement = screen.getByPlaceholderText(
-    //   /Scrivi qui il tuo messaggio.../i
-    // );
-
-    /*const transcript = "";
-    const idTranscript = "";
-
-    var myHeaders = new Headers();
-    myHeaders.append("authorization", "d558677a79ad45ccaf2204170bf00e16");
-    myHeaders.append("content-type", "application/json");
-
-    var raw = JSON.stringify({
-      audio_url: "https://bit.ly/3yxKEIY",
+    fireEvent.change(inputApiKey, {
+      target: { value: "" },
     });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+    fireEvent.change(inputApiKey, {
+      target: { value: "12345678-1234-1234-1234-123456789012" },
+    });
 
-    fetch("https://api.assemblyai.com/v2/transcript", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    fireEvent.click(buttonElement);
 
-    requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+    const inputElement = screen.getByPlaceholderText(
+      /Scrivi qui il tuo messaggio.../i
+    );
 
-    fetch(`https://api.assemblyai.com/v2/${idTranscript}`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    fireEvent.change(inputElement, {
+      target: { value: functionToMock() },
+    });
 
     const buttonSendElement = screen.getByTestId(/INVIA MESSAGGIO/i);
 
     fireEvent.click(buttonSendElement);
 
-    const elementToFind = screen.getByText(transcript);
-    expect(elementToFind).toBeInTheDocument();*/
+    const elementToFind = screen.getByText("messaggio tradotto");
+    expect(elementToFind).toBeInTheDocument();
   });
 });
