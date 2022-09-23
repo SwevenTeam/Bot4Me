@@ -61,6 +61,7 @@ const Home = () => {
     if (!localStorage.getItem("clientId")) {
       getClientID();
     } else {
+      /* istanbul ignore next */
       setClientID(localStorage.getItem("clientId"));
     }
     if (inputApiKey.current.value !== null) {
@@ -76,7 +77,7 @@ const Home = () => {
       }
     }
   };
-
+  /* istanbul ignore next */
   const logout = () => {
     /*
       ---
@@ -88,6 +89,7 @@ const Home = () => {
           Effettua il reload della pagina mostrando la schermata di Utente Non Autenticato.
       - Returns → 
     */
+   
     setApiKey("");
     localStorage.removeItem("apikey");
     setClientID("");
@@ -96,11 +98,11 @@ const Home = () => {
     setHidden(false);
     window.location.reload();
   };
-
+  /* istanbul ignore next */
   const finish = () => {
     botResponse("termina");
   };
-
+  /* istanbul ignore next */
   const changeHidden = () => {
     if (apikey === "") {
       setHidden(false);
@@ -113,7 +115,7 @@ const Home = () => {
     setMessage("");
     botResponse(message);
   };
-
+  /* istanbul ignore next */
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       onSubmit();
@@ -151,6 +153,7 @@ const Home = () => {
       text ===
       "Autenticazione Fallita : l'API-KEY inserita non è valida, riprova"
     ) {
+      /* istanbul ignore next */
       setHidden(true);
     }
   }
@@ -220,6 +223,7 @@ const Home = () => {
         clientID: clientId,
       })
       .then(function (response) {
+        /* istanbul ignore next */
         saveClientId(response.data);
       });
   }
@@ -270,6 +274,7 @@ const Home = () => {
         <CustomButton
           text={"LOGOUT"}
           isDisabled={!hidden}
+          /* istanbul ignore next */
           className={"msger-logout-btn"}
           onSubmit={() => {
             logout();
