@@ -29,7 +29,7 @@ class Request_Activity(MyRequest):
         - Description → identifica se questa Request può essere utilizzata
         - Returns → boolean value : true se può eseguire, false se non può eseguire
         """
-        if self.state == "consuntivazione":
+        if self.state == "consuntivazione" and self.Api:
             if IsDictionaryFilled(self.data):
                 return True
             else:

@@ -6,7 +6,7 @@ from Request.Request_Presence import Request_Presence
 from State.State_Null import State_Null
 from chatterbot.conversation import Statement
 from sqlalchemy import true
-from .Util_Adapter import similarStringMatch, similarStringMatch_Location
+from .Util_Adapter import checkPresence, similarStringMatch, similarStringMatch_Location
 
 
 class Adapter_Presence(LogicAdapter):
@@ -43,8 +43,14 @@ class Adapter_Presence(LogicAdapter):
         if state.getCurrentState() == "Iniziale":
 
             # Controllo su presenza stringhe che identificano la richiesta di
-            # presenza
-            words = ['presenza', 'presenze']
+            # presenza o di checkout
+            words = [
+                'presenza',
+                'presenze',
+                'checkin',
+                'checkout',
+                'check-out',
+                'esci']
             return similarStringMatch(statement.text.split(), words)
 
         # Altrimenti, controllo se lo state è presenza sede
@@ -81,14 +87,46 @@ class Adapter_Presence(LogicAdapter):
         s = input_statement.getState()
         text = input_statement.text.split()
         Api = input_statement.getApiKey()
+        # Parole Chiave per Check Out
+        checkout = ['checkout', 'check-out', 'esci']
         # Nel caso in cui sia settato ad "Iniziale",
         # riassegno il valore come una nuova inizializzazione di  StatoPresenza
         if s.getCurrentState() and s.getCurrentState() == "Iniziale":
-            s = State_Presence()
-            output_statement = Statement_State(
-                "Operazione di registrazione della presenza avviata : inserire il nome di una sede",
-                s,
-                Api)
+            # Controllo se si vuole effettuare un Check In o un Check Out
+
+            if similarStringMatch(text, checkout):
+                place = checkPresence(Api)
+                if place == '':
+                    output_statement = Statement_State(
+                        "Impossibile effetuare il Check Out senza prima effettuare una registrazione",
+                        s,
+                        Api)
+                else:
+                    s = State_Presence()
+                    s.addData("sede", place)
+                    Req = Request_Presence(
+                        s,
+                        Api)
+                    if Req.isReady():
+                        if Req.sendRequest(False):
+                            output_statement = Statement_State(
+                                "Check Out effettuato con successo",
+                                State_Null(),
+                                Api)
+                        else:
+                            output_statement = Statement_State(
+                                "È avvenuto un errore nella richiesta, riprovare",
+                                input_statement.getState(),
+                                Api)
+
+            else:
+                answer = "Hai già registrato una presenza, inserire una nuove sede per effettuare un'altra registrazione (annulla per annullare)" if checkPresence(
+                    Api) else "Operazione di registrazione della presenza avviata : inserire il nome di una sede"
+                s = State_Presence()
+                output_statement = Statement_State(
+                    answer,
+                    s,
+                    Api)
         else:
             sedi = similarStringMatch_Location(text, Api)
             if sedi == '':
@@ -96,6 +134,7 @@ class Adapter_Presence(LogicAdapter):
                     "Sede non Accettata : Reinserire il nome della Sede", s)
             else:
                 s.addData("sede", sedi)
+
                 Req = Request_Presence(
                     input_statement.getState(),
                     Api)
