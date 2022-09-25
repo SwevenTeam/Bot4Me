@@ -264,6 +264,11 @@
   cursor: default;
 }
 
+.msger-undo-btn:disabled{
+  opacity: 0.5;
+  cursor: default;
+}
+
 .msg-text ul li{
   margin-left:2em;
 }
@@ -290,10 +295,6 @@
   border-radius: 50%;
   margin: 0.3em;
   animation: spinner 1.5s linear infinite;
-}
-
-.spinner-hidden {
-  display: none;
 }
 
 .spinner-container{

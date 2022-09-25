@@ -1,4 +1,5 @@
 import json
+from operator import itemgetter
 
 
 def IsDictionaryFilled(Dictionary):
@@ -7,7 +8,8 @@ def IsDictionaryFilled(Dictionary):
 
 def parseResponseGetActivity(response):
     outputString = ''
-    for i in response:
+    orderResponse = orderGetActivity(response)
+    for i in orderResponse:
         tmp_str = "Consuntivazione del giorno "
         tmp_str += i['date']
         tmp_str += " in sede "
@@ -20,3 +22,7 @@ def parseResponseGetActivity(response):
         tmp_str += "descrizione : " + i['note'] + "<br><br>"
         outputString += tmp_str
     return outputString
+
+
+def orderGetActivity(response):
+    return sorted(response, key=itemgetter('date'))

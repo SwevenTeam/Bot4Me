@@ -1,11 +1,10 @@
 import React from "react";
 
-const LoadingSpinner=({hidden}) => {
+const LoadingSpinner = () => {
   return (
-    <div className={(hidden ? "spinner-container" : "spinner-hidden")}>
-      <div className="loading-spinner">
-      </div>
+    <div className={"spinner-container"}>
+      <div data-testid="Loading Spinner" className="loading-spinner"></div>
     </div>
   );
-}
+};
 export default LoadingSpinner;

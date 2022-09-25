@@ -8,6 +8,7 @@ from State.State_Get_Activity import State_Get_Activity
 from sqlalchemy import false, null, true
 from State.State_Null import State_Null
 import datetime
+from datetime import date
 from .Util_Adapter import returnAllData, checkProjectExistance, similarStringMatch, similarStringMatch_Location
 
 
@@ -98,34 +99,54 @@ class Adapter_Get_Activity(LogicAdapter):
         s = input_statement.getState()
         Api = input_statement.getApiKey()
         text = input_statement.getText()
+        data = s.getData()
 
         if s.getCurrentState() and s.getCurrentState() == "Iniziale":
             s = State_Get_Activity()
             output_statement = Statement_State(
-                "Operazione Restituzione di Consuntivazione Avviata : Inserire il codice del Progetto", s)
-        else:
-            if text.isnumeric():
-                if checkProjectExistance(text, Api):
-                    s.addData("codice progetto", text)
-                    Req = Request_Get_Activity(s, Api)
-                    if Req.isReady():
-                        result = Req.sendRequest()
-                        if result == []:
-                            output_statement = Statement_State(
-                                "Nessun elemento da visualizzare", State_Null(), Api)
+                "Operazione Restituzione di Consuntivazione Avviata : Inserire la data da cui iniziare a visualizzare", s)
+        elif s.getCurrentState() == "restituzione consuntivazione":
+            if not data["data"]:
+                if similarStringMatch("oggi", text):
+                    s.addData("data", date.today().strftime('%Y-%m-%d'))
+                    output_statement = Statement_State(
+                        "Data accettata : Inserire il codice del Progetto", s)
+                else:
+                    try:
+                        datetime.datetime.strptime(text, '%Y-%m-%d')
+                        s.addData("data", text)
+
+                        output_statement = Statement_State(
+                            "Data accettata : Inserire il codice del Progetto", s)
+                    except ValueError:
+                        output_statement = Statement_State(
+                            "Data non accettata : Reinserire la data del progetto", s)
+            elif data["data"] and not data["codice progetto"]:
+                if text.isnumeric():
+                    if checkProjectExistance(text, Api):
+                        s.addData("codice progetto", text)
+                        Req = Request_Get_Activity(s, Api)
+                        if Req.isReady():
+                            result = Req.sendRequest()
+                            if result == []:
+                                output_statement = Statement_State(
+                                    "Nessun elemento da visualizzare", State_Null(), Api)
+                            else:
+                                output_statement = Statement_State(
+                                    result, State_Null(), Api)
                         else:
                             output_statement = Statement_State(
-                                result, State_Null(), Api)
+                                "Sembra che tu debba ancora Inserire il codice", s)
                     else:
                         output_statement = Statement_State(
-                            "Sembra che tu debba ancora Inserire il codice", s)
+                            "Progetto Inesistente : Inserire un nuovo codice", s)
+
                 else:
                     output_statement = Statement_State(
-                        "Progetto Inesistente : Inserire un nuovo codice", s)
-
-            else:
-                output_statement = Statement_State(
-                    "Inserire il codice del Progetto come numero", s)
+                        "Inserire il codice del Progetto come numero", s)
+        else:
+            output_statement = Statement_State(
+                "È avvenuto un errore, provare a reinserire", s)
 
         output_statement.confidence = 0.8
         return output_statement

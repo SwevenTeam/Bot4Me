@@ -24,7 +24,7 @@ class Test_Adapter():
         A = Adapter_Presence(chatbot)
         if A.can_process(S):
             value = A.process(S, None)
-        assert value.text == "Operazione di registrazione della presenza avviata : inserire il nome di una sede"
+        assert value.text == "Operazione di registrazione della presenza avviata : inserire il nome di una sede" or value.text == "Hai già registrato una presenza, inserire una nuove sede per effettuare un'altra registrazione (annulla per annullare)"
 
     # Test Registrazione Presenza Corretta
     # T_U40
@@ -62,3 +62,28 @@ class Test_Adapter():
         if A.can_process(S):
             value = A.process(S, None)
         assert value.text == "Sede non Accettata : Reinserire il nome della Sede"
+
+    def test_Adapter_Presence_Checkout(self, chatbot):
+        S = Statement_State(
+            "Checkout",
+            State_Null(),
+            '9012')
+        A = Adapter_Presence(chatbot)
+        if A.can_process(S):
+            value = A.process(S, None)
+        assert value.text == "Impossibile effetuare il Check Out senza prima effettuare una registrazione"
+
+    def test_Adapter_Presence_Checkin_Checkout(self, chatbot):
+        S = Statement_State(
+            "Imola",
+            State_Presence(),
+            '12345678-1234-1234-1234-123456789012')
+        A = Adapter_Presence(chatbot)
+        A.process(S, None)
+        S = Statement_State(
+            "Checkout",
+            State_Null(),
+            '12345678-1234-1234-1234-123456789012')
+        value = A.process(S, None)
+
+        assert value.text == "Check Out effettuato con successo"

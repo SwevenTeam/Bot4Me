@@ -3,6 +3,7 @@ from sqlalchemy import false, true
 import requests
 from requests import Response
 import json
+from datetime import date
 from .Util_Request import IsDictionaryFilled, parseResponseGetActivity
 from Request.MyRequest import MyRequest
 
@@ -55,15 +56,19 @@ class Request_Get_Activity(MyRequest):
             'api_key': self.Api,
             'Content-Type': 'application/json'}
 
-        informazioni = [
-        ]
+        today = date.today().strftime('%Y-%m-%d')
+
+        informazioni = {
+            'from': self.data["data"],
+            'to': today
+        }
 
         responseUrl = requests.get(
             url=myurl,
             headers=header,
-            json=informazioni
+            params=informazioni
         )
-        print(type(responseUrl.json()))
+
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return parseResponseGetActivity(responseUrl.json())
         else:

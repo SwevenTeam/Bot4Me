@@ -106,7 +106,7 @@ class Adapter_Activity(LogicAdapter):
         # Utente ha iniziato il processo, Adapter richiede di Inserire il codice del Progetto
         # o Utente vuole modificare il codice del progetto
         if (not data["codice progetto"]
-                ) or data["conferma"] == "codice progetto":
+            ) or data["conferma"] == "codice progetto":
             # Controllo se il progetto esiste
             if checkProjectExistance(text, Api):
                 s.addData("codice progetto", text)
@@ -252,7 +252,7 @@ class Adapter_Activity(LogicAdapter):
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement = Statement_State(
-                        "Scelta Fatturabilità accettata : Inserire la descrizione", s)
+                        "Scelta Fatturabilità accettata : Inserire la descrizione (tra Sviluppo, Formazione e Collaborazione )", s)
 
             elif similarStringMatch(text.split(), negative):
                 s.addData("fatturabile", "False")
@@ -267,28 +267,32 @@ class Adapter_Activity(LogicAdapter):
                 # Se è un'operazione di primo inserimento
                 else:
                     output_statement = Statement_State(
-                        "Scelta Fatturabilità accettata : Inserire la descrizione", s)
+                        "Scelta Fatturabilità accettata : Inserire la descrizione (tra Sviluppo, Formazione e Collaborazione )", s)
             else:
                 output_statement = Statement_State(
                     "Scelta Fatturabilità non accettata : reinserire una risposta corretta ( esempio : sì/no)", s)
 
         # Utente ha inserito la sede, ora dovrà inserire la descrizione
         elif (not data["descrizione"] and data["fatturabile"]) or data["conferma"] == "descrizione":
-            s.addData("descrizione", text)
-            # Se è un'operazione di modifica
-            if data["conferma"] == "descrizione":
-                s.addData("conferma", "non confermato")
-                output_statement = Statement_State(
-                    "Descrizione Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" +
-                    returnAllData(s) +
-                    " Confermare operazione di consuntivazione?",
-                    s)
-            # Se è un'operazione di primo inserimento
+            activity = ["sviluppo", "formazione", "collaborazione"]
+            if similarStringMatch(text.split(), activity):
+                s.addData("descrizione", text)
+                # Se è un'operazione di modifica
+                if data["conferma"] == "descrizione":
+                    s.addData("conferma", "non confermato")
+                    output_statement = Statement_State(
+                        "Descrizione Accettata e aggiornata. Visualizzazione Dati Aggiornati <br>" +
+                        returnAllData(s) +
+                        " Confermare operazione di consuntivazione?",
+                        s)
+                # Se è un'operazione di primo inserimento
+                else:
+                    statement = "Descrizione Accettata : Inserimento completato <br>" + \
+                        returnAllData(s) + "vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
+                    output_statement = Statement_State(statement, s)
             else:
-                statement = "Descrizione Accettata : Inserimento completato <br>" + \
-                    returnAllData(s) + "vuoi consuntivare? ( consuntiva per consuntivare, modifica per modificare, annulla per annullare )"
-                output_statement = Statement_State(statement, s)
-
+                output_statement = Statement_State(
+                    "Descrizione non accettata : reinserire una descrizione valida (tra Sviluppo, Formazione e Collaborazione )", s)
         # Utente ha inserito tutti i data richiesti, ora dovrà confermare
         elif IsDictionaryFilled(data):
             chiavi = [

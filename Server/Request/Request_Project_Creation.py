@@ -66,8 +66,6 @@ class Request_Project_Creation(MyRequest):
         responseUrl = requests.post(
             url=myurl, headers=header, json=informazioni)
 
-        print(responseUrl)
-
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
         else:

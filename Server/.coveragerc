@@ -1,0 +1,8 @@
+[run]
+omit = Test/*
+       Adapter/Test/*
+       Request/Test/*
+       State/Test/*
+       App.py
+       Request/MyRequest.py
+       */__init__.py
