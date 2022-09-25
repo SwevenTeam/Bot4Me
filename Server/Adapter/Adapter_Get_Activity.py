@@ -128,7 +128,7 @@ class Adapter_Get_Activity(LogicAdapter):
                         Req = Request_Get_Activity(s, Api)
                         if Req.isReady():
                             result = Req.sendRequest()
-                            if result == [] or result=='':
+                            if result == [] or result == '':
                                 output_statement = Statement_State(
                                     "Nessun elemento da visualizzare", State_Null(), Api)
                             else:
