@@ -46,7 +46,7 @@ class Request_Gate(MyRequest):
         data = {'status': 'string', }
 
         responseUrl = requests.put(url, headers=header, json=data)
-        print(responseUrl)
+
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
         return False

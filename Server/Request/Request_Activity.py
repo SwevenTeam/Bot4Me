@@ -73,8 +73,6 @@ class Request_Activity(MyRequest):
             json=informazioni
         )
 
-        print(responseUrl)
-
         if responseUrl.status_code >= 200 and responseUrl.status_code < 300:
             return True
         else:
